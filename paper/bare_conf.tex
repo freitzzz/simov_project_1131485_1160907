@@ -120,10 +120,6 @@
 % The documentation is contained in the cite.sty file itself.
 
 
-
-
-
-
 % *** GRAPHICS RELATED PACKAGES ***
 %
 \ifCLASSINFOpdf
@@ -347,29 +343,27 @@
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
-
 \begin{document}
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Bare Demo of IEEEtran.cls for IEEECS Conferences}
-
+\title{Aplicações móveis no mundo universitário}
 
 % author names and affiliations
 % use a multiple column layout for up to two different
 % affiliations
 
-\author{\IEEEauthorblockN{Authors Name/s per 1st Affiliation (Author)}
-\IEEEauthorblockA{line 1 (of Affiliation): dept. name of organization\\
-line 2: name of organization, acronyms acceptable\\
-line 3: City, Country\\
-line 4: Email: name@xyz.com}
+\author{\IEEEauthorblockN{Emanuel Pedro}
+\IEEEauthorblockA{Departamento de Engenharia Informática\\
+ISEP\\
+Porto, Portugal\\
+Email: 1131485@isep.ipp.pt}
 \and
-\IEEEauthorblockN{Authors Name/s per 2nd Affiliation (Author)}
-\IEEEauthorblockA{line 1 (of Affiliation): dept. name of organization\\
-line 2: name of organization, acronyms acceptable\\
-line 3: City, Country\\
-line 4: Email: name@xyz.com}
+\IEEEauthorblockN{Freitas, João}
+\IEEEauthorblockA{Departamento de Engenharia Informática\\
+	ISEP \\
+Porto, Portugal\\
+Email: 1160706@isep.ipp.pt}
 }
 
 % conference papers do not typically use \thanks and this command
@@ -428,17 +422,9 @@ component; formatting; style; styling;
 % creates the second title. It will be ignored for other modes.
 \IEEEpeerreviewmaketitle
 
-
-
 \section{Introduction}
-% no \IEEEPARstart
-This demo file is intended to serve as a ``starter file''
-for IEEE conference papers produced under \LaTeX\ using
-IEEEtran.cls version 1.7 and later.
 
-All manuscripts must be in English. These guidelines include complete descriptions of the fonts, spacing, and related information for producing your proceedings manuscripts. Please follow them and if you have any questions, direct them to the production editor in charge of your proceedings at Conference Publishing Services (CPS): Phone +1 (714) 821-8380 or Fax +1 (714) 761-1784.
-% You must have at least 2 lines in the paragraph with the drop letter
-% (should never be an issue)
+\input{intro/intro}
 
 \subsection{Subsection Heading Here}
 Subsection text here.
@@ -536,17 +522,14 @@ Wherever Times is specified, Times Roman or Times New Roman may be used. If neit
 
 
 \section{Conclusion}
-The conclusion goes here. this is more of the conclusion
 
-% conference papers do not normally have an appendix
-
+\input{conclusion/conclusion}
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
 
+\input{ack/ack}
 
-The authors would like to thank...
-more thanks here
 
 
 % trigger a \newpage just before the given reference
