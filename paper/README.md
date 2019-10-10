@@ -15,7 +15,7 @@
   * Parece que já não está disponível
   * https://www.youtube.com/watch?v=yb-2fGWmevg
 
-## Univesidade de Coimbra
+## Universidade de Coimbra
   * https://play.google.com/store/apps/details?id=com.moofwd.ucoimbra&hl=en
 
 ## Técnico
@@ -29,3 +29,6 @@
 
 ## Universidade Europeia / IADE / IPAM
   * https://play.google.com/store/apps/details?id=com.moofwd.pt.ue
+
+## FCT NOVA
+  * https://play.google.com/store/apps/details?id=com.fct.neec.oficial
