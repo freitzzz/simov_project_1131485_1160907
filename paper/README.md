@@ -5,6 +5,8 @@
   * https://sigarra.up.pt/reitoria/pt/noticias_geral.ver_noticia?p_nr=5984&p_amo_id=11000
   * https://play.google.com/store/apps/details?id=com.moofwd.uporto&hl=en
   * https://wp.up.pt/fadeupinformatica/en/app-da-u-porto/
+  
+  *Email* : upanoxxxxx@fe.up.pt (x - algarismo de 1 a 9)
 
 ## Universidade de Aveiro
 
