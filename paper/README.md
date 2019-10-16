@@ -8,10 +8,17 @@
   
   *Email* : upanoxxxxx@fe.up.pt (x - algarismo de 1 a 9)
 
+## ISEP
+
+  * https://apkpure.com/br/portal-isep/pt.ipp.isep.portal.portal_isep
+
+
+
 ## Universidade de Aveiro
 
-  * https://www.ua.pt/stic/uamobile
-  * https://play.google.com/store/apps/details?id=com.moofwd.mooestrouaveiro&hl=pt_PT
+  * https://www.ua.pt/stic/uamobile 
+
+  * https://play.google.com/store/apps/details?id=com.moofwd.mooestrouaveiro&hl=pt_PT : Aplica-se na categoria de Sistemas de Informação 
 
 ## Universidade da Beira Interior
   * Parece que já não está disponível
