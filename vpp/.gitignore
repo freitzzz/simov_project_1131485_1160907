@@ -1,0 +1,8 @@
+# Visual Paradigm
+
+## Ignores backup files
+*.bak*
+*.vbak*
+
+## Ignores lock files
+*.lck*
