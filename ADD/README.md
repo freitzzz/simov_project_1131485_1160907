@@ -82,3 +82,10 @@ The following tables describe the existing architectural drivers
 |CON-1|The daily usage of the application should not consume more than 10% of battery usage|High|Pre-iteration 1|--|--|
 |CON-2|The application must be available at least in 95% of existing Android devices|High|Pre-iteration 1|--|--|
 |CON-3|The application must be built only using open-source technologies or technologies with no cost|Medium|Pre-iteration 1|--|--|
+
+#### Concerns
+
+|ID|Concern|Difficulty|Appeared in|Partially addressed in|Addressed in|
+|--|-------|----------|-----------|----------------------|------------|
+|CRN-1|Multi-language support|Medium|Pre-iteration 1|--|--|
+|CRN-2|Exception/Error logging|Medium|Pre-iteration 1|--|--|
