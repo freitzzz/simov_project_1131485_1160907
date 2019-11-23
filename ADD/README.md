@@ -74,3 +74,11 @@ The following tables describe the existing architectural drivers
 |UC-11|Receive push-notifications about favourite dishes availability|If a user has marked a dish as favourite it would be beneficial to notify him about the existence of this dish when its available on a menu|Medium|Medium|Pre-iteration 1|--|--|
 |UC-12|Choose offline mode in app|It should be possible to use the application without the usage of Wifi/Mobile data|Low|Medium|Pre-iteration 1|--|--|
 |UC-13|Change application theme|In order to ease user experience it should be possible to differ the look of the app in white and dark themes|Low|Low|Pre-iteration 1|--|--|
+
+#### Constraints
+
+|ID|Constraint|Difficulty|Appeared in|Partially addressed in|Addressed in|
+|--|----------|----------|-----------|----------------------|------------|
+|CON-1|The daily usage of the application should not consume more than 10% of battery usage|High|Pre-iteration 1|--|--|
+|CON-2|The application must be available at least in 95% of existing Android devices|High|Pre-iteration 1|--|--|
+|CON-3|The application must be built only using open-source technologies or technologies with no cost|Medium|Pre-iteration 1|--|--|
