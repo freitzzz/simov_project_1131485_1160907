@@ -92,9 +92,9 @@ The following tables describe the existing architectural drivers
 
 #### Quality Attributes
 
-|ID|Quality Attribute|Scenario|Associated Use Case|Appeared in|Partially addressed in|Addressed in|
-|--|-----------------|--------|-------------------|-----------|----------------------|------------|
-|QA-1|Efficiency|The daily usage of the application should not consume more than 10% of battery usage|All|Pre-iteration 1|--|--|
-|QA-2|Localizability|The application should provide feedback in Portuguese and English languages|All|Pre-iteration 1|--|--|
-|QA-3|Portability|The application must be available at least in 95% of existing Android devices|All|Pre-iteration 1|--|--|
-|QA-4|Auditability|All application exceptions and errors should be logged for development team research|All|Pre-iteration 1|--|--|
+|ID|Quality Attribute|Scenario|Associated Use Case|Priority|Appeared in|Partially addressed in|Addressed in|
+|--|-----------------|--------|-------------------|--------|-----------|----------------------|------------|
+|QA-1|Efficiency|The daily usage of the application should not consume more than 10% of battery usage|All|High|Pre-iteration 1|--|--|
+|QA-2|Localizability|The application should provide feedback in Portuguese and English languages|All|Medium|Pre-iteration 1|--|--|
+|QA-3|Portability|The application must be available at least in 95% of existing Android devices|All|High|Pre-iteration 1|--|--|
+|QA-4|Auditability|All application exceptions and errors should be logged for development team research|All|Medium|Pre-iteration 1|--|--|
