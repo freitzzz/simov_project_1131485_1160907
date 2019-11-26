@@ -66,3 +66,13 @@ Given the iteration goal selected drivers in Step 2, it is necessary to define w
 |Google Maps|Google Maps SDK could be used to render map and show route navigation, yet it requires a monthly subscription which violates CON-3. The only benefit it provides is that it is a well known and tested solution provided by Google|
 |JSON files for data storing|A persistence strategy that uses JSON files could also be used for data storing (UC-12), but would require more testing effort as this strategy would require files manipulation. SQLite on the other hand is a well tested solution that already manages itself data manipulation and only uses one file|
 
+**Step 5**
+
+- Goal: Instantiate architectural elements, allocate responsibilities and define interfaces
+
+To satisfy the structure of the chosen design concepts, the following elements are proposed to be created:
+
+|Design Decisions and Location|Rationale|
+|-----------------------------|---------|
+|Map system elements to logical components|This will help understanding how each system element communicates with each other|
+|Map system elements to physical components|This will help understanding how each system element physically communicates with each other|
