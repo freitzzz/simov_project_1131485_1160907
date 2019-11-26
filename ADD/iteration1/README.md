@@ -39,3 +39,12 @@
 | QA-2 |||
 | QA-3 |||
 
+**Step 3**
+
+- Goal: Choose elements of the system to refine
+
+As this is the first iteration of a greenfield system, it is necessary to define the first element of the system which is the system itself. The system is composed by two components, which are:
+
+- IPEM (ipp-ementa mobile), which is the mobile frontend of ipp-ementa, producing a graphic interface that will be consumed by the users. This element represents an Android application.
+- IPED (ipp-ementa distributor), which is the backend of ipp-ementa, producing an interface that allows the consume of business logic functionalities.
+
