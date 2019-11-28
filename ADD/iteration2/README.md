@@ -42,3 +42,11 @@
 | QA-2 |||
 
 
+**Step 3**
+
+- Goal: Choose elements of the system to refine
+
+
+  - IPEM
+
+
