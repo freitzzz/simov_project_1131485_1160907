@@ -47,6 +47,7 @@ As this is the first iteration of a greenfield system, it is necessary to define
 
 - IPEM (ipp-ementa mobile), which is the mobile frontend of ipp-ementa, producing a graphic interface that will be consumed by the users. This element represents an Android application.
 - IPED (ipp-ementa distributor), which is the backend of ipp-ementa, producing an interface that allows the consume of business logic functionalities.
+- IPEPN (ipp-ementa push-notifications), which is ipp-ementa push-notification system, producing an interface that allows the consume of this system for interested parties
 
 **Step 4**
 
@@ -58,7 +59,7 @@ Given the iteration goal selected drivers in Step 2, it is necessary to define w
 |-----------------------------|---------|
 |Use *Android KitKat* (Android API 19) as the minimal platform supported|In order to implement the mobile application in Android, it is first necessary to decide which mininal Android API is supported. As of [November of 2019](https://developer.android.com/about/dashboards), only 3.8% of Android devices are built in a platform that is lower than Android KitKat, which makes Android API 19 applications supported by 96.2% of all devices. The use of this platform will comply with CON-2 and support UC-1, UC-2, UC-3, UC-4, UC-7, UC-11, UC-12 and QA-3|
 |Use [`mapsforge`](https://github.com/mapsforge/mapsforge) for maps rendering, and routes navigation|Mapsforge is a **free** open-source, offline *vector map library and writer* for Android (>= API Level 9), Windows, macOS and Linux which allows map rendering, route planning and navigation by consuming [Open Street Map](https://www.openstreetmap.org) database. Mapsforge. The use of this technology will support the concretization of UC5, UC6 and UC12 and complies with CON-2, CON-3 and QA-3|
-|Use [*Firebase Cloud Messaging*](https://firebase.google.com/docs/cloud-messaging) (FCM) for application push-notifications|The use of FCM will allow the trigger of push notifications regarding favourite dishes availability, supporting the concretization of UC-11, QA-3 and complies with CON-2 and CON-3|
+|Use [*Firebase Cloud Messaging*](https://firebase.google.com/docs/cloud-messaging) (FCM) for application push-notifications|The use of FCM will allow the trigger of push notifications regarding favourite dishes availability. It already provides an SDK for Android (>= API Level 16), supporting the concretization of UC-11, QA-3 and complies with CON-2 and CON-3|
 |Use *SQLite* for storing data|The consume of a local SQLite database will allow the store application data such as available canteens, schools, menus and dishes, supporting the concretization of UC-12, QA-3 and comply with CON-2 and CON-3|
 
 |Alternative|Rationale|
@@ -76,3 +77,43 @@ To satisfy the structure of the chosen design concepts, the following elements a
 |-----------------------------|---------|
 |Map system elements to logical components|This will help understanding how each system element communicates with each other|
 |Map system elements to physical components|This will help understanding how each system element physically communicates with each other|
+
+
+**Step 6**
+
+- Goal: Sketch views and record design decisions
+
+### Component and Connector View
+
+#### Components Diagram
+
+![COARSE_VIEW_COMPONENTS_DIAGRAM](diagrams/COARSE_VIEW_COMPONENTS_DIAGRAM.png)
+
+#### Deployment Diagram
+
+![COARSE_VIEW_DEPLOYMENT_DIAGRAM](diagrams/COARSE_VIEW_DEPLOYMENT_DIAGRAM.png)
+
+- Responsability Table for Defined Elements
+
+|Element|Responsibility|
+|-------|--------------|
+|IPEM|Component that has the responsibility of producing an Android Application that allows mobile device users to consume a graphical interface that allows the interaction with ipp-ementa functionalities|
+|IPED|Component that has the responsibility of producing an interface for the consume of business logic functionalities|
+|IPEPN|Component that has the responsibility of producing an interface that allows the consume of push-notifications functionalities|
+|FCM|Also known as Firebase Cloud Messaging, is a component that has the responsibility of emitting push-notifications to IPEM applications|
+|Mapsforge|Library that has the responsiblity of drawing maps and routes on Android applications by consuming Open Street Map data|
+|SQLite|Embedded database that has the responsibility of storing IPEM offline data|
+|Mapsforge Android API|Interface that allows the consume of Mapsforge functionalities|
+|FCM Android SDK|Interface that allows the consume of FCM functionalities as an Android SDK|
+|IPEM Offline Data|Interface that allows the consume of SQLite functionalities|
+|IPED REST API|Interface that allows the consume of IPED functionalities|
+|IPEPN Push Notifications Web API|Interface that allows the consume of IPEPN functionalities|
+|FCM HTTP v1 API|Interface that allows the consume of FCM functionalities as an Web API|
+|Firebase Cloud Platform|Cloud platform where Firebase services are deployed|
+|Heroku Cloud Platform|Cloud platform where IPED and IPEN are deployed|
+|Open Street Map|Node in which Open Street Map servers are deployed|
+|Mobile Device|Represents IPEM user mobile device|
+|Android Kitkat|Minimal Operating System necessary to run ipp-ementa|
+|IPEM.apk|Artifact that represents the deployed artifact which is executed by Android Kitkat|
+|App Server|Component provided by Firebase Cloud Platform that allows the produce of FCM HTTP v1 API and FCM Android SDK interfaces|
+|OSM Web Server|Component that produces an Web API interface that allows the consume of Open Street Map data|
