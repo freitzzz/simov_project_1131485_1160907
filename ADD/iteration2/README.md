@@ -15,3 +15,30 @@
 |Are initial architectural concerns defined?|Yes|
 
 
+**Step 2**
+
+- Goal: Establish iteration goal by selecting drivers
+
+#### Kanban Board
+
+| Not Addressed | Partially Addressed | Addressed |
+|---------------|---------------------|-----------|
+| UC-1 |||
+| UC-2 |||
+| UC-3 |||
+| UC-4 |||
+| UC-5 |||
+| UC-6 |||
+| UC-7 |||
+| UC-8 |||
+| UC-9 |||
+| UC-10 |||
+| UC-11 |||
+| UC-12 |||
+| UC-13 |||
+| CON-1 |||
+| CRN-1 |||
+| QA-1 |||
+| QA-2 |||
+
+
