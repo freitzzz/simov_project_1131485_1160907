@@ -69,3 +69,15 @@ Given the iteration goal selected drivers in Step 2, it is necessary to define w
 |SQLite Android API|Traditional SQLite Android API could also be used for database access, yet as explained above Room was preffered as the team is not experienced with relational database|
 
 
+**Step 5**
+
+- Goal: Instantiate architectural elements, allocate responsibilities and define interfaces
+
+To satisfy the structure of the chosen design concepts, the following elements are proposed to be created:
+
+|Design Decisions and Location|Rationale|
+|-----------------------------|---------|
+|Elaborate domain model|Domain model allows the identification of business concepts, which are necessary to address the selected drivers (UC-1, UC-2, UC-3, UC-4, UC-5, UC-6, UC-7, UC-8, UC-9, UC-10, UC-11, UC-12, UC-13, CON-1, CRN-1, QA-1 and QA-2)|
+|Map use cases by actors|To establish actors and their responbilities it is necessary to map the use cases being addressed by their actors|
+|Map use cases to domain objects|Domain objects of use cases help in identifying the dependencies existent for each use case|
+|Elaborate IPEM structure using packages|In order to comprehend how the application is structured, it is necessary to define the structure of the application using packages|
