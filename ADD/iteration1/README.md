@@ -117,3 +117,31 @@ To satisfy the structure of the chosen design concepts, the following elements a
 |IPEM.apk|Artifact that represents the deployed artifact which is executed by Android Kitkat|
 |App Server|Component provided by Firebase Cloud Platform that allows the produce of FCM HTTP v1 API and FCM Android SDK interfaces|
 |OSM Web Server|Component that produces an Web API interface that allows the consume of Open Street Map data|
+
+
+**Step 7**
+
+- Goal: Perform analysis of current design and review iteration goal and achivements of design purposes
+
+In this iteration, ipp-ementa was designed architecturally in a coarse view which allowed the specification of existing elements in the system and respective deployments that fulfill the requirements given by the selected drivers. Drivers CON-2, CON-3 and QA-3 were fully addressed as the elements specification allowed to grant that at least 96.2% Android devices will be able to use ipp-ementa and that no technological costs will occur by using open-source and free technologies.
+
+The following table represents the update of the kanban board after the iteration:
+
+| Not Addressed | Partially Addressed | Addressed |
+|---------------|---------------------|-----------|
+|| UC-1 ||
+|| UC-2 ||
+|| UC-3 ||
+|| UC-4 ||
+|| UC-5 ||
+|| UC-6 ||
+|| UC-7 ||
+|| UC-11 ||
+|| UC-12 ||
+| CON-1 |||
+||| CON-2 |
+||| CON-3 |
+| CRN-1 |||
+| QA-1 |||
+| QA-2 |||
+||| QA-3 |
