@@ -118,6 +118,9 @@ To satisfy the structure of the chosen design concepts, the following elements a
 |IPEM.apk|Artifact that represents the deployed artifact which is executed by Android Kitkat|
 |App Server|Component provided by Firebase Cloud Platform that allows the produce of FCM HTTP v1 API and FCM Android SDK interfaces|
 |OSM Web Server|Component that produces an Web API interface that allows the consume of Open Street Map data|
+|School POS|Component that has the responsibility of providing interfaces that allow the purchase of a dish|
+|Bluetooth Purchase|Interface that allows the purchase of a Dish using Bluetooth|
+|NFC Purchase|Interface that allows the purchase of a Dish using NFC|
 
 
 **Step 7**
