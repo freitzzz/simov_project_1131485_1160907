@@ -100,14 +100,15 @@ To satisfy the structure of the chosen design concepts, the following elements a
 |IPEM|Component that has the responsibility of producing an Android Application that allows mobile device users to consume a graphical interface that allows the interaction with ipp-ementa functionalities|
 |IPED|Component that has the responsibility of producing an interface for the consume of business logic functionalities|
 |IPEPN|Component that has the responsibility of producing an interface that allows the consume of push-notifications functionalities|
-|FCM|Also known as Firebase Cloud Messaging, is a component that has the responsibility of emitting push-notifications to IPEM applications|
+|Firebase Cloud Messaging|Component that has the responsibility of emitting push-notifications to IPEM applications|
+|Open Street Map|Component that has the responsibility of producing an interface for consuming maps data|
 |Mapsforge|Library that has the responsiblity of drawing maps and routes on Android applications by consuming Open Street Map data|
 |SQLite|Embedded database that has the responsibility of storing IPEM offline data|
-|Mapsforge Android API|Interface that allows the consume of Mapsforge functionalities|
+|Maps Data|Interface that allows the consume of open street map data|
 |FCM Android SDK|Interface that allows the consume of FCM functionalities as an Android SDK|
 |IPEM Offline Data|Interface that allows the consume of SQLite functionalities|
 |IPED REST API|Interface that allows the consume of IPED functionalities|
-|IPEPN Push Notifications Web API|Interface that allows the consume of IPEPN functionalities|
+|IPEPN Push Notifications Web API|Interface that allows the request of push notifications|
 |FCM HTTP v1 API|Interface that allows the consume of FCM functionalities as an Web API|
 |Firebase Cloud Platform|Cloud platform where Firebase services are deployed|
 |Heroku Cloud Platform|Cloud platform where IPED and IPEN are deployed|
