@@ -93,3 +93,8 @@ To satisfy the structure of the chosen design concepts, the following elements a
 #### Domain Model
 
 ![DOMAIN_MODEL](diagrams/IPEM_DOMAIN_MODEL.png)
+
+#### Package Diagram
+
+![PACKAGE_DIAGRAM](diagrams/IPEM_PACKAGE_DIAGRAM.png)
+
