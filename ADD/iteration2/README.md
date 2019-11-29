@@ -81,3 +81,14 @@ To satisfy the structure of the chosen design concepts, the following elements a
 |Map use cases by actors|To establish actors and their responbilities it is necessary to map the use cases being addressed by their actors|
 |Map use cases to domain objects|Domain objects of use cases help in identifying the dependencies existent for each use case|
 |Elaborate IPEM structure using packages|In order to comprehend how the application is structured, it is necessary to define the structure of the application using packages|
+
+
+**Step 6**
+
+- Goal: Sketch views and record design decisions
+
+### Module View
+
+#### Domain Model
+
+![DOMAIN_MODEL](diagrams/IPEM_DOMAIN_MODEL.png)
