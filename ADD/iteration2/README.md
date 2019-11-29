@@ -81,6 +81,7 @@ To satisfy the structure of the chosen design concepts, the following elements a
 |Map use cases by actors|To establish actors and their responbilities it is necessary to map the use cases being addressed by their actors|
 |Map use cases to domain objects|Domain objects of use cases help in identifying the dependencies existent for each use case|
 |Elaborate IPEM structure using packages|In order to comprehend how the application is structured, it is necessary to define the structure of the application using packages|
+|Decompose IPEM in smaller components|In order to comprehend how MVP architectural pattern applies in IPEM it is necessary to decompose it in a fine-grain view|
 
 
 **Step 6**
