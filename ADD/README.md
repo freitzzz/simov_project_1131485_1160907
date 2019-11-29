@@ -65,8 +65,8 @@ The following tables describe the existing architectural drivers
 |UC-2|Consult school canteens|To consult canteens menus it is necessary to consult which canteens a school provides|High|Low|Pre-iteration 1|Iteration 1|--|
 |UC-3|Consult canteen menus|To consult menus dishes it is necessary to consult which menus a canteen offers|High|Low|Pre-iteration 1|Iteration 1|--|
 |UC-4|Consult menu dishes|To consult which dishes I can choose to eat it is necessary to consult which dishes are available on a menu|High|Low|Pre-iteration 1|Iteration 1|--|
-|UC-5|View schools location on map|To ease user experience it is necessary to display school location using on a map|High|Medium|Pre-iteration 1|Iteration 1|--|
-|UC-6|View paths to school on map|To ease user experience it is necessary to indicate possible paths to a school on a map|High|High|Pre-iteration 1|Iteration 1|--|
+|UC-5|View canteen location on map|To ease user experience it is necessary to display canteen location using on a map|High|Medium|Pre-iteration 1|Iteration 1|--|
+|UC-6|View paths to canteen on map|To ease user experience it is necessary to indicate possible paths to a canteen on a map|High|High|Pre-iteration 1|Iteration 1|--|
 |UC-7|Purchase dish|To increase user experience it should be possible to pay a dish using the application. The communication between the mobile phone and the payment system must either be NFC or Bluetooth|High|High|Pre-iteration 1|Iteration 1|--|
 |UC-8|Choose a dish as personal favourite|There should be a mechanism that allows users to mark the dishes that they enjoyed|Medium|Low|Pre-iteration 1|--|--|
 |UC-9|Choose to receive app notifications|Users can receive various notifications on their smartphones|Medium|Low|Pre-iteration 1|--|--|
