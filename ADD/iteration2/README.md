@@ -98,3 +98,9 @@ To satisfy the structure of the chosen design concepts, the following elements a
 
 ![PACKAGE_DIAGRAM](diagrams/IPEM_PACKAGE_DIAGRAM.png)
 
+### Component and Connector View
+
+#### IPEM Fine-Grain View Components Diagram
+
+![COMPONENTS_DIAGRAM](diagrams/FINE_GRAIN_VIEW_IPEM_COMPONENT_DIAGRAM.png)
+
