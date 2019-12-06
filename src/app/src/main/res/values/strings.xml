@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ipp-ementa</string>
+    <string name="ipp_ementa_header_logo">This image identifies the logo used as the application header</string>
+    <string name="available_schools_header_text">Available Schools</string>
 </resources>

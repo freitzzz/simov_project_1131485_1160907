@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">ipp-ementa</string>
+    <string name="ipp_ementa_header_logo">Esta imagem representa o logo usado como header da aplicação</string>
+    <string name="available_schools_header_text">Escolas Disponíveis</string>
+</resources>
