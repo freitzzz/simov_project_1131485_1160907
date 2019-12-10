@@ -2,7 +2,7 @@ package com.ippementa.ipem.model.canteen;
 
 import java.util.ArrayList;
 
-public class AvailableCanteensModel extends ArrayList<AvailableCanteensModel.Item> {
+public class AvailableCanteensResponsePayload extends ArrayList<AvailableCanteensResponsePayload.Item> {
 
     public class Item {
 
