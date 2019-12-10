@@ -49,7 +49,9 @@ public class AvailableSchoolsActivity extends AppCompatActivity implements Avail
             }
         });
 
-        schoolsListView.setAdapter(new AvailableSchoolsListAdapter(this, new ArrayList<AvailableSchoolsModel.Item>()));
+        adapter = new AvailableSchoolsListAdapter(this, new ArrayList<AvailableSchoolsModel.Item>());
+
+        schoolsListView.setAdapter(adapter);
 
         presenter.requestSchools();
     }
