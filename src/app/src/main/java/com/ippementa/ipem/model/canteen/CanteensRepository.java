@@ -9,7 +9,7 @@ import java.net.URL;
 
 public class CanteensRepository {
 
-    public AvailableCanteensModel availableCanteens(long schoolId) throws IOException {
+    public AvailableCanteensResponsePayload availableCanteens(long schoolId) throws IOException {
 
         URL url = new URL("http://10.0.2.2:8080/schools/" + schoolId + "/canteens");
 
@@ -17,9 +17,9 @@ public class CanteensRepository {
 
         if(apiResponse.statusCode == 200){
 
-            AvailableCanteensModel model = new Gson().fromJson(apiResponse.payload, AvailableCanteensModel.class);
+            AvailableCanteensResponsePayload payload = new Gson().fromJson(apiResponse.payload, AvailableCanteensResponsePayload.class);
 
-            return model;
+            return payload;
         }else{
 
             throw new RequestException(apiResponse);

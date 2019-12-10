@@ -6,10 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ippementa.ipem.R;
+import com.ippementa.ipem.presenter.canteen.AvailableCanteensModel;
+import com.ippementa.ipem.presenter.canteen.AvailableCanteensPresenter;
+import com.ippementa.ipem.presenter.school.AvailableSchoolsModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +23,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AvailableCanteensActivity extends AppCompatActivity {
+public class AvailableCanteensActivity extends AppCompatActivity implements AvailableCanteensView{
 
-    private List<String[]> availableCanteens;
+    private AvailableCanteensPresenter presenter;
+
+    private AvailableCanteensListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,22 +35,88 @@ public class AvailableCanteensActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_available_canteens);
 
-        String schoolName = getIntent().getStringExtra("school.name");
+        this.presenter = new AvailableCanteensPresenter(this);
+
+        AvailableSchoolsModel.Item school = getIntent().getParcelableExtra("school");
 
         TextView headerTextView = findViewById(R.id.available_canteens_header_text_view);
 
-        headerTextView.setText(headerTextView.getText().toString() + schoolName);
+        headerTextView.setText(headerTextView.getText().toString() + " " + school.acronym);
+
+        Button headerBackButton = findViewById(R.id.available_canteens_header_back_button);
+
+        headerBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                navigateBackToAvailableSchoolsPage();
+
+            }
+        });
 
         ListView canteensListView = findViewById(R.id.available_canteens_list_view);
 
-        this.availableCanteens = (ArrayList<String[]>)getIntent().getExtras().getSerializable("canteens");
+        this.adapter = new AvailableCanteensActivity.AvailableCanteensListAdapter(this, new ArrayList<AvailableCanteensModel.Item>());
 
-        canteensListView.setAdapter(new AvailableCanteensActivity.AvailableCanteensListAdapter(this, availableCanteens));
+        canteensListView.setAdapter(adapter);
+
+        this.presenter.requestCanteens(school.id);
     }
 
-    private class AvailableCanteensListAdapter extends ArrayAdapter<String[]> {
+    @Override
+    public void showCanteens(AvailableCanteensModel canteens) {
 
-        public AvailableCanteensListAdapter(Context context, List<String[]> objects) {
+        adapter.clear();
+
+        adapter.addAll(canteens);
+
+        adapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void navigateToCanteenMenusPage(AvailableCanteensModel.Item canteen) {
+
+    }
+
+    @Override
+    public void navigateBackToAvailableSchoolsPage() {
+
+        finish();
+
+    }
+
+    @Override
+    public void showUnavailableCanteensError() {
+
+        Toast.makeText(this, "No Available Canteens", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void showNoInternetConnectionError() {
+
+        Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void showServerNotAvailableError() {
+
+        Toast.makeText(this, "Server Not Available", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void showUnexepectedServerFailureError() {
+
+        Toast.makeText(this, "Unexpected Server Failure", Toast.LENGTH_LONG).show();
+
+    }
+
+    private class AvailableCanteensListAdapter extends ArrayAdapter<AvailableCanteensModel.Item> {
+
+        public AvailableCanteensListAdapter(Context context, List<AvailableCanteensModel.Item> objects) {
             super(context, 0, objects);
         }
 
@@ -51,7 +124,7 @@ public class AvailableCanteensActivity extends AppCompatActivity {
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-            String[] canteen = getItem(position);
+            AvailableCanteensModel.Item canteen = getItem(position);
 
             if(convertView == null){
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.available_canteens_list_view_item, parent, false);
@@ -59,7 +132,7 @@ public class AvailableCanteensActivity extends AppCompatActivity {
 
             TextView canteenNameTextView = convertView.findViewById(R.id.available_canteens_list_view_item_canteen_name_text_view);
 
-            canteenNameTextView.setText(canteen[1]);
+            canteenNameTextView.setText(canteen.name);
 
             return convertView;
         }
