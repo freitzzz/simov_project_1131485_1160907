@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.AvailableSchoolsActivity">
+    tools:context=".view.school.AvailableSchoolsActivity">
 
     <ImageView
         android:id="@+id/available_schools_header_image_view"
