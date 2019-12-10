@@ -123,6 +123,8 @@ public class AvailableSchoolsPresenter implements IPresenter {
 
                         item.name = payloadItem.name;
 
+                        model.add(item);
+
                     }
 
                     presenter.view.showSchools(model);
