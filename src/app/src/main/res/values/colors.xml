@@ -7,4 +7,5 @@
     <color name="colorBackgroundHeaderText">#EAEAEA</color>
     <color name="colorSchoolAcronym">#EF375F</color>
     <color name="colorSchoolName">#000000</color>
+    <color name="colorCanteenName">#000000</color>
 </resources>
