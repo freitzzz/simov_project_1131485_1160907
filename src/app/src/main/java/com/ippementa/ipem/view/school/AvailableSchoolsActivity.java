@@ -1,12 +1,7 @@
 package com.ippementa.ipem.view.school;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,48 +10,124 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ippementa.ipem.R;
-import com.ippementa.ipem.model.canteen.AvailableCanteensModel;
-import com.ippementa.ipem.model.canteen.CanteensRepository;
+import com.ippementa.ipem.presenter.school.AvailableSchoolsModel;
+import com.ippementa.ipem.presenter.school.AvailableSchoolsPresenter;
 import com.ippementa.ipem.view.canteen.AvailableCanteensActivity;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AvailableSchoolsActivity extends AppCompatActivity {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
-    private List<String[]> availableSchools;
+public class AvailableSchoolsActivity extends AppCompatActivity implements AvailableSchoolsView {
+
+    private AvailableSchoolsPresenter presenter;
+
+    private AvailableSchoolsListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.presenter = new AvailableSchoolsPresenter(this);
+
         setContentView(R.layout.activity_available_schools);
 
-        ListView schoolsListView = findViewById(R.id.available_schools_list_view);
-
-        this.availableSchools = (ArrayList<String[]>)getIntent().getExtras().getSerializable("schools");
+        final ListView schoolsListView = findViewById(R.id.available_schools_list_view);
 
         schoolsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String[] schoolInfo = availableSchools.get(position);
+                AvailableSchoolsModel.Item school = adapter.getItem(position);
 
-                long schoolId = Long.parseLong(schoolInfo[0]);
-
-                new RequestAvailableSchoolsTask().execute(schoolId);
+                navigateToSchoolCanteensPage(school);
             }
         });
 
-        schoolsListView.setAdapter(new AvailableSchoolsListAdapter(this, availableSchools));
+        schoolsListView.setAdapter(new AvailableSchoolsListAdapter(this, new ArrayList<AvailableSchoolsModel.Item>()));
+
+        presenter.requestSchools();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        presenter.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        presenter.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        presenter.onPause();
+    }
+
+    @Override
+    public void showSchools(AvailableSchoolsModel schools) {
+
+        adapter.clear();
+
+        adapter.addAll(schools);
+
+        adapter.notifyDataSetChanged();
 
     }
 
-    private class AvailableSchoolsListAdapter extends ArrayAdapter<String[]> {
+    @Override
+    public void navigateToSchoolCanteensPage(AvailableSchoolsModel.Item school) {
 
-        public AvailableSchoolsListAdapter(Context context, List<String[]> objects) {
+        Intent availableCanteensActivity = new Intent(AvailableSchoolsActivity.this, AvailableCanteensActivity.class);
+
+        availableCanteensActivity.putExtra("school", school);
+
+        startActivity(availableCanteensActivity);
+
+    }
+
+    @Override
+    public void showUnavailableSchoolsError() {
+
+        Toast.makeText(this, "No Schools Available", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void showNoInternetConnectionError() {
+
+        Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void showServerNotAvailableError() {
+
+        Toast.makeText(this, "Server Not Available", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void showUnexepectedServerFailureError() {
+
+        Toast.makeText(this, "Unexpected Server Failure", Toast.LENGTH_LONG).show();
+
+    }
+
+    private class AvailableSchoolsListAdapter extends ArrayAdapter<AvailableSchoolsModel.Item> {
+
+        public AvailableSchoolsListAdapter(Context context, List<AvailableSchoolsModel.Item> objects) {
             super(context, 0, objects);
         }
 
@@ -64,7 +135,7 @@ public class AvailableSchoolsActivity extends AppCompatActivity {
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-            String[] school = getItem(position);
+            AvailableSchoolsModel.Item school = getItem(position);
 
             if(convertView == null){
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.available_schools_list_view_item, parent, false);
@@ -74,44 +145,11 @@ public class AvailableSchoolsActivity extends AppCompatActivity {
 
             TextView schoolNameTextView = convertView.findViewById(R.id.available_schools_list_view_item_school_name_text_view);
 
-            schoolAcronymTextView.setText(school[1]);
+            schoolAcronymTextView.setText(school.acronym);
 
-            schoolNameTextView.setText(school[2]);
+            schoolNameTextView.setText(school.name);
 
             return convertView;
-        }
-    }
-
-    private class RequestAvailableSchoolsTask extends AsyncTask<Long, Integer, AvailableCanteensModel> {
-
-        @Override
-        protected AvailableCanteensModel doInBackground(Long... schooldIds) {
-
-            CanteensRepository repository = new CanteensRepository();
-
-            try {
-                return repository.availableCanteens(schooldIds[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(AvailableCanteensModel items) {
-            super.onPostExecute(items);
-
-            Intent availableCanteensActivity = new Intent(AvailableSchoolsActivity.this, AvailableCanteensActivity.class);
-
-            ArrayList<String[]> canteens = new ArrayList<>();
-
-            for(AvailableCanteensModel.Item item : items){
-                canteens.add(new String[]{Long.toString(item.id), item.name});
-            }
-
-            availableCanteensActivity.putExtra("canteens", canteens);
-
-            startActivity(availableCanteensActivity);
         }
     }
 

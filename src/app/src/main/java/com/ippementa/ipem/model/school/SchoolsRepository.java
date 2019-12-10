@@ -9,7 +9,7 @@ import java.net.URL;
 
 public class SchoolsRepository {
 
-    public AvailableSchoolsModel availableSchools() throws IOException {
+    public AvailableSchoolsResponsePayload availableSchools() throws IOException {
 
         URL url = new URL("http://10.0.2.2:8080/schools");
 
@@ -17,7 +17,7 @@ public class SchoolsRepository {
 
         if(apiResponse.statusCode == 200){
 
-            AvailableSchoolsModel model = new Gson().fromJson(apiResponse.payload, AvailableSchoolsModel.class);
+            AvailableSchoolsResponsePayload model = new Gson().fromJson(apiResponse.payload, AvailableSchoolsResponsePayload.class);
 
             return model;
         }else{
