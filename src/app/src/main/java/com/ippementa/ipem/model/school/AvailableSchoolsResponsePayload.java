@@ -2,7 +2,7 @@ package com.ippementa.ipem.model.school;
 
 import java.util.ArrayList;
 
-public class AvailableSchoolsModel extends ArrayList<AvailableSchoolsModel.Item> {
+public class AvailableSchoolsResponsePayload extends ArrayList<AvailableSchoolsResponsePayload.Item> {
 
     public class Item {
 
