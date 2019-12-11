@@ -11,7 +11,7 @@ public class CanteensRepository {
 
     public AvailableCanteensResponsePayload availableCanteens(long schoolId) throws IOException {
 
-        URL url = new URL("http://10.0.2.2:8080/schools/" + schoolId + "/canteens");
+        URL url = new URL("http://demo7718589.mockable.io/schools/" + schoolId + "/canteens");
 
         Client.Response apiResponse = Client.get(url);
 

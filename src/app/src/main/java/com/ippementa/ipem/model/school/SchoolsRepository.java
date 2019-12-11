@@ -11,7 +11,7 @@ public class SchoolsRepository {
 
     public AvailableSchoolsResponsePayload availableSchools() throws IOException {
 
-        URL url = new URL("http://10.0.2.2:8080/schools");
+        URL url = new URL("http://demo7718589.mockable.io/schools");
 
         Client.Response apiResponse = Client.get(url);
 
