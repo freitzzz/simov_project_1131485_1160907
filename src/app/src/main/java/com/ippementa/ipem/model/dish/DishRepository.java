@@ -12,7 +12,7 @@ public class DishRepository {
 
     public MenuDishesResponsePayload dishes(long schoolId, long canteenId, long menuId) throws IOException {
 
-        URL url = new URL("http://demo7718589.mockable.io/schools/" + schoolId + "/canteens/" + canteenId + "/menus/" + menuId + "/dishes");
+        URL url = new URL("http://localhost:8080/schools/" + schoolId + "/canteens/" + canteenId + "/menus/" + menuId + "/dishes");
 
         Client.Response apiResponse = Client.get(url);
 

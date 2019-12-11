@@ -11,7 +11,7 @@ public class MenusRepository {
 
     public AvailableCanteenMenusResponsePayload availableMenus(long schoolId, long canteenId) throws IOException {
 
-        URL url = new URL("http://demo7718589.mockable.io/schools/" + schoolId + "/canteens/" + canteenId + "/menus");
+        URL url = new URL("http://localhost:8080/schools/" + schoolId + "/canteens/" + canteenId + "/menus");
 
         Client.Response apiResponse = Client.get(url);
 
