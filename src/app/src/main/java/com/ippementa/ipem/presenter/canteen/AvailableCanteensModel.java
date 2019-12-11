@@ -9,6 +9,8 @@ public class AvailableCanteensModel extends ArrayList<AvailableCanteensModel.Ite
 
     public static class Item implements Parcelable {
 
+        public long schoolId;
+
         public long id;
 
         public String name;
@@ -16,6 +18,7 @@ public class AvailableCanteensModel extends ArrayList<AvailableCanteensModel.Ite
         public Item(){}
 
         protected Item(Parcel in) {
+            schoolId = in.readLong();
             id = in.readLong();
             name = in.readString();
         }
@@ -39,6 +42,7 @@ public class AvailableCanteensModel extends ArrayList<AvailableCanteensModel.Ite
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
+            dest.writeLong(schoolId);
             dest.writeLong(id);
             dest.writeString(name);
         }

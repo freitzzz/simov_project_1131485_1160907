@@ -1,10 +1,12 @@
 package com.ippementa.ipem.view.canteen;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -15,6 +17,7 @@ import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.canteen.AvailableCanteensModel;
 import com.ippementa.ipem.presenter.canteen.AvailableCanteensPresenter;
 import com.ippementa.ipem.presenter.school.AvailableSchoolsModel;
+import com.ippementa.ipem.view.menu.AvailableCanteenMenusActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +40,7 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
 
         this.presenter = new AvailableCanteensPresenter(this);
 
-        AvailableSchoolsModel.Item school = getIntent().getParcelableExtra("school");
+        final AvailableSchoolsModel.Item school = getIntent().getParcelableExtra("school");
 
         TextView headerTextView = findViewById(R.id.available_canteens_header_text_view);
 
@@ -55,6 +58,17 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
         });
 
         ListView canteensListView = findViewById(R.id.available_canteens_list_view);
+
+        canteensListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AvailableCanteensModel.Item canteen = adapter.getItem(position);
+
+                canteen.schoolId = school.id;
+
+                navigateToCanteenMenusPage(canteen);
+            }
+        });
 
         this.adapter = new AvailableCanteensActivity.AvailableCanteensListAdapter(this, new ArrayList<AvailableCanteensModel.Item>());
 
@@ -76,6 +90,12 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
 
     @Override
     public void navigateToCanteenMenusPage(AvailableCanteensModel.Item canteen) {
+
+        Intent intent = new Intent(this, AvailableCanteenMenusActivity.class);
+
+        intent.putExtra("canteen", canteen);
+
+        startActivity(intent);
 
     }
 
