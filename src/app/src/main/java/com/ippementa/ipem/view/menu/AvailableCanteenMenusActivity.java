@@ -1,10 +1,12 @@
 package com.ippementa.ipem.view.menu;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.canteen.AvailableCanteensModel;
 import com.ippementa.ipem.presenter.menu.AvailableCanteenMenusModel;
 import com.ippementa.ipem.presenter.menu.AvailableCanteenMenusPresenter;
+import com.ippementa.ipem.view.dish.MenuDishesActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +41,7 @@ public class AvailableCanteenMenusActivity extends AppCompatActivity implements 
 
         this.presenter = new AvailableCanteenMenusPresenter(this);
 
-        AvailableCanteensModel.Item canteen = getIntent().getParcelableExtra("canteen");
+        final AvailableCanteensModel.Item canteen = getIntent().getParcelableExtra("canteen");
 
         TextView headerTextView = findViewById(R.id.available_canteen_menus_header_text_view);
 
@@ -56,6 +59,19 @@ public class AvailableCanteenMenusActivity extends AppCompatActivity implements 
         });
 
         ListView menusListView = findViewById(R.id.available_canteen_menus_list_view);
+
+        menusListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AvailableCanteenMenusModel.Item menu = adapter.getItem(position);
+
+                menu.schoolId = canteen.schoolId;
+
+                menu.canteenId = canteen.id;
+
+                navigateToMenuDishesPage(menu);
+            }
+        });
 
         this.adapter = new AvailableCanteenMenusActivity.AvailableCanteenMenusListAdapter(this, new ArrayList<AvailableCanteenMenusModel.Item>());
 
@@ -77,6 +93,12 @@ public class AvailableCanteenMenusActivity extends AppCompatActivity implements 
 
     @Override
     public void navigateToMenuDishesPage(AvailableCanteenMenusModel.Item menu) {
+
+        Intent intent = new Intent(this, MenuDishesActivity.class);
+
+        intent.putExtra("menu", menu);
+
+        startActivity(intent);
 
     }
 

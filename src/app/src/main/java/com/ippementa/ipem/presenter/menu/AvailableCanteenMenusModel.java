@@ -11,12 +11,18 @@ public class AvailableCanteenMenusModel extends ArrayList<AvailableCanteenMenusM
 
         public long id;
 
+        public long schoolId;
+
+        public long canteenId;
+
         public String type;
 
         public Item(){}
 
         protected Item(Parcel in) {
             id = in.readLong();
+            schoolId = in.readLong();
+            canteenId = in.readLong();
             type = in.readString();
         }
 
@@ -40,6 +46,8 @@ public class AvailableCanteenMenusModel extends ArrayList<AvailableCanteenMenusM
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeLong(id);
+            dest.writeLong(schoolId);
+            dest.writeLong(canteenId);
             dest.writeString(type);
         }
     }
