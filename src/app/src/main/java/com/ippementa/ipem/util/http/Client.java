@@ -25,9 +25,15 @@ public class Client {
 
         response.statusCode = connection.getResponseCode();
 
-        InputStream payloadInputStream = connection.getInputStream();
+        InputStream payloadStream;
 
-        BufferedReader readerStream = new BufferedReader(new InputStreamReader(payloadInputStream));
+        if(response.statusCode < 400){
+            payloadStream = connection.getInputStream();
+        }else{
+            payloadStream = connection.getErrorStream();
+        }
+
+        BufferedReader readerStream = new BufferedReader(new InputStreamReader(payloadStream));
 
         StringBuffer buffer = new StringBuffer();
 
