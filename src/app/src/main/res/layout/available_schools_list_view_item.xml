@@ -17,5 +17,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:textColor="@color/colorSchoolName"/>
-    
+
+    <fragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:name="com.ippementa.ipem.view.preferences.UserPreferencesFragment"/>
 </LinearLayout>

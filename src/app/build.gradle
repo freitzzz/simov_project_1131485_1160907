@@ -24,6 +24,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
     implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.google.android.material:material:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
@@ -32,8 +34,11 @@ dependencies {
 
     def room_version = "2.2.2"
 
+    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
+
     implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    // For Kotlin use kapt instead of annotationProcessor
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
     // optional - RxJava support for Room
@@ -43,4 +48,6 @@ dependencies {
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 
+    //Preference library
+    implementation 'com.android.support:preference-v7:23.4.0'
 }

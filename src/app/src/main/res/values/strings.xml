@@ -4,5 +4,7 @@
     <string name="available_schools_header_text">Available Schools</string>
     <string name="available_canteens_header_text">Canteens of</string>
     <string name="available_canteen_menus_header_text">Available menus at</string>
-    <string name="menu_dishes_header_text" >Available Dishes</string>
+    <string name="menu_dishes_header_text">Available Dishes</string>
+    <string name="enable_offline_mode_text">Enable Offline Mode</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>

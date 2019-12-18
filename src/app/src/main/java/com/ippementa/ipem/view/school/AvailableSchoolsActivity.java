@@ -16,6 +16,7 @@ import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.school.AvailableSchoolsModel;
 import com.ippementa.ipem.presenter.school.AvailableSchoolsPresenter;
 import com.ippementa.ipem.view.canteen.AvailableCanteensActivity;
+import com.ippementa.ipem.view.preferences.UserPreferencesFragment;
 
 import java.util.ArrayList;
 import java.util.List;
