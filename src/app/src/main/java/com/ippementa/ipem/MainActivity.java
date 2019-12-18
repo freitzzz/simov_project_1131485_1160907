@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ippementa.ipem.view.preferences.UserPreferencesFragment;
+import com.ippementa.ipem.view.preferences.UserPreferencesActivity;
 import com.ippementa.ipem.view.school.AvailableSchoolsActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = new Intent(this, AvailableSchoolsActivity.class);
-
+        //Intent intent = new Intent(this, UserPreferencesActivity.class);
         startActivity(intent);
     }
 }
