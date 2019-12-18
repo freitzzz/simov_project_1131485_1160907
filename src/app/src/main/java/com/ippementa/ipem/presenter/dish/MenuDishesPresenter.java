@@ -2,7 +2,7 @@ package com.ippementa.ipem.presenter.dish;
 
 import android.os.AsyncTask;
 
-import com.ippementa.ipem.model.dish.DishRepository;
+import com.ippementa.ipem.model.dish.IPEDDishRepositoryImpl;
 import com.ippementa.ipem.model.dish.MenuDishesResponsePayload;
 import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.presenter.menu.AvailableCanteenMenusModel;
@@ -51,7 +51,7 @@ public class MenuDishesPresenter implements IPresenter {
         @Override
         protected BackgroundResult doInBackground(AvailableCanteenMenusModel.Item... item) {
 
-            DishRepository repository = new DishRepository();
+            IPEDDishRepositoryImpl repository = new IPEDDishRepositoryImpl();
 
             BackgroundResult result = new BackgroundResult();
 

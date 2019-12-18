@@ -3,7 +3,7 @@ package com.ippementa.ipem.presenter.school;
 import android.os.AsyncTask;
 
 import com.ippementa.ipem.model.school.AvailableSchoolsResponsePayload;
-import com.ippementa.ipem.model.school.SchoolsRepository;
+import com.ippementa.ipem.model.school.IPEDSchoolsRepositoryImpl;
 import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.util.CommunicationMediator;
 import com.ippementa.ipem.util.http.RequestException;
@@ -54,7 +54,7 @@ public class AvailableSchoolsPresenter implements IPresenter {
         @Override
         protected BackgroundResult doInBackground(Void... voids) {
 
-            SchoolsRepository repository = new SchoolsRepository();
+            IPEDSchoolsRepositoryImpl repository = new IPEDSchoolsRepositoryImpl();
 
             BackgroundResult result = new BackgroundResult();
 
