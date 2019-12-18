@@ -3,10 +3,11 @@ package com.ippementa.ipem.presenter.menu;
 import android.os.AsyncTask;
 
 import com.ippementa.ipem.model.menu.AvailableCanteenMenusResponsePayload;
-import com.ippementa.ipem.model.menu.IPEDMenusRepositoryImpl;
+import com.ippementa.ipem.model.menu.MenusRepository;
 import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.presenter.canteen.AvailableCanteensModel;
 import com.ippementa.ipem.util.CommunicationMediator;
+import com.ippementa.ipem.util.Provider;
 import com.ippementa.ipem.util.http.RequestException;
 import com.ippementa.ipem.view.menu.AvailableCanteenMenusActivity;
 import com.ippementa.ipem.view.menu.AvailableCanteenMenusView;
@@ -55,7 +56,8 @@ public class AvailableCanteenMenusPresenter implements IPresenter {
         @Override
         protected BackgroundResult doInBackground(AvailableCanteensModel.Item... item) {
 
-            IPEDMenusRepositoryImpl repository = new IPEDMenusRepositoryImpl();
+            MenusRepository repository
+                    = Provider.instance().repositoryFactory().createMenusRepository();
 
             BackgroundResult result = new BackgroundResult();
 

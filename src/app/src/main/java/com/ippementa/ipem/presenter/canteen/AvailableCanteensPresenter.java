@@ -3,9 +3,10 @@ package com.ippementa.ipem.presenter.canteen;
 import android.os.AsyncTask;
 
 import com.ippementa.ipem.model.canteen.AvailableCanteensResponsePayload;
-import com.ippementa.ipem.model.canteen.IPEDCanteensRepositoryImpl;
+import com.ippementa.ipem.model.canteen.CanteensRepository;
 import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.util.CommunicationMediator;
+import com.ippementa.ipem.util.Provider;
 import com.ippementa.ipem.util.http.RequestException;
 import com.ippementa.ipem.view.canteen.AvailableCanteensActivity;
 import com.ippementa.ipem.view.canteen.AvailableCanteensView;
@@ -54,7 +55,8 @@ public class AvailableCanteensPresenter implements IPresenter {
         @Override
         protected BackgroundResult doInBackground(Long... schoolId) {
 
-            IPEDCanteensRepositoryImpl repository = new IPEDCanteensRepositoryImpl();
+            CanteensRepository repository
+                    = Provider.instance().repositoryFactory().createCanteensRepository();
 
             BackgroundResult result = new BackgroundResult();
 
