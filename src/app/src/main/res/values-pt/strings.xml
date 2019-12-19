@@ -6,5 +6,4 @@
     <string name="available_canteens_header_text">Cantinas do</string>
     <string name="available_canteen_menus_header_text">Ementas disponíveis em</string>
     <string name="menu_dishes_header_text">Pratos disponíveis</string>
-    <string name="enable_offline_mode_text">Ativar Modo Offline</string>
 </resources>

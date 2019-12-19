@@ -4,12 +4,18 @@
     android:layout_height="match_parent" android:layout_width="match_parent"
     android:id="@+id/preferences">
 
+    <PreferenceScreen
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <SwitchPreferenceCompat
-            app:key="offline_mode"
-            app:title="@string/enable_offline_mode_text"/>
+            app:key="notifications"
+            app:title="Enable message notifications"/>
 
+        <Preference
+            app:key="feedback"
+            app:title="Send feedback"
+            app:summary="Report technical issues or suggest new features"/>
 
-
+    </PreferenceScreen>
 
 </PreferenceScreen>

@@ -1,22 +1,16 @@
 package com.ippementa.ipem.view.preferences;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceFragmentCompat;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.ippementa.ipem.R;
 
 public class UserPreferencesFragment extends PreferenceFragmentCompat {
     @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+    public void onCreatePreferences(Bundle bundle, String s) {
+        //Load the preferences from the xml
         addPreferencesFromResource(R.xml.preferences);
     }
-
 }

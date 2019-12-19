@@ -16,11 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.preferences.UserPreferencesActivity"></activity>
-        <activity
-            android:name=".ui.login.UserPreferencesActivity"
-            android:label="@string/title_activity_user_preferences" />
-        <activity android:name=".view.dish.MenuDishesActivity" />
+        <activity android:name=".view.dish.MenuDishesActivity"></activity>
         <activity android:name=".view.menu.AvailableCanteenMenusActivity" />
         <activity android:name=".view.canteen.AvailableCanteensActivity" />
         <activity android:name=".view.school.AvailableSchoolsActivity" />
