@@ -24,7 +24,8 @@ public class Provider {
         if(this.settings.isInOfflineMode()){
 
             this.roomRepositoryFactory
-                    = Room.databaseBuilder(ctx, RepositoryFactory.RoomRepositoryFactoryImpl.class, "ipp-ementa-sqlite")
+                    = Room
+                    .databaseBuilder(ctx, RepositoryFactory.RoomRepositoryFactoryImpl.class, "ipp-ementa-sqlite")
                     .build();
         }
 
@@ -48,7 +49,8 @@ public class Provider {
 
             if(roomRepositoryFactory == null){
                 this.roomRepositoryFactory
-                        = Room.databaseBuilder(ctx, RepositoryFactory.RoomRepositoryFactoryImpl.class, "ipp-ementa-sqlite")
+                        = Room
+                        .databaseBuilder(ctx, RepositoryFactory.RoomRepositoryFactoryImpl.class, "ipp-ementa-sqlite")
                         .build();
             }
 
@@ -59,6 +61,12 @@ public class Provider {
             return new RepositoryFactory.IPEDRepositoryFactoryImpl();
 
         }
+
+    }
+
+    public Settings settings(){
+
+        return this.settings;
 
     }
 
