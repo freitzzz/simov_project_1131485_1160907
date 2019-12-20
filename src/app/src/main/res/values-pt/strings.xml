@@ -6,4 +6,10 @@
     <string name="available_canteens_header_text">Cantinas do</string>
     <string name="available_canteen_menus_header_text">Ementas disponíveis em</string>
     <string name="menu_dishes_header_text">Pratos disponíveis</string>
+    <string name="menu_lunch_type">Almoço</string>
+    <string name="menu_dinner_type">Jantar</string>
+    <string name="dish_meat_type">Carne</string>
+    <string name="dish_fish_type">Peixe</string>
+    <string name="dish_vegetarian_type">Vegetariano</string>
+    <string name="dish_diet_type">Dieta</string>
 </resources>
