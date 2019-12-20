@@ -4,11 +4,12 @@
     <string name="available_schools_header_text">Available Schools</string>
     <string name="available_canteens_header_text">Canteens of</string>
     <string name="available_canteen_menus_header_text">Available menus at</string>
-    <string name="menu_dishes_header_text" >Available Dishes</string>
+    <string name="menu_dishes_header_text">Available Dishes</string>
     <string name="menu_lunch_type">Lunch</string>
     <string name="menu_dinner_type">Dinner</string>
     <string name="dish_meat_type">Meat</string>
     <string name="dish_fish_type">Fish</string>
     <string name="dish_vegetarian_type">Vegetarian</string>
     <string name="dish_diet_type">Diet</string>
+    <string name="option_menu_settings_item">Settings</string>
 </resources>
