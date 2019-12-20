@@ -7,6 +7,7 @@ import com.ippementa.ipem.model.canteen.CanteensRepository;
 import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.util.CommunicationMediator;
 import com.ippementa.ipem.util.Provider;
+import com.ippementa.ipem.util.http.Client;
 import com.ippementa.ipem.util.http.RequestException;
 import com.ippementa.ipem.view.canteen.AvailableCanteensActivity;
 import com.ippementa.ipem.view.canteen.AvailableCanteensView;
@@ -57,13 +58,28 @@ public class AvailableCanteensPresenter implements IPresenter {
         protected BackgroundResult doInBackground(Long... schoolId) {
 
             CanteensRepository repository
-                    = Provider.instance((AvailableCanteensActivity)view).repositoryFactory().createCanteensRepository();
+                    = Provider
+                    .instance((AvailableCanteensActivity)view)
+                    .repositoryFactory((AvailableCanteensActivity)view)
+                    .createCanteensRepository();
 
             BackgroundResult result = new BackgroundResult();
 
             try {
 
                 result.canteens = repository.canteens(schoolId[0]);
+
+                if(result.canteens.isEmpty()){
+                    // Need to simulate a RequestException as this was a SQL Query that found no rows
+
+                    Client.Response response = new Client.Response();
+
+                    response.statusCode = 404;
+
+                    RequestException exception = new RequestException(response);
+
+                    result.requestException = exception;
+                }
 
             } catch (IOException e) {
 

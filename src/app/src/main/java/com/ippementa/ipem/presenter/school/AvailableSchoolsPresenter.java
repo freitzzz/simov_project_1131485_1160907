@@ -7,6 +7,7 @@ import com.ippementa.ipem.model.school.SchoolsRepository;
 import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.util.CommunicationMediator;
 import com.ippementa.ipem.util.Provider;
+import com.ippementa.ipem.util.http.Client;
 import com.ippementa.ipem.util.http.RequestException;
 import com.ippementa.ipem.view.school.AvailableSchoolsActivity;
 import com.ippementa.ipem.view.school.AvailableSchoolsView;
@@ -57,13 +58,28 @@ public class AvailableSchoolsPresenter implements IPresenter {
         protected BackgroundResult doInBackground(Void... voids) {
 
             SchoolsRepository repository
-                    = Provider.instance((AvailableSchoolsActivity)view).repositoryFactory().createSchoolsRepository();
+                    = Provider
+                    .instance((AvailableSchoolsActivity)view)
+                    .repositoryFactory((AvailableSchoolsActivity)view)
+                    .createSchoolsRepository();
 
             BackgroundResult result = new BackgroundResult();
 
             try {
 
                 result.schools = repository.availableSchools();
+
+                if(result.schools.isEmpty()){
+                    // Need to simulate a RequestException as this was a SQL Query that found no rows
+
+                    Client.Response response = new Client.Response();
+
+                    response.statusCode = 404;
+
+                    RequestException exception = new RequestException(response);
+
+                    result.requestException = exception;
+                }
 
             } catch (IOException e) {
 

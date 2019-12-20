@@ -9,6 +9,7 @@ import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.presenter.menu.AvailableCanteenMenusModel;
 import com.ippementa.ipem.util.CommunicationMediator;
 import com.ippementa.ipem.util.Provider;
+import com.ippementa.ipem.util.http.Client;
 import com.ippementa.ipem.util.http.RequestException;
 import com.ippementa.ipem.view.dish.MenuDishesActivity;
 import com.ippementa.ipem.view.dish.MenuDishesView;
@@ -55,13 +56,28 @@ public class MenuDishesPresenter implements IPresenter {
         protected BackgroundResult doInBackground(AvailableCanteenMenusModel.Item... item) {
 
             DishRepository repository
-                    = Provider.instance((MenuDishesActivity)view).repositoryFactory().createDishRepository();
+                    = Provider
+                    .instance((MenuDishesActivity)view)
+                    .repositoryFactory((MenuDishesActivity)view)
+                    .createDishRepository();
 
             BackgroundResult result = new BackgroundResult();
 
             try {
 
                 result.dishes = repository.dishes(item[0].schoolId, item[0].canteenId, item[0].id);
+
+                if(result.dishes.isEmpty()){
+                    // Need to simulate a RequestException as this was a SQL Query that found no rows
+
+                    Client.Response response = new Client.Response();
+
+                    response.statusCode = 404;
+
+                    RequestException exception = new RequestException(response);
+
+                    result.requestException = exception;
+                }
 
             } catch (IOException e) {
 
