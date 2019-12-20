@@ -11,7 +11,7 @@ import androidx.room.Query;
 public interface RoomDishRepositoryImpl extends DishRepository {
 
     @Override
-    @Query("SELECT * FROM Dish WHERE menuId = :menuId")
+    @Query("SELECT * FROM Dish WHERE menuId = :menuId AND :canteenId > -1 AND :schoolId > -1")
     List<Dish> dishes(long schoolId, long canteenId, long menuId) throws IOException;
 
     @Insert

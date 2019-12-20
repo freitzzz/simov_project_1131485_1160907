@@ -11,7 +11,7 @@ import androidx.room.Query;
 public interface RoomMenusRepositoryImpl extends MenusRepository {
 
     @Override
-    @Query("SELECT * FROM Menu WHERE canteenId = :canteenId")
+    @Query("SELECT * FROM Menu WHERE canteenId = :canteenId AND :schoolId > -1")
     List<Menu> menus(long schoolId, long canteenId) throws IOException;
 
     @Insert

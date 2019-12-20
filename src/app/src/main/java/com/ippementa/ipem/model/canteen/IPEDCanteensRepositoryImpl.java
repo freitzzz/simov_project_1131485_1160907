@@ -13,7 +13,7 @@ public class IPEDCanteensRepositoryImpl implements CanteensRepository {
 
     public List<Canteen> canteens(long schoolId) throws IOException {
 
-        URL url = new URL("http://localhost:8080/schools/" + schoolId + "/canteens");
+        URL url = new URL("http://demo7718589.mockable.io/schools/" + schoolId + "/canteens");
 
         Client.Response apiResponse = Client.get(url);
 
