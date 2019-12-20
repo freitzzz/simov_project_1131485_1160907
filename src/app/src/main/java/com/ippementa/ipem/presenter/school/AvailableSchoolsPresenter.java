@@ -2,7 +2,7 @@ package com.ippementa.ipem.presenter.school;
 
 import android.os.AsyncTask;
 
-import com.ippementa.ipem.model.school.AvailableSchoolsResponsePayload;
+import com.ippementa.ipem.model.school.School;
 import com.ippementa.ipem.model.school.SchoolsRepository;
 import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.util.CommunicationMediator;
@@ -12,6 +12,7 @@ import com.ippementa.ipem.view.school.AvailableSchoolsActivity;
 import com.ippementa.ipem.view.school.AvailableSchoolsView;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AvailableSchoolsPresenter implements IPresenter {
 
@@ -56,13 +57,13 @@ public class AvailableSchoolsPresenter implements IPresenter {
         protected BackgroundResult doInBackground(Void... voids) {
 
             SchoolsRepository repository
-                    = Provider.instance().repositoryFactory().createSchoolsRepository();
+                    = Provider.instance((AvailableSchoolsActivity)view).repositoryFactory().createSchoolsRepository();
 
             BackgroundResult result = new BackgroundResult();
 
             try {
 
-                result.payload = repository.availableSchools();
+                result.schools = repository.availableSchools();
 
             } catch (IOException e) {
 
@@ -115,15 +116,15 @@ public class AvailableSchoolsPresenter implements IPresenter {
 
                     AvailableSchoolsModel model = new AvailableSchoolsModel();
 
-                    for(AvailableSchoolsResponsePayload.Item payloadItem : result.payload){
+                    for(School school : result.schools){
 
                         AvailableSchoolsModel.Item item = new AvailableSchoolsModel.Item();
 
-                        item.id = payloadItem.id;
+                        item.id = school.id;
 
-                        item.acronym = payloadItem.acronym;
+                        item.acronym = school.acronym;
 
-                        item.name = payloadItem.name;
+                        item.name = school.name;
 
                         model.add(item);
 
@@ -143,7 +144,7 @@ public class AvailableSchoolsPresenter implements IPresenter {
          */
         private class BackgroundResult {
 
-            public AvailableSchoolsResponsePayload payload;
+            public List<School> schools;
 
             public IOException ioException;
 

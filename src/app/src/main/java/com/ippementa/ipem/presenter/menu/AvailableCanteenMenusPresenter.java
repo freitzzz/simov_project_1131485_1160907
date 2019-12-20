@@ -2,7 +2,8 @@ package com.ippementa.ipem.presenter.menu;
 
 import android.os.AsyncTask;
 
-import com.ippementa.ipem.model.menu.AvailableCanteenMenusResponsePayload;
+import com.ippementa.ipem.R;
+import com.ippementa.ipem.model.menu.Menu;
 import com.ippementa.ipem.model.menu.MenusRepository;
 import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.presenter.canteen.AvailableCanteensModel;
@@ -13,6 +14,7 @@ import com.ippementa.ipem.view.menu.AvailableCanteenMenusActivity;
 import com.ippementa.ipem.view.menu.AvailableCanteenMenusView;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AvailableCanteenMenusPresenter implements IPresenter {
 
@@ -57,13 +59,13 @@ public class AvailableCanteenMenusPresenter implements IPresenter {
         protected BackgroundResult doInBackground(AvailableCanteensModel.Item... item) {
 
             MenusRepository repository
-                    = Provider.instance().repositoryFactory().createMenusRepository();
+                    = Provider.instance((AvailableCanteenMenusActivity)view).repositoryFactory().createMenusRepository();
 
             BackgroundResult result = new BackgroundResult();
 
             try {
 
-                result.payload = repository.availableMenus(item[0].schoolId, item[0].id);
+                result.menus = repository.menus(item[0].schoolId, item[0].id);
 
             } catch (IOException e) {
 
@@ -116,13 +118,24 @@ public class AvailableCanteenMenusPresenter implements IPresenter {
 
                     AvailableCanteenMenusModel model = new AvailableCanteenMenusModel();
 
-                    for(AvailableCanteenMenusResponsePayload.Item payloadItem : result.payload){
+                    for(Menu menu : result.menus){
 
                         AvailableCanteenMenusModel.Item item = new AvailableCanteenMenusModel.Item();
 
-                        item.id = payloadItem.id;
+                        item.id = menu.id;
 
-                        item.type = payloadItem.type;
+                        String typeAsString;
+
+                        switch (menu.type){
+                            case LUNCH:
+                                typeAsString = ((AvailableCanteenMenusActivity)view).getString(R.string.menu_lunch_type);
+                                break;
+                            default:
+                                typeAsString = ((AvailableCanteenMenusActivity)view).getString(R.string.menu_dinner_type);
+                                break;
+                        }
+
+                        item.type = typeAsString;
 
                         model.add(item);
 
@@ -142,7 +155,7 @@ public class AvailableCanteenMenusPresenter implements IPresenter {
          */
         private class BackgroundResult {
 
-            public AvailableCanteenMenusResponsePayload payload;
+            public List<Menu> menus;
 
             public IOException ioException;
 

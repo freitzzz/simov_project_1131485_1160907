@@ -2,7 +2,7 @@ package com.ippementa.ipem.presenter.canteen;
 
 import android.os.AsyncTask;
 
-import com.ippementa.ipem.model.canteen.AvailableCanteensResponsePayload;
+import com.ippementa.ipem.model.canteen.Canteen;
 import com.ippementa.ipem.model.canteen.CanteensRepository;
 import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.util.CommunicationMediator;
@@ -12,6 +12,7 @@ import com.ippementa.ipem.view.canteen.AvailableCanteensActivity;
 import com.ippementa.ipem.view.canteen.AvailableCanteensView;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AvailableCanteensPresenter implements IPresenter {
 
@@ -56,13 +57,13 @@ public class AvailableCanteensPresenter implements IPresenter {
         protected BackgroundResult doInBackground(Long... schoolId) {
 
             CanteensRepository repository
-                    = Provider.instance().repositoryFactory().createCanteensRepository();
+                    = Provider.instance((AvailableCanteensActivity)view).repositoryFactory().createCanteensRepository();
 
             BackgroundResult result = new BackgroundResult();
 
             try {
 
-                result.payload = repository.availableCanteens(schoolId[0]);
+                result.canteens = repository.canteens(schoolId[0]);
 
             } catch (IOException e) {
 
@@ -115,13 +116,13 @@ public class AvailableCanteensPresenter implements IPresenter {
 
                     AvailableCanteensModel model = new AvailableCanteensModel();
 
-                    for(AvailableCanteensResponsePayload.Item payloadItem : result.payload){
+                    for(Canteen canteen : result.canteens){
 
                         AvailableCanteensModel.Item item = new AvailableCanteensModel.Item();
 
-                        item.id = payloadItem.id;
+                        item.id = canteen.id;
 
-                        item.name = payloadItem.name;
+                        item.name = canteen.name;
 
                         model.add(item);
 
@@ -141,7 +142,7 @@ public class AvailableCanteensPresenter implements IPresenter {
          */
         private class BackgroundResult {
 
-            public AvailableCanteensResponsePayload payload;
+            public List<Canteen> canteens;
 
             public IOException ioException;
 

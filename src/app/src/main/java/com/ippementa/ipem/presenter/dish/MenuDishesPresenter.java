@@ -2,8 +2,9 @@ package com.ippementa.ipem.presenter.dish;
 
 import android.os.AsyncTask;
 
+import com.ippementa.ipem.R;
+import com.ippementa.ipem.model.dish.Dish;
 import com.ippementa.ipem.model.dish.DishRepository;
-import com.ippementa.ipem.model.dish.MenuDishesResponsePayload;
 import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.presenter.menu.AvailableCanteenMenusModel;
 import com.ippementa.ipem.util.CommunicationMediator;
@@ -13,6 +14,7 @@ import com.ippementa.ipem.view.dish.MenuDishesActivity;
 import com.ippementa.ipem.view.dish.MenuDishesView;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MenuDishesPresenter implements IPresenter {
 
@@ -53,13 +55,13 @@ public class MenuDishesPresenter implements IPresenter {
         protected BackgroundResult doInBackground(AvailableCanteenMenusModel.Item... item) {
 
             DishRepository repository
-                    = Provider.instance().repositoryFactory().createDishRepository();
+                    = Provider.instance((MenuDishesActivity)view).repositoryFactory().createDishRepository();
 
             BackgroundResult result = new BackgroundResult();
 
             try {
 
-                result.payload = repository.dishes(item[0].schoolId, item[0].canteenId, item[0].id);
+                result.dishes = repository.dishes(item[0].schoolId, item[0].canteenId, item[0].id);
 
             } catch (IOException e) {
 
@@ -112,15 +114,32 @@ public class MenuDishesPresenter implements IPresenter {
 
                     MenuDishesModel model = new MenuDishesModel();
 
-                    for(MenuDishesResponsePayload.Item payloadItem : result.payload){
+                    for(Dish dish : result.dishes){
 
                         MenuDishesModel.Item item = new MenuDishesModel.Item();
 
-                        item.id = payloadItem.id;
+                        item.id = dish.id;
 
-                        item.type = payloadItem.type;
+                        String typeAsString;
 
-                        item.description = payloadItem.description;
+                        switch(dish.type){
+                            case MEAT:
+                                typeAsString = ((MenuDishesActivity)view).getString(R.string.dish_meat_type);
+                                break;
+                            case FISH:
+                                typeAsString = ((MenuDishesActivity)view).getString(R.string.dish_fish_type);
+                                break;
+                            case VEGETARIAN:
+                                typeAsString = ((MenuDishesActivity)view).getString(R.string.dish_vegetarian_type);
+                                break;
+                            default:
+                                typeAsString = ((MenuDishesActivity)view).getString(R.string.dish_diet_type);
+                                break;
+                        }
+
+                        item.type = typeAsString;
+
+                        item.description = dish.description;
 
                         model.add(item);
 
@@ -140,7 +159,7 @@ public class MenuDishesPresenter implements IPresenter {
          */
         private class BackgroundResult {
 
-            public MenuDishesResponsePayload payload;
+            public List<Dish> dishes;
 
             public IOException ioException;
 
