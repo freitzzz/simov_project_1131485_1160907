@@ -6,10 +6,12 @@ import com.ippementa.ipem.util.http.RequestException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IPEDCanteensRepositoryImpl implements CanteensRepository {
 
-    public AvailableCanteensResponsePayload availableCanteens(long schoolId) throws IOException {
+    public List<Canteen> canteens(long schoolId) throws IOException {
 
         URL url = new URL("http://localhost:8080/schools/" + schoolId + "/canteens");
 
@@ -19,7 +21,25 @@ public class IPEDCanteensRepositoryImpl implements CanteensRepository {
 
             AvailableCanteensResponsePayload payload = new Gson().fromJson(apiResponse.payload, AvailableCanteensResponsePayload.class);
 
-            return payload;
+
+            List<Canteen> canteens = new ArrayList<>();
+
+            for (AvailableCanteensResponsePayload.Item item : payload) {
+
+                Canteen canteen = new Canteen();
+
+                canteen.name = item.name;
+
+                canteen.id = item.id;
+
+                canteen.schoolId = schoolId;
+
+                canteens.add(canteen);
+
+            }
+
+            return canteens;
+
         }else{
 
             throw new RequestException(apiResponse);

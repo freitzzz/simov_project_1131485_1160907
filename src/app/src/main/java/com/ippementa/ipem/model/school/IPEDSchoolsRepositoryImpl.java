@@ -6,10 +6,12 @@ import com.ippementa.ipem.util.http.RequestException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IPEDSchoolsRepositoryImpl implements SchoolsRepository{
 
-    public AvailableSchoolsResponsePayload availableSchools() throws IOException {
+    public List<School> availableSchools() throws IOException {
 
         URL url = new URL("http://localhost:8080/schools");
 
@@ -19,7 +21,23 @@ public class IPEDSchoolsRepositoryImpl implements SchoolsRepository{
 
             AvailableSchoolsResponsePayload model = new Gson().fromJson(apiResponse.payload, AvailableSchoolsResponsePayload.class);
 
-            return model;
+            List<School> schools = new ArrayList<>();
+
+            for (AvailableSchoolsResponsePayload.Item item : model) {
+
+                School school = new School();
+
+                school.acronym = item.acronym;
+
+                school.name = item.name;
+
+                school.id = item.id;
+
+                schools.add(school);
+
+            }
+
+            return schools;
         }else{
 
             throw new RequestException(apiResponse);

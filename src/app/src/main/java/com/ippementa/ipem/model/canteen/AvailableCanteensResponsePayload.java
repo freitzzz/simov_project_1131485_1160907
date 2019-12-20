@@ -10,5 +10,7 @@ public class AvailableCanteensResponsePayload extends ArrayList<AvailableCanteen
 
         public String name;
 
+        public Item(){}
+
     }
 }
