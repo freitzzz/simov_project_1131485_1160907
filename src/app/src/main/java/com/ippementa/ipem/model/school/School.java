@@ -1,9 +1,5 @@
 package com.ippementa.ipem.model.school;
 
-import com.ippementa.ipem.model.canteen.Canteen;
-
-import java.util.List;
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -21,7 +17,7 @@ public class School {
 
     public String name;
 
-    public List<Canteen> canteens;
+    //public List<Canteen> canteens;
 
     public School(){}
 
