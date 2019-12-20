@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,6 +18,7 @@ import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.school.AvailableSchoolsModel;
 import com.ippementa.ipem.presenter.school.AvailableSchoolsPresenter;
 import com.ippementa.ipem.view.canteen.AvailableCanteensActivity;
+import com.ippementa.ipem.view.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +78,27 @@ public class AvailableSchoolsActivity extends AppCompatActivity implements Avail
         super.onPause();
 
         presenter.onPause();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.option_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.option_menu_settings_item:
+
+                Intent intent = new Intent(this, SettingsActivity.class);
+
+                startActivity(intent);
+
+                return true;
+            default:
+                return false;
+        }
     }
 
     @Override
