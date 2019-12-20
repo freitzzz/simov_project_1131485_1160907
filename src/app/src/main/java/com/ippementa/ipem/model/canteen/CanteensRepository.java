@@ -1,9 +1,10 @@
 package com.ippementa.ipem.model.canteen;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface CanteensRepository {
 
-    AvailableCanteensResponsePayload availableCanteens(long schoolId) throws IOException;
+    List<Canteen> canteens(long schoolId) throws IOException;
 
 }
