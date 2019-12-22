@@ -14,4 +14,10 @@
     <string name="option_menu_settings_item">Settings</string>
     <string name="canteen_context_menu_map_location">Map Location</string>
     <string name="canteen_context_menu_map_routine">Start Route Plan</string>
+    <string name="settings_offline_data_download_start">Please wait while necessary data is being downloaded...</string>
+    <string name="settings_offline_data_download_finish">Data was downloaded with success</string>
+    <string name="no_internet_connection_error">No internet connection</string>
+    <string name="server_not_available_error">Information server is not available</string>
+    <string name="unexpected_server_failure_error">An unexpected error has occurred</string>
+    <string name="settings_offline_mode">Offline Mode</string>
 </resources>
