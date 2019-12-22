@@ -36,7 +36,7 @@ public class SettingsActivity extends AppCompatActivity implements SettingsView{
 
         // TODO: Network errors in fragment
         // Only insert in database the necessary files after download
-        // Redirect user after download
+
         // Block user change of offline mode while data is being downloaded
 
     }
@@ -52,6 +52,13 @@ public class SettingsActivity extends AppCompatActivity implements SettingsView{
     public void disableOfflineModeSwitchInteraction() {
 
         this.contentFragment.disableOfflineModeSwitchInteraction();
+
+    }
+
+    @Override
+    public void deactivateOfflineModeSwitch() {
+
+        this.contentFragment.setOfflineModeSwitchToFalse();
 
     }
 

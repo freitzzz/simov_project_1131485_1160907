@@ -8,6 +8,8 @@ public interface SettingsView extends ErrorView {
 
     void disableOfflineModeSwitchInteraction();
 
+    void deactivateOfflineModeSwitch();
+
     void showOfflineDataDownloadStartSnackbar();
 
     void showOfflineDataDownloadFinishSnackbar();

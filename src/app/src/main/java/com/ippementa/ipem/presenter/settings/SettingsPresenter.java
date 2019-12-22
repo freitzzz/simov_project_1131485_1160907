@@ -13,15 +13,15 @@ import com.ippementa.ipem.model.menu.RoomMenusRepositoryImpl;
 import com.ippementa.ipem.model.school.RoomSchoolsRepositoryImpl;
 import com.ippementa.ipem.model.school.School;
 import com.ippementa.ipem.presenter.IPresenter;
+import com.ippementa.ipem.util.CommunicationMediator;
 import com.ippementa.ipem.util.Provider;
+import com.ippementa.ipem.util.http.RequestException;
 import com.ippementa.ipem.view.settings.SettingsActivity;
 import com.ippementa.ipem.view.settings.SettingsView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.room.RoomDatabase;
 
 public class SettingsPresenter implements IPresenter {
 
@@ -69,20 +69,21 @@ public class SettingsPresenter implements IPresenter {
         isViewAvailableToInteract = false;
     }
 
-    private class DownloadOfflineDataAsyncTask extends AsyncTask<Void, Void, Boolean> {
+    private class DownloadOfflineDataAsyncTask extends AsyncTask<Void, Void, BackgroundResult> {
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected BackgroundResult doInBackground(Void... voids) {
+
+            // view.getContext() instead of cast...
+
+            Context ctx = (SettingsActivity)view;
+
+            // repository wont change so we can declare it to a variable
+
+            RepositoryFactory repositoryFactory = Provider.instance(ctx).repositoryFactory(ctx);
+
+            BackgroundResult result = new BackgroundResult();
+
             try {
-
-                // view.getContext() instead of cast...
-
-                Context ctx = (SettingsActivity)view;
-
-                // repository wont change so we can declare it to a variable
-
-                RepositoryFactory repositoryFactory = Provider.instance(ctx).repositoryFactory(ctx);
-
-                System.out.println(repositoryFactory);
 
                 List<School> schools
                         = repositoryFactory
@@ -95,7 +96,7 @@ public class SettingsPresenter implements IPresenter {
 
                 List<Dish> dishes = new ArrayList<>();
 
-                for(School school : schools){
+                for (School school : schools) {
                     try {
                         List<Canteen> _canteens
                                 = repositoryFactory
@@ -104,15 +105,29 @@ public class SettingsPresenter implements IPresenter {
 
                         canteens.addAll(_canteens);
 
-                    }catch (Exception e){
+                    } catch (IOException ioException) {
 
-                        e.printStackTrace();
+                        ioException.printStackTrace();
+
+                        result.ioException = ioException;
+
+                        return result;
+
+                    } catch (RequestException requestException) {
+
+                        requestException.printStackTrace();
+
+                        if (requestException.response.statusCode != 404) {
+                            result.requestException = requestException;
+
+                            return result;
+                        }
 
                     }
 
                 }
 
-                for(Canteen canteen : canteens){
+                for (Canteen canteen : canteens) {
 
                     System.out.println(canteen.schoolId);
                     try {
@@ -121,37 +136,65 @@ public class SettingsPresenter implements IPresenter {
                                 .createMenusRepository()
                                 .menus(canteen.schoolId, canteen.id);
                         menus.addAll(_menus);
-                    }catch (Exception e){
+                    } catch (IOException ioException) {
 
-                        e.printStackTrace();
+                        ioException.printStackTrace();
+
+                        result.ioException = ioException;
+
+                        return result;
+
+                    } catch (RequestException requestException) {
+
+                        requestException.printStackTrace();
+
+                        if (requestException.response.statusCode != 404) {
+                            result.requestException = requestException;
+
+                            return result;
+                        }
 
                     }
 
 
                 }
 
-                for(Menu menu : menus){
+                for (Menu menu : menus) {
 
                     long schoolId = 0;
 
-                    for(Canteen canteen : canteens){
+                    for (Canteen canteen : canteens) {
 
-                        if(menu.canteenId == canteen.id){
+                        if (menu.canteenId == canteen.id) {
                             schoolId = canteen.schoolId;
                             break;
                         }
 
                     }
 
-                    try{
+                    try {
                         List<Dish> _dishes
                                 = repositoryFactory
                                 .createDishRepository()
                                 .dishes(schoolId, menu.canteenId, menu.id);
                         dishes.addAll(_dishes);
-                    }catch (Exception e){
+                    } catch (IOException ioException) {
 
-                        e.printStackTrace();
+                        ioException.printStackTrace();
+
+                        result.ioException = ioException;
+
+                        return result;
+
+                    } catch (RequestException requestException) {
+
+                        requestException.printStackTrace();
+
+                        if (requestException.response.statusCode != 404) {
+                            result.requestException = requestException;
+
+                            return result;
+                        }
 
                     }
 
@@ -160,42 +203,109 @@ public class SettingsPresenter implements IPresenter {
 
                 Provider.instance(ctx).settings().activateOfflineMode(ctx);
 
-                ((RoomDatabase)Provider.instance(ctx).repositoryFactory(ctx)).clearAllTables();
-
                 // as offline mode was activated we need a new instance of repository factory
 
                 repositoryFactory = Provider.instance(ctx).repositoryFactory(ctx);
 
-                ((RoomSchoolsRepositoryImpl)repositoryFactory.createSchoolsRepository()).insertAll(schools.toArray(new School[]{}));
+                RoomSchoolsRepositoryImpl schoolsRepository = (RoomSchoolsRepositoryImpl) repositoryFactory.createSchoolsRepository();
 
-                ((RoomCanteensRepositoryImpl)repositoryFactory.createCanteensRepository()).insertAll(canteens.toArray(new Canteen[]{}));
+                RoomCanteensRepositoryImpl canteensRepository = (RoomCanteensRepositoryImpl) repositoryFactory.createCanteensRepository();
 
-                ((RoomMenusRepositoryImpl)repositoryFactory.createMenusRepository()).insertAll(menus.toArray(new Menu[]{}));
+                RoomMenusRepositoryImpl menusRepository = (RoomMenusRepositoryImpl) repositoryFactory.createMenusRepository();
 
-                ((RoomDishRepositoryImpl)repositoryFactory.createDishRepository()).insertAll(dishes.toArray(new Dish[]{}));
+                RoomDishRepositoryImpl dishRepository = (RoomDishRepositoryImpl) repositoryFactory.createDishRepository();
 
-            }catch(IOException e){
-                e.printStackTrace();
+                // first clear old data
+
+                schoolsRepository.clearTable();
+
+                canteensRepository.clearTable();
+
+                menusRepository.clearTable();
+
+                dishRepository.clearTable();
+
+                // then insert new data
+
+                schoolsRepository.insertAll(schools.toArray(new School[]{}));
+
+                canteensRepository.insertAll(canteens.toArray(new Canteen[]{}));
+
+                menusRepository.insertAll(menus.toArray(new Menu[]{}));
+
+                dishRepository.insertAll(dishes.toArray(new Dish[]{}));
+
+            }catch (IOException ioException){
+
+                ioException.printStackTrace();
+
+                result.ioException = ioException;
+
+                return result;
+
+            }catch (RequestException requestException){
+
+                requestException.printStackTrace();
+
+                if(requestException.response.statusCode != 404){
+                    result.requestException = requestException;
+
+                    return result;
+                }
+
             }
 
-            return true;
+            return result;
+
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(BackgroundResult result) {
 
-            if(result){
+            super.onPostExecute(result);
 
-                view.showOfflineDataDownloadFinishSnackbar();
+            SettingsPresenter presenter = SettingsPresenter.this;
 
-            }else{
+            if(presenter.isViewAvailableToInteract){
 
-                view.showUnexepectedServerFailureError();
+                if(result.ioException != null){
+
+                    if(!CommunicationMediator.hasInternetConnection((SettingsActivity)presenter.view)){
+
+                        presenter.view.showNoInternetConnectionError();
+
+                    }else{
+
+                        presenter.view.showServerNotAvailableError();
+
+                    }
+
+                    presenter.view.deactivateOfflineModeSwitch();
+
+                }else if(result.requestException != null){
+
+                    presenter.view.showUnexepectedServerFailureError();
+
+                    presenter.view.deactivateOfflineModeSwitch();
+
+                }else{
+
+                    view.showOfflineDataDownloadFinishSnackbar();
+
+                }
 
             }
 
             view.enableOfflineModeSwitchInteraction();
 
         }
+    }
+
+    private class BackgroundResult {
+
+        public IOException ioException;
+
+        public RequestException requestException;
+
     }
 }

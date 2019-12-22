@@ -66,4 +66,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         this.offlineModeSwitch.setSelectable(false);
 
     }
+
+    public void setOfflineModeSwitchToFalse(){
+
+        this.offlineModeSwitch.setChecked(false);
+
+        this.offlineModeSwitch.callChangeListener(false);
+
+    }
 }
