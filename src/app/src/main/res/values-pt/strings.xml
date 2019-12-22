@@ -13,4 +13,6 @@
     <string name="dish_vegetarian_type">Vegetariano</string>
     <string name="dish_diet_type">Dieta</string>
     <string name="option_menu_settings_item">Definições</string>
+    <string name="canteen_context_menu_map_location">Localização no Mapa</string>
+    <string name="canteen_context_menu_map_routine">Guiar-me ao local</string>
 </resources>
