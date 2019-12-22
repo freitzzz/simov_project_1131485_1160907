@@ -31,7 +31,7 @@ public class Settings {
         }
     }
 
-    public boolean deactivateOfflineMode(Context ctx){
+    public boolean activateOnlineMode(Context ctx){
 
         SharedPreferences preferences
                 = ctx.getSharedPreferences("ipp-ementa-shared-preferences", Context.MODE_PRIVATE);
