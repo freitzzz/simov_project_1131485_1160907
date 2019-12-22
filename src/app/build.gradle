@@ -44,6 +44,17 @@ dependencies {
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 
+    // Android Preferences
+
     implementation "androidx.preference:preference:1.1.0"
+
+    // Mapsforge library
+
+    def mapsforge_version = "0.12.0"
+
+    implementation "org.mapsforge:mapsforge-map-android:$mapsforge_version"
+    implementation "org.mapsforge:mapsforge-themes:$mapsforge_version"
+    implementation 'net.sf.kxml:kxml2:2.3.0'
+    implementation "com.caverock:androidsvg:1.4"
 
 }
