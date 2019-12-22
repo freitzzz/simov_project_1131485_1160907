@@ -17,4 +17,7 @@ public interface RoomDishRepositoryImpl extends DishRepository {
     @Insert
     void insertAll(Dish... dishes);
 
+    @Query("DELETE FROM Dish")
+    void clearTable();
+
 }

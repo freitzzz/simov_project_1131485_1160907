@@ -16,4 +16,7 @@ public interface RoomSchoolsRepositoryImpl extends SchoolsRepository {
 
     @Insert
     void insertAll(School... schools);
+
+    @Query("DELETE FROM School")
+    void clearTable();
 }

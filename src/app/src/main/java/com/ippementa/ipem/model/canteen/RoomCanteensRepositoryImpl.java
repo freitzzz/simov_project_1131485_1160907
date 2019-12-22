@@ -16,4 +16,7 @@ public interface RoomCanteensRepositoryImpl extends CanteensRepository {
 
     @Insert
     void insertAll(Canteen... canteens);
+
+    @Query("DELETE FROM Canteen")
+    void clearTable();
 }

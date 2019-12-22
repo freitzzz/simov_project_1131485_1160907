@@ -16,4 +16,7 @@ public interface RoomMenusRepositoryImpl extends MenusRepository {
 
     @Insert
     void insertAll(Menu... menus);
+
+    @Query("DELETE FROM Menu")
+    void clearTable();
 }
