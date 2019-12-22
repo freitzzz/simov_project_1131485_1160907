@@ -3,6 +3,7 @@ package com.ippementa.ipem.view.canteen;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,6 +74,8 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
             }
         });
 
+        registerForContextMenu(canteensListView);
+
         this.adapter = new AvailableCanteensActivity.AvailableCanteensListAdapter(this, new ArrayList<AvailableCanteensModel.Item>());
 
         canteensListView.setAdapter(adapter);
@@ -120,6 +123,26 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
             default:
                 return false;
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.canteen_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.canteen_context_menu_map_location:
+                Intent intent = new Intent(AvailableCanteensActivity.this, CanteensLocationOnMapActivity.class);
+
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override
