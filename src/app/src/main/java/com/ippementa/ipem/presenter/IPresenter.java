@@ -1,9 +1,11 @@
 package com.ippementa.ipem.presenter;
 
+import java.io.Serializable;
+
 /**
  * An interface that defines functionalities that are applicable to every presenter
  */
-public interface IPresenter {
+public interface IPresenter extends Serializable {
 
     /**
      * Triggers that the view being controlled by the presenter is being destroyed
