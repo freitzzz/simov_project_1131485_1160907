@@ -34,11 +34,6 @@ public class SettingsActivity extends AppCompatActivity implements SettingsView{
                 .replace(R.id.activity_settings_root_layout, this.contentFragment)
                 .commit();
 
-        // TODO: Network errors in fragment
-        // Only insert in database the necessary files after download
-
-        // Block user change of offline mode while data is being downloaded
-
     }
 
     @Override
