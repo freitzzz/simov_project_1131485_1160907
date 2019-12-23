@@ -13,7 +13,7 @@ public class IPEDDishRepositoryImpl implements DishRepository{
 
     public List<Dish> dishes(long schoolId, long canteenId, long menuId) throws IOException {
 
-        URL url = new URL("http://demo7718589.mockable.io/schools/" + schoolId + "/canteens/" + canteenId + "/menus/" + menuId + "/dishes");
+        URL url = new URL("https://heroku-iped.herokuapp.com/schools/" + schoolId + "/canteens/" + canteenId + "/menus/" + menuId + "/dishes");
 
         Client.Response apiResponse = Client.get(url);
 
