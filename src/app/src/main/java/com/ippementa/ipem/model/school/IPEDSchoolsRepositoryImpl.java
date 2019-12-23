@@ -13,7 +13,7 @@ public class IPEDSchoolsRepositoryImpl implements SchoolsRepository{
 
     public List<School> availableSchools() throws IOException {
 
-        URL url = new URL("http://demo7718589.mockable.io/schools");
+        URL url = new URL("https://heroku-iped.herokuapp.com/schools");
 
         Client.Response apiResponse = Client.get(url);
 
