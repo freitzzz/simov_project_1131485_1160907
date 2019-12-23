@@ -1,0 +1,338 @@
+{
+	"info": {
+		"_postman_id": "00dc9d00-be83-4065-a4c3-21701efeb45e",
+		"name": "Bootstrapp_simov",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST ISEP",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"acronym\":\"ISEP\",\r\n    \"name\":\"Instituto Superior de Engenharia do Porto\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Cantina do H\"\r\n        },\r\n        {\r\n            \"name\":\"Bar da AE\"\r\n        },\r\n        {\r\n            \"name\":\"Cantina do F\"\r\n        }\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "https://heroku-iped.herokuapp.com/schools",
+					"protocol": "https",
+					"host": [
+						"heroku-iped",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"schools"
+					]
+				},
+				"description": "Bootstrapp para api de simov "
+			},
+			"response": []
+		},
+		{
+			"name": "POST ESG",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"acronym\":\"ESTG\",\r\n    \"name\":\"Escola Superior de Tecnologia e Gestão\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Cantina\"\r\n        },\r\n        {\r\n            \"name\":\"Bar\"\r\n        }\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "https://heroku-iped.herokuapp.com/schools",
+					"protocol": "https",
+					"host": [
+						"heroku-iped",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"schools"
+					]
+				},
+				"description": "Bootstrapp para api de simov "
+			},
+			"response": []
+		},
+		{
+			"name": "POST ESE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"acronym\":\"ESE\",\r\n    \"name\":\"Escola Superior de Educação\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Snack-Bar\"\r\n        },\r\n        {\r\n            \"name\":\"Cantina\"\r\n        }\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "https://heroku-iped.herokuapp.com/schools",
+					"protocol": "https",
+					"host": [
+						"heroku-iped",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"schools"
+					]
+				},
+				"description": "Bootstrapp para api de simov "
+			},
+			"response": []
+		},
+		{
+			"name": "POST ISCAP",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"acronym\":\"ISCAP\",\r\n    \"name\":\"Instituto Superior de Contabilidade e Administração do Porto\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Snack-Bar\"\r\n        },\r\n        {\r\n            \"name\":\"Cantina\"\r\n        }\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "https://heroku-iped.herokuapp.com/schools",
+					"protocol": "https",
+					"host": [
+						"heroku-iped",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"schools"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST ESS",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"acronym\":\"ESS\",\r\n    \"name\":\"Escola Superior de Saúde\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Bar\"\r\n        },\r\n        {\r\n            \"name\":\"Linha de self\"\r\n        },\r\n        {\r\n        \t\"name\" : \"Cafetaria\"\r\n        }\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "https://heroku-iped.herokuapp.com/schools",
+					"protocol": "https",
+					"host": [
+						"heroku-iped",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"schools"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST ESMAE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"acronym\":\"ESMAE\",\r\n    \"name\":\"Escola Superior de Música e Artes do Espetáculo\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Cantina\"\r\n        },\r\n        {\r\n            \"name\":\"Bar\"\r\n        }\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "https://heroku-iped.herokuapp.com/schools",
+					"protocol": "https",
+					"host": [
+						"heroku-iped",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"schools"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST MENU ISEP LUNCH",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\":\"lunch\",\r\n    \"dishes\":[\r\n        {\r\n            \"type\":\"meat\",\r\n            \"description\":\"Arroz de pato\"\r\n        },\r\n        {\r\n            \"type\":\"vegetarian\",\r\n            \"description\":\"Tofu com tomate\"\r\n        }\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "https://heroku-iped.herokuapp.com/schools/1/canteens/1/menus",
+					"protocol": "https",
+					"host": [
+						"heroku-iped",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"schools",
+						"1",
+						"canteens",
+						"1",
+						"menus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST MENU ISEP DINNER",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\":\"dinner\",\r\n    \"dishes\":[\r\n        {\r\n            \"type\":\"fish\",\r\n            \"description\":\"Bacalhau à brás\"\r\n        },\r\n        {\r\n            \"type\":\"diet\",\r\n            \"description\":\"Bifinhos de peru\"\r\n        }\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "https://heroku-iped.herokuapp.com/schools/1/canteens/1/menus",
+					"protocol": "https",
+					"host": [
+						"heroku-iped",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"schools",
+						"1",
+						"canteens",
+						"1",
+						"menus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST MENU ESE LUNCH 2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\":\"lunch\",\r\n    \"dishes\":[\r\n        {\r\n            \"type\":\"meat\",\r\n            \"description\":\"Lombo assado\"\r\n        },\r\n        {\r\n            \"type\":\"vegetarian\",\r\n            \"description\":\"Cuscuz com legumes e especiarias\"\r\n        }\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "https://heroku-iped.herokuapp.com/schools/2/canteens/2/menus",
+					"protocol": "https",
+					"host": [
+						"heroku-iped",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"schools",
+						"2",
+						"canteens",
+						"2",
+						"menus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST MENU ESE DINNER 2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\":\"dinner\",\r\n    \"dishes\":[\r\n        {\r\n            \"type\":\"fish\",\r\n            \"description\":\"Sardinha assado com batata assada\"\r\n        },\r\n        {\r\n            \"type\":\"meat\",\r\n            \"description\":\"Carne cozida e arroz com feijão branco\"\r\n        }\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "https://heroku-iped.herokuapp.com/schools/2/canteens/5/menus",
+					"protocol": "https",
+					"host": [
+						"heroku-iped",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"schools",
+						"2",
+						"canteens",
+						"5",
+						"menus"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
