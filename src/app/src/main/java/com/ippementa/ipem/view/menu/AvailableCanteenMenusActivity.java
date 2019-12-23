@@ -33,6 +33,8 @@ import androidx.core.content.ContextCompat;
 
 public class AvailableCanteenMenusActivity extends AppCompatActivity implements AvailableCanteenMenusView{
 
+    public static final int REQUEST_CODE_FOR_SETTINGS_ACTIVITY = 854;
+
     private AvailableCanteenMenusPresenter presenter;
 
     private AvailableCanteenMenusListAdapter adapter;
@@ -117,12 +119,26 @@ public class AvailableCanteenMenusActivity extends AppCompatActivity implements 
 
                 Intent intent = new Intent(this, SettingsActivity.class);
 
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_FOR_SETTINGS_ACTIVITY);
 
                 return true;
             default:
                 return false;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE_FOR_SETTINGS_ACTIVITY){
+
+            final AvailableCanteensModel.Item canteen = getIntent().getParcelableExtra("canteen");
+
+            presenter.requestMenus(canteen);
+
+        }
+
     }
 
     @Override

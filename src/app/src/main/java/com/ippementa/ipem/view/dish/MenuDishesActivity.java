@@ -31,6 +31,8 @@ import androidx.core.content.ContextCompat;
 
 public class MenuDishesActivity extends AppCompatActivity implements MenuDishesView{
 
+    public static final int REQUEST_CODE_FOR_SETTINGS_ACTIVITY = 854;
+
     private MenuDishesPresenter presenter;
 
     private MenuDishesListAdapter adapter;
@@ -42,7 +44,7 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
         this.presenter = new MenuDishesPresenter(this);
 
-        AvailableCanteenMenusModel.Item menu = getIntent().getParcelableExtra("menu");
+        final AvailableCanteenMenusModel.Item menu = getIntent().getParcelableExtra("menu");
 
         Button headerBackButton = findViewById(R.id.menu_dishes_header_back_button);
 
@@ -98,12 +100,26 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
                 Intent intent = new Intent(this, SettingsActivity.class);
 
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_FOR_SETTINGS_ACTIVITY);
 
                 return true;
             default:
                 return false;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE_FOR_SETTINGS_ACTIVITY){
+
+            final AvailableCanteenMenusModel.Item menu = getIntent().getParcelableExtra("menu");
+
+            presenter.requestDishes(menu);
+
+        }
+
     }
 
     @Override

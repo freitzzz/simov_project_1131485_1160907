@@ -32,6 +32,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AvailableCanteensActivity extends AppCompatActivity implements AvailableCanteensView{
 
+    public static final int REQUEST_CODE_FOR_SETTINGS_ACTIVITY = 854;
+
     private AvailableCanteensPresenter presenter;
 
     private AvailableCanteensListAdapter adapter;
@@ -117,7 +119,7 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
 
                 Intent intent = new Intent(this, SettingsActivity.class);
 
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_FOR_SETTINGS_ACTIVITY);
 
                 return true;
             default:
@@ -143,6 +145,20 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE_FOR_SETTINGS_ACTIVITY){
+
+            final AvailableSchoolsModel.Item school = getIntent().getParcelableExtra("school");
+
+            presenter.requestCanteens(school.id);
+
+        }
+
     }
 
     @Override

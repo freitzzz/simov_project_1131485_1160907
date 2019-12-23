@@ -29,6 +29,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AvailableSchoolsActivity extends AppCompatActivity implements AvailableSchoolsView {
 
+    public static final int REQUEST_CODE_FOR_SETTINGS_ACTIVITY = 854;
+
     private AvailableSchoolsPresenter presenter;
 
     private AvailableSchoolsListAdapter adapter;
@@ -93,12 +95,24 @@ public class AvailableSchoolsActivity extends AppCompatActivity implements Avail
 
                 Intent intent = new Intent(this, SettingsActivity.class);
 
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_FOR_SETTINGS_ACTIVITY);
 
                 return true;
             default:
                 return false;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE_FOR_SETTINGS_ACTIVITY){
+
+            presenter.requestSchools();
+
+        }
+
     }
 
     @Override
