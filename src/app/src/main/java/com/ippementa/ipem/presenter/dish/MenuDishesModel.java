@@ -11,7 +11,9 @@ public class MenuDishesModel extends ArrayList<MenuDishesModel.Item> {
 
         public long id;
 
-        public String type;
+        public MenuDishesModel.Item.Type type;
+
+        public String typeAsString;
 
         public String description;
 
@@ -19,8 +21,9 @@ public class MenuDishesModel extends ArrayList<MenuDishesModel.Item> {
 
         protected Item(Parcel in) {
             id = in.readLong();
-            type = in.readString();
+            typeAsString = in.readString();
             description = in.readString();
+            type = Type.valueOf(in.readString());
         }
 
         public static final Creator<Item> CREATOR = new Creator<Item>() {
@@ -43,8 +46,16 @@ public class MenuDishesModel extends ArrayList<MenuDishesModel.Item> {
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeLong(id);
-            dest.writeString(type);
+            dest.writeString(typeAsString);
             dest.writeString(description);
+            dest.writeString(type.name());
+        }
+
+        public enum Type {
+            MEAT,
+            FISH,
+            VEGETARIAN,
+            DIET
         }
     }
 }

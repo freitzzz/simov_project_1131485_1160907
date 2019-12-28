@@ -188,23 +188,23 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
             ImageView menuTypeImageView = convertView.findViewById(R.id.menu_dishes_list_view_item_type_image_view);
 
-            menuTypeTextView.setText(dish.type);
+            menuTypeTextView.setText(dish.typeAsString);
 
             menuDescriptionTextView.setText(dish.description);
 
-            switch (dish.type.toLowerCase()){
+            switch (dish.type){
 
-                case "meat":
-                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, android.R.drawable.star_on));
+                case MEAT:
+                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_meat));
                     break;
-                case "fish":
-                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, android.R.drawable.arrow_up_float));
+                case FISH:
+                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_fish));
                     break;
-                case "diet":
-                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, android.R.drawable.ic_dialog_email));
+                case VEGETARIAN:
+                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_vegetarian));
                     break;
                 default:
-                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, android.R.drawable.star_off));
+                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_diet));
                     break;
             }
 

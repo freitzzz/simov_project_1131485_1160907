@@ -137,23 +137,30 @@ public class MenuDishesPresenter implements IPresenter {
                         item.id = dish.id;
 
                         String typeAsString;
+                        MenuDishesModel.Item.Type type;
 
                         switch(dish.type){
                             case MEAT:
+                                type = MenuDishesModel.Item.Type.MEAT;
                                 typeAsString = ((MenuDishesActivity)view).getString(R.string.dish_meat_type);
                                 break;
                             case FISH:
+                                type = MenuDishesModel.Item.Type.FISH;
                                 typeAsString = ((MenuDishesActivity)view).getString(R.string.dish_fish_type);
                                 break;
                             case VEGETARIAN:
+                                type = MenuDishesModel.Item.Type.VEGETARIAN;
                                 typeAsString = ((MenuDishesActivity)view).getString(R.string.dish_vegetarian_type);
                                 break;
                             default:
+                                type = MenuDishesModel.Item.Type.DIET;
                                 typeAsString = ((MenuDishesActivity)view).getString(R.string.dish_diet_type);
                                 break;
                         }
 
-                        item.type = typeAsString;
+                        item.type = type;
+
+                        item.typeAsString = typeAsString;
 
                         item.description = dish.description;
 
