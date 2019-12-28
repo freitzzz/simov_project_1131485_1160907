@@ -182,32 +182,39 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.menu_dishes_list_view_item, parent, false);
             }
 
-            TextView menuTypeTextView = convertView.findViewById(R.id.menu_dishes_list_view_item_type_text_view);
+            TextView dishTypeTextView = convertView.findViewById(R.id.menu_dishes_list_view_item_type_text_view);
 
-            TextView menuDescriptionTextView = convertView.findViewById(R.id.menu_dishes_list_view_item_description_text_view);
+            TextView dishDescriptionTextView = convertView.findViewById(R.id.menu_dishes_list_view_item_description_text_view);
 
-            ImageView menuTypeImageView = convertView.findViewById(R.id.menu_dishes_list_view_item_type_image_view);
+            ImageView dishTypeImageView = convertView.findViewById(R.id.menu_dishes_list_view_item_type_image_view);
 
-            menuTypeTextView.setText(dish.typeAsString);
+            ImageView dishFavoriteMarkImageView = convertView.findViewById(R.id.menu_dishes_list_view_item_favorite_mark_image_view);
 
-            menuDescriptionTextView.setText(dish.description);
+            dishTypeTextView.setText(dish.typeAsString);
+
+            dishDescriptionTextView.setText(dish.description);
 
             switch (dish.type){
 
                 case MEAT:
-                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_meat));
+                    dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_meat));
                     break;
                 case FISH:
-                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_fish));
+                    dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_fish));
                     break;
                 case VEGETARIAN:
-                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_vegetarian));
+                    dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_vegetarian));
                     break;
                 default:
-                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_diet));
+                    dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_diet));
                     break;
             }
 
+            if(dish.isFavorite) {
+                dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_is_favorite));
+            }else{
+                dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_is_not_favorite));
+            }
             return convertView;
         }
     }

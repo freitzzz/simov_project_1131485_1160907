@@ -19,6 +19,8 @@ public class Dish {
 
     public String description;
 
+    public boolean isFavorite;
+
     @TypeConverters(DishTypeConverter.class)
     public DishType type;
 

@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import com.ippementa.ipem.R;
 import com.ippementa.ipem.model.dish.Dish;
 import com.ippementa.ipem.model.dish.DishRepository;
+import com.ippementa.ipem.model.dish.RoomDishRepositoryImpl;
 import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.presenter.menu.AvailableCanteenMenusModel;
 import com.ippementa.ipem.util.CommunicationMediator;
@@ -15,6 +16,7 @@ import com.ippementa.ipem.view.dish.MenuDishesActivity;
 import com.ippementa.ipem.view.dish.MenuDishesView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuDishesPresenter implements IPresenter {
@@ -65,9 +67,15 @@ public class MenuDishesPresenter implements IPresenter {
 
             try {
 
-                result.dishes = repository.dishes(item[0].schoolId, item[0].canteenId, item[0].id);
+                RoomDishRepositoryImpl roomDishRepository
+                        = Provider
+                        .instance((MenuDishesActivity)view)
+                        .roomRepositoryFactory()
+                        .createDishRepository();
 
-                if(result.dishes.isEmpty()){
+                List<Dish> dishes = repository.dishes(item[0].schoolId, item[0].canteenId, item[0].id);
+
+                if(dishes.isEmpty()){
                     // Need to simulate a RequestException as this was a SQL Query that found no rows
 
                     Client.Response response = new Client.Response();
@@ -77,7 +85,38 @@ public class MenuDishesPresenter implements IPresenter {
                     RequestException exception = new RequestException(response);
 
                     result.requestException = exception;
+                }else{
+
+                    boolean isInOfflineMode
+                            = Provider
+                            .instance((MenuDishesActivity)view)
+                            .settings()
+                            .isInOfflineMode();
+
+                    if(!isInOfflineMode) {
+
+                        List<Dish> storedDishes = roomDishRepository.dishes(item[0].schoolId, item[0].canteenId, item[0].id);
+
+                        List<Long> idOfDishesThatWereMarkedAsFavorite = new ArrayList<>();
+
+                        for(Dish storedDish : storedDishes) {
+
+                            if(storedDish.isFavorite) {
+                                idOfDishesThatWereMarkedAsFavorite.add(storedDish.id);
+                            }
+
+                        }
+
+                        for(Dish dish : dishes) {
+
+                            if(idOfDishesThatWereMarkedAsFavorite.contains(dish.id)) {
+                                dish.isFavorite = true;
+                            }
+                        }
+                    }
                 }
+
+                result.dishes = dishes;
 
             } catch (IOException e) {
 
@@ -163,6 +202,8 @@ public class MenuDishesPresenter implements IPresenter {
                         item.typeAsString = typeAsString;
 
                         item.description = dish.description;
+
+                        item.isFavorite = dish.isFavorite;
 
                         model.add(item);
 

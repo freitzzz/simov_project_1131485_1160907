@@ -17,6 +17,8 @@ public class MenuDishesModel extends ArrayList<MenuDishesModel.Item> {
 
         public String description;
 
+        public boolean isFavorite;
+
         public Item(){}
 
         protected Item(Parcel in) {
@@ -24,6 +26,7 @@ public class MenuDishesModel extends ArrayList<MenuDishesModel.Item> {
             typeAsString = in.readString();
             description = in.readString();
             type = Type.valueOf(in.readString());
+            isFavorite = in.readByte() != 0;
         }
 
         public static final Creator<Item> CREATOR = new Creator<Item>() {
@@ -49,6 +52,7 @@ public class MenuDishesModel extends ArrayList<MenuDishesModel.Item> {
             dest.writeString(typeAsString);
             dest.writeString(description);
             dest.writeString(type.name());
+            dest.writeByte((byte)(isFavorite ? 1 : 0));
         }
 
         public enum Type {
