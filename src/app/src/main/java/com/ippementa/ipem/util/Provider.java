@@ -21,13 +21,10 @@ public class Provider {
 
         this.settings = new Settings(ctx);
 
-        if(this.settings.isInOfflineMode()){
-
-            this.roomRepositoryFactory
-                    = Room
-                    .databaseBuilder(ctx, RepositoryFactory.RoomRepositoryFactoryImpl.class, "ipp-ementa-sqlite")
-                    .build();
-        }
+        this.roomRepositoryFactory
+                = Room
+                .databaseBuilder(ctx, RepositoryFactory.RoomRepositoryFactoryImpl.class, "ipp-ementa-sqlite")
+                .build();
 
     }
 
@@ -43,16 +40,14 @@ public class Provider {
 
     }
 
+    /**
+     * Provides access to a factory of repositories which type is defined in runtime
+     * @param ctx context of the activity which repository factory is being called from
+     * @return instance of RepositoryFactory which type is defined in runtime
+     */
     public RepositoryFactory repositoryFactory(Context ctx){
 
         if(this.settings.isInOfflineMode()){
-
-            if(roomRepositoryFactory == null){
-                this.roomRepositoryFactory
-                        = Room
-                        .databaseBuilder(ctx, RepositoryFactory.RoomRepositoryFactoryImpl.class, "ipp-ementa-sqlite")
-                        .build();
-            }
 
             return roomRepositoryFactory;
 
@@ -61,6 +56,16 @@ public class Provider {
             return new RepositoryFactory.IPEDRepositoryFactoryImpl();
 
         }
+
+    }
+
+    /**
+     * Provides access to the factory of room repositories
+     * @return implementation of RoomDatabase for ipp-ementa repositories
+     */
+    public RepositoryFactory.RoomRepositoryFactoryImpl roomRepositoryFactory(){
+
+        return roomRepositoryFactory;
 
     }
 
