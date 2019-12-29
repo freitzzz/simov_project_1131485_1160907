@@ -36,6 +36,30 @@ public class MenuDishesPresenter implements IPresenter {
 
     }
 
+    public void markAsFavorite(AvailableCanteenMenusModel.Item menu, MenuDishesModel.Item dish){
+
+        MarkDishAsFavoriteTask.TaskRequest request = new MarkDishAsFavoriteTask().new TaskRequest();
+
+        request.menu = menu;
+
+        request.dish = dish;
+
+        new MarkDishAsFavoriteTask().execute(request);
+
+    }
+
+    public void unmarkAsFavorite(AvailableCanteenMenusModel.Item menu, MenuDishesModel.Item dish){
+
+        UnmarkDishAsFavoriteTask.TaskRequest request = new UnmarkDishAsFavoriteTask().new TaskRequest();
+
+        request.menu = menu;
+
+        request.dish = dish;
+
+        new UnmarkDishAsFavoriteTask().execute(request);
+
+    }
+
     @Override
     public void onDestroy() {
         view = null;
@@ -224,6 +248,281 @@ public class MenuDishesPresenter implements IPresenter {
         private class BackgroundResult {
 
             public List<Dish> dishes;
+
+            public IOException ioException;
+
+            public RequestException requestException;
+
+        }
+    }
+
+    private class MarkDishAsFavoriteTask extends AsyncTask<MarkDishAsFavoriteTask.TaskRequest, Integer, MarkDishAsFavoriteTask.BackgroundResult> {
+
+        @Override
+        protected BackgroundResult doInBackground(TaskRequest... item) {
+
+            BackgroundResult result = new BackgroundResult();
+
+            TaskRequest request = item[0];
+
+            try {
+
+                RoomDishRepositoryImpl roomDishRepository
+                        = Provider
+                        .instance((MenuDishesActivity)view)
+                        .roomRepositoryFactory()
+                        .createDishRepository();
+
+                Dish dish = roomDishRepository.dish(
+                        request.menu.schoolId,
+                        request.menu.canteenId,
+                        request.menu.id,
+                        request.dish.id
+                );
+
+                if(dish == null){
+
+                    DishRepository dishRepository
+                            = Provider
+                            .instance((MenuDishesActivity)view)
+                            .repositoryFactory((MenuDishesActivity)view)
+                            .createDishRepository();
+
+                    dish = dishRepository.dish(
+                            request.menu.schoolId,
+                            request.menu.canteenId,
+                            request.menu.id,
+                            request.dish.id
+                    );
+
+                    dish.isFavorite = true;
+
+                    roomDishRepository.insertAll(dish);
+
+                }else{
+
+                    dish.isFavorite = false;
+
+                    roomDishRepository.update(dish);
+
+                }
+
+                request.dish.isFavorite = true;
+
+            } catch (IOException e) {
+
+                result.ioException = e;
+
+                e.printStackTrace();
+            } catch (RequestException requestFailure){
+
+                result.requestException = requestFailure;
+
+                requestFailure.printStackTrace();
+
+            }
+
+            result.dish = request.dish;
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(BackgroundResult result) {
+            super.onPostExecute(result);
+
+            MenuDishesPresenter presenter = MenuDishesPresenter.this;
+
+            if(presenter.isViewAvailableToInteract){
+
+                if(result.ioException != null){
+
+                    if(!CommunicationMediator.hasInternetConnection((MenuDishesActivity)presenter.view)){
+
+                        presenter.view.showNoInternetConnectionError();
+
+                    }else{
+
+                        presenter.view.showServerNotAvailableError();
+
+                    }
+
+                    presenter.view.unmarkDishAsFavorite(result.dish);
+
+                }else if(result.requestException != null){
+
+                    if(result.requestException.response.statusCode == 404){
+
+                        presenter.view.showUnavailableDishError();
+
+                    }else{
+
+                        presenter.view.showUnexepectedServerFailureError();
+
+                    }
+
+                    presenter.view.unmarkDishAsFavorite(result.dish);
+
+                }else{
+
+                    presenter.view.showDishWasMarkedFavoriteWithSuccessToast();
+
+                }
+
+            }
+        }
+
+        private class TaskRequest {
+
+            public AvailableCanteenMenusModel.Item menu;
+
+            public MenuDishesModel.Item dish;
+
+        }
+
+        /**
+         * This class encapsulates the possible results of the doInBackground method
+         * It is necessary to create this encapsulation as the method does not allow the throw of
+         * checked exceptions, which may occur
+         */
+        private class BackgroundResult {
+
+            MenuDishesModel.Item dish;
+
+            public IOException ioException;
+
+            public RequestException requestException;
+
+        }
+    }
+
+    private class UnmarkDishAsFavoriteTask extends AsyncTask<UnmarkDishAsFavoriteTask.TaskRequest, Integer, UnmarkDishAsFavoriteTask.BackgroundResult> {
+
+        @Override
+        protected BackgroundResult doInBackground(TaskRequest... item) {
+
+            BackgroundResult result = new BackgroundResult();
+
+            TaskRequest request = item[0];
+
+            try {
+
+                RoomDishRepositoryImpl roomDishRepository
+                        = Provider
+                        .instance((MenuDishesActivity)view)
+                        .roomRepositoryFactory()
+                        .createDishRepository();
+
+                Dish dish = roomDishRepository.dish(
+                        request.menu.schoolId,
+                        request.menu.canteenId,
+                        request.menu.id,
+                        request.dish.id
+                );
+
+                if(dish == null){
+
+                    // if the return result from the repository call is still null it means that
+                    // the data in the device internal storage was erased
+                    // which leads room not to find it in SQLite database file
+                    // this means that we need simulate a request exception to warn the user
+                    // that the dish is not available
+
+                    Client.Response response = new Client.Response();
+
+                    response.statusCode = 404;
+
+                    RequestException requestException = new RequestException(response);
+
+                    result.requestException = requestException;
+
+                }else{
+
+                    dish.isFavorite = false;
+
+                    roomDishRepository.update(dish);
+
+                }
+
+            } catch (IOException e) {
+
+                result.ioException = e;
+
+                e.printStackTrace();
+            } catch (RequestException requestFailure){
+
+                result.requestException = requestFailure;
+
+                requestFailure.printStackTrace();
+
+            }
+
+            result.dish = request.dish;
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(BackgroundResult result) {
+            super.onPostExecute(result);
+
+            MenuDishesPresenter presenter = MenuDishesPresenter.this;
+
+            if(presenter.isViewAvailableToInteract){
+
+                if(result.ioException != null){
+
+                    if(!CommunicationMediator.hasInternetConnection((MenuDishesActivity)presenter.view)){
+
+                        presenter.view.showNoInternetConnectionError();
+
+                    }else{
+
+                        presenter.view.showServerNotAvailableError();
+
+                    }
+
+                    presenter.view.markDishAsFavorite(result.dish);
+
+                }else if(result.requestException != null){
+
+                    if(result.requestException.response.statusCode == 404){
+
+                        presenter.view.showUnavailableDishError();
+
+                    }else{
+
+                        presenter.view.showUnexepectedServerFailureError();
+
+                    }
+
+                    presenter.view.markDishAsFavorite(result.dish);
+
+                }else{
+
+                    presenter.view.showDishWasUnmarkedFavoriteWithSuccessToast();
+
+                }
+
+            }
+        }
+
+        private class TaskRequest {
+
+            public AvailableCanteenMenusModel.Item menu;
+
+            public MenuDishesModel.Item dish;
+
+        }
+
+        /**
+         * This class encapsulates the possible results of the doInBackground method
+         * It is necessary to create this encapsulation as the method does not allow the throw of
+         * checked exceptions, which may occur
+         */
+        private class BackgroundResult {
+
+            MenuDishesModel.Item dish;
 
             public IOException ioException;
 
