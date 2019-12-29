@@ -11,6 +11,54 @@ import java.util.List;
 
 public class IPEDDishRepositoryImpl implements DishRepository{
 
+    @Override
+    public Dish dish(long schoolId, long canteenId, long menuId, long dishId) throws IOException {
+
+        URL url = new URL("https://heroku-iped.herokuapp.com/schools/" + schoolId + "/canteens/" + canteenId + "/menus/" + menuId + "/dishes/" + dishId);
+
+        Client.Response apiResponse = Client.get(url);
+
+        if(apiResponse.statusCode == 200){
+
+            MenuDishesResponsePayload.Item item = new Gson().fromJson(apiResponse.payload, MenuDishesResponsePayload.Item.class);
+
+            Dish dish = new Dish();
+
+            String typeAsString = item.type;
+
+            Dish.DishType type;
+
+            switch(typeAsString.toLowerCase()){
+                case "meat":
+                    type = Dish.DishType.MEAT;
+                    break;
+                case "fish":
+                    type = Dish.DishType.FISH;
+                    break;
+                case "vegetarian":
+                    type = Dish.DishType.VEGETARIAN;
+                    break;
+                default:
+                    type = Dish.DishType.DIET;
+            }
+
+            dish.type = type;
+
+            dish.description = item.description;
+
+            dish.id = item.id;
+
+            dish.menuId = menuId;
+
+            return dish;
+        }else{
+
+            throw new RequestException(apiResponse);
+
+        }
+
+    }
+
     public List<Dish> dishes(long schoolId, long canteenId, long menuId) throws IOException {
 
         URL url = new URL("https://heroku-iped.herokuapp.com/schools/" + schoolId + "/canteens/" + canteenId + "/menus/" + menuId + "/dishes");
