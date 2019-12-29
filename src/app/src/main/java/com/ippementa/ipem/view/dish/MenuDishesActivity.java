@@ -37,6 +37,8 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
     private MenuDishesListAdapter adapter;
 
+    private AvailableCanteenMenusModel.Item menu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,7 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
         this.presenter = new MenuDishesPresenter(this);
 
-        final AvailableCanteenMenusModel.Item menu = getIntent().getParcelableExtra("menu");
+        this.menu = getIntent().getParcelableExtra("menu");
 
         Button headerBackButton = findViewById(R.id.menu_dishes_header_back_button);
 
@@ -146,6 +148,45 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
     }
 
     @Override
+    public void showUnavailableDishError() {
+
+        Toast.makeText(this, "Dish is not available", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void showDishWasMarkedFavoriteWithSuccessToast() {
+
+        Toast.makeText(this, "Dish was marked as favorite with success!", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void showDishWasUnmarkedFavoriteWithSuccessToast() {
+
+        Toast.makeText(this, "Dish was unmarked as favorite with success!", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void markDishAsFavorite(MenuDishesModel.Item dish) {
+
+        dish.isFavorite = true;
+
+        adapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void unmarkDishAsFavorite(MenuDishesModel.Item dish) {
+
+        dish.isFavorite = false;
+
+        adapter.notifyDataSetChanged();
+
+    }
+
+    @Override
     public void showNoInternetConnectionError() {
 
         Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show();
@@ -176,7 +217,7 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-            MenuDishesModel.Item dish = getItem(position);
+            final MenuDishesModel.Item dish = getItem(position);
 
             if(convertView == null){
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.menu_dishes_list_view_item, parent, false);
@@ -188,7 +229,7 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
             ImageView dishTypeImageView = convertView.findViewById(R.id.menu_dishes_list_view_item_type_image_view);
 
-            ImageView dishFavoriteMarkImageView = convertView.findViewById(R.id.menu_dishes_list_view_item_favorite_mark_image_view);
+            final ImageView dishFavoriteMarkImageView = convertView.findViewById(R.id.menu_dishes_list_view_item_favorite_mark_image_view);
 
             dishTypeTextView.setText(dish.typeAsString);
 
@@ -215,6 +256,31 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
             }else{
                 dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_is_not_favorite));
             }
+
+            dishFavoriteMarkImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(!dish.isFavorite) {
+
+                        dish.isFavorite = true;
+
+                        dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_is_favorite));
+
+                        presenter.markAsFavorite(MenuDishesActivity.this.menu, dish);
+
+                    }else{
+
+                        dish.isFavorite = false;
+
+                        dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_is_not_favorite));
+
+                        presenter.unmarkAsFavorite(MenuDishesActivity.this.menu, dish);
+
+                    }
+                }
+            });
+
             return convertView;
         }
     }
