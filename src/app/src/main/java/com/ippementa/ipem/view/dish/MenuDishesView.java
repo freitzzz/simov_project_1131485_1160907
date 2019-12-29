@@ -11,4 +11,14 @@ public interface MenuDishesView extends ErrorView {
 
     void showUnavailableDishesError();
 
+    void showUnavailableDishError();
+
+    void showDishWasMarkedFavoriteWithSuccessToast();
+
+    void showDishWasUnmarkedFavoriteWithSuccessToast();
+
+    void markDishAsFavorite(MenuDishesModel.Item dish);
+
+    void unmarkDishAsFavorite(MenuDishesModel.Item dish);
+
 }
