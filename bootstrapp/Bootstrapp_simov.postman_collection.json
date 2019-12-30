@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "00dc9d00-be83-4065-a4c3-21701efeb45e",
+		"_postman_id": "7e06155c-1cd6-407f-8c48-1d477134c61a",
 		"name": "Bootstrapp_simov",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "\r\n{\r\n    \"acronym\":\"ISEP\",\r\n    \"name\":\"Instituto Superior de Engenharia do Porto\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Cantina do H\"\r\n        },\r\n        {\r\n            \"name\":\"Bar da AE\"\r\n        },\r\n        {\r\n            \"name\":\"Cantina do F\"\r\n        }\r\n    ]\r\n}"
+					"raw": "\r\n{\r\n    \"acronym\":\"ISEP\",\r\n    \"name\":\"Instituto Superior de Engenharia do Porto\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Cantina do H\",\r\n            \"location\":{\r\n                \"latitude\":41.178205,\r\n                \"longitude\":-8.6091482\r\n            }\r\n        },\r\n        {\r\n            \"name\":\"Bar da AE\",\r\n            \"location\":{\r\n                \"latitude\":41.178368,\r\n                \"longitude\":-8.608466\r\n            }\r\n        },\r\n        {\r\n            \"name\":\"Cantina do F\",\r\n            \"location\":{\r\n                \"latitude\":41.179290,\r\n                \"longitude\":-8.607970\r\n            }\r\n        }\r\n    ]\r\n}"
 				},
 				"url": {
 					"raw": "https://heroku-iped.herokuapp.com/schools",
@@ -51,7 +51,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "\r\n{\r\n    \"acronym\":\"ESTG\",\r\n    \"name\":\"Escola Superior de Tecnologia e Gestão\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Cantina\"\r\n        },\r\n        {\r\n            \"name\":\"Bar\"\r\n        }\r\n    ]\r\n}"
+					"raw": "\r\n{\r\n    \"acronym\":\"ESTG\",\r\n    \"name\":\"Escola Superior de Tecnologia e Gestão\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Cantina Escola Superior Tecnologia e Gestão\",\r\n            \"location\":{\r\n                \"latitude\":41.366891,\r\n                \"longitude\":-8.194395\r\n            }\r\n        },\r\n        {\r\n            \"name\":\"Bar da ESTG\",\r\n            \"location\":{\r\n                \"latitude\":41.366638,\r\n                \"longitude\":-8.194585\r\n            }\r\n        }\r\n    ]\r\n}"
 				},
 				"url": {
 					"raw": "https://heroku-iped.herokuapp.com/schools",
@@ -83,7 +83,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "\r\n{\r\n    \"acronym\":\"ESE\",\r\n    \"name\":\"Escola Superior de Educação\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Snack-Bar\"\r\n        },\r\n        {\r\n            \"name\":\"Cantina\"\r\n        }\r\n    ]\r\n}"
+					"raw": "\r\n{\r\n    \"acronym\":\"ESE\",\r\n    \"name\":\"Escola Superior de Educação\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Snack-Bar\",\r\n            \"location\":{\r\n            \t\"latitude\":41.180502,\r\n            \t\"longitude\":-8.596956\r\n            }\r\n        },\r\n        {\r\n            \"name\":\"Cantina\",\r\n            \"location\":{\r\n            \t\"latitude\":41.180243,\r\n            \t\"longitude\": -8.596958\r\n            }\r\n        }\r\n    ]\r\n}"
 				},
 				"url": {
 					"raw": "https://heroku-iped.herokuapp.com/schools",
@@ -115,7 +115,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "\r\n{\r\n    \"acronym\":\"ISCAP\",\r\n    \"name\":\"Instituto Superior de Contabilidade e Administração do Porto\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Snack-Bar\"\r\n        },\r\n        {\r\n            \"name\":\"Cantina\"\r\n        }\r\n    ]\r\n}"
+					"raw": "\r\n{\r\n    \"acronym\":\"ISCAP\",\r\n    \"name\":\"Instituto Superior de Contabilidade e Administração do Porto\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Bar AE ISCAP\",\r\n            \"location\":{\r\n            \t\"latitude\": 41.189713,\r\n            \t\"longitude\":-8.599044\r\n            }\r\n        },\r\n        {\r\n            \"name\":\"Bar Dzina\",\r\n            \"location\":{\r\n            \t\"latitude\": 41.190316,\r\n            \t\"longitude\":-8.5994804\r\n            }\r\n        },\r\n        {\r\n            \"name\":\"Snack-Bar / Restaurante da D.Zina\",\r\n            \"location\":{\r\n            \t\"latitude\": 41.190316,\r\n            \t\"longitude\":-8.5994804\r\n            }\r\n        }\r\n    ]\r\n}"
 				},
 				"url": {
 					"raw": "https://heroku-iped.herokuapp.com/schools",
@@ -146,7 +146,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "\r\n{\r\n    \"acronym\":\"ESS\",\r\n    \"name\":\"Escola Superior de Saúde\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Bar\"\r\n        },\r\n        {\r\n            \"name\":\"Linha de self\"\r\n        },\r\n        {\r\n        \t\"name\" : \"Cafetaria\"\r\n        }\r\n    ]\r\n}"
+					"raw": "\r\n{\r\n    \"acronym\":\"ESS\",\r\n    \"name\":\"Escola Superior de Saúde\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Bar da ESS\",\r\n            \"location\":{\r\n            \t\"latitude\":41.177743,\r\n            \t\"longitude\":-8.606795\r\n            }\r\n        },\r\n        {\r\n            \"name\":\"Linha de Self\",\r\n            \"location\":{\r\n            \t\"latitude\":41.177639,\r\n            \t\"longitude\":-8.606775\r\n            }\r\n        },\r\n        {\r\n        \t\"name\" : \"Cafetaria\",\r\n        \t\"location\":{\r\n            \t\"latitude\":41.177539,\r\n            \t\"longitude\":-8.606841\r\n            }\r\n        }\r\n    ]\r\n}"
 				},
 				"url": {
 					"raw": "https://heroku-iped.herokuapp.com/schools",
@@ -177,7 +177,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "\r\n{\r\n    \"acronym\":\"ESMAE\",\r\n    \"name\":\"Escola Superior de Música e Artes do Espetáculo\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Cantina\"\r\n        },\r\n        {\r\n            \"name\":\"Bar\"\r\n        }\r\n    ]\r\n}"
+					"raw": "\r\n{\r\n    \"acronym\":\"ESMAE\",\r\n    \"name\":\"Escola Superior de Música e Artes do Espetáculo\",\r\n    \"canteens\":[\r\n        {\r\n            \"name\":\"Cantina do ESMAE\",\r\n            \"location\":{\r\n            \t\"latitude\":41.154504,\r\n            \t\"longitude\":-8.603528\r\n            }\r\n        },\r\n        {\r\n            \"name\":\"Bar\"\r\n        }\r\n    ]\r\n}"
 				},
 				"url": {
 					"raw": "https://heroku-iped.herokuapp.com/schools",
