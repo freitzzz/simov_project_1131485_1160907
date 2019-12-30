@@ -22,7 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Activity that displays the location of canteens on a map
+ * Activity that displays canteens as POI in a map
  * Initial boilerplate code was retrieved from: https://github.com/mapsforge/mapsforge/blob/master/mapsforge-samples-android/src/main/java/org/mapsforge/samples/android/GettingStarted.java
  */
 public class CanteensLocationOnMapActivity extends Activity {
@@ -105,7 +105,9 @@ public class CanteensLocationOnMapActivity extends Activity {
              * Note: this map position is specific to Berlin area.
              */
             mapView.setCenter(new LatLong(41.1496100, -8.6109900));
-            mapView.setZoomLevel((byte) 12);
+            mapView.setZoomLevel((byte) 15);
+
+            mapView.setClickable(true);
         } catch (Exception e) {
             /*
              * In case of map file errors avoid crash, but developers should handle these cases!

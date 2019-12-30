@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.canteen.CanteensLocationOnMapActivity"/>
+        <activity android:name=".view.canteen.CanteensLocationOnMapActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name=".view.settings.SettingsActivity"></activity>
         <activity android:name=".view.dish.MenuDishesActivity" />
         <activity android:name=".view.menu.AvailableCanteenMenusActivity" />
