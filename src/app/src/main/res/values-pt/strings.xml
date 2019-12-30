@@ -21,4 +21,7 @@
     <string name="server_not_available_error">Servidor que contém a informação não está disponível</string>
     <string name="unexpected_server_failure_error">Aconteceu um erro inesperado</string>
     <string name="settings_offline_mode">Modo Offline</string>
+    <string name="settings_favorite_dishes_availability_push_notifications">Push Notifications dos seus pratos favoritos</string>
+    <string name="nearby_canteens_push_notifications">Push Notifications de cantinas na sua proximidade</string>
+    <string name="settings_dark_mode">Modo Escuro</string>
 </resources>

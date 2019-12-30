@@ -20,4 +20,7 @@
     <string name="server_not_available_error">Information server is not available</string>
     <string name="unexpected_server_failure_error">An unexpected error has occurred</string>
     <string name="settings_offline_mode">Offline Mode</string>
+    <string name="settings_favorite_dishes_availability_push_notifications">Favorite Dish Push Notifications</string>
+    <string name="nearby_canteens_push_notifications">Nearby Canteens Push Notifications</string>
+    <string name="settings_dark_mode">Dark Mode</string>
 </resources>

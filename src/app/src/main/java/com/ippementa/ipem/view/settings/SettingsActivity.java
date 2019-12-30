@@ -45,7 +45,6 @@ public class SettingsActivity extends AppCompatActivity implements SettingsView{
 
     @Override
     public void disableOfflineModeSwitchInteraction() {
-
         this.contentFragment.disableOfflineModeSwitchInteraction();
 
     }
