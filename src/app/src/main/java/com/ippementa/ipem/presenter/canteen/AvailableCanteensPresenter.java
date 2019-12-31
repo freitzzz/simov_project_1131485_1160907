@@ -32,6 +32,20 @@ public class AvailableCanteensPresenter implements IPresenter {
 
     }
 
+    public void requestCanteenToDisplayOnMap(long schoolId, long canteenId) {
+
+        RequestCanteenTask task = new RequestCanteenTask();
+
+        RequestCanteenTask.TaskRequest request = task.new TaskRequest();
+
+        request.schoolId = schoolId;
+
+        request.canteenId = canteenId;
+
+        task.execute(request);
+
+    }
+
     @Override
     public void onDestroy() {
         view = null;
@@ -159,6 +173,136 @@ public class AvailableCanteensPresenter implements IPresenter {
         private class BackgroundResult {
 
             public List<Canteen> canteens;
+
+            public IOException ioException;
+
+            public RequestException requestException;
+
+        }
+    }
+
+    private class RequestCanteenTask extends AsyncTask<RequestCanteenTask.TaskRequest, Integer, RequestCanteenTask.BackgroundResult> {
+
+        /**
+         * Fetches available canteens in a thread that is separated from the main thread
+         * If the object returned is null then
+         */
+        @Override
+        protected BackgroundResult doInBackground(RequestCanteenTask.TaskRequest... requests) {
+
+            CanteensRepository repository
+                    = Provider
+                    .instance((AvailableCanteensActivity)view)
+                    .repositoryFactory((AvailableCanteensActivity)view)
+                    .createCanteensRepository();
+
+            BackgroundResult result = new BackgroundResult();
+
+            try {
+
+                TaskRequest request = requests[0];
+
+                System.out.println(request.schoolId);
+
+                System.out.println(request.canteenId);
+
+                result.canteen = repository.canteen(request.schoolId, request.canteenId);
+
+                if(result.canteen == null){
+                    // Need to simulate a RequestException as this was a SQL Query that found no rows
+
+                    Client.Response response = new Client.Response();
+
+                    response.statusCode = 404;
+
+                    RequestException exception = new RequestException(response);
+
+                    result.requestException = exception;
+                }
+
+            } catch (IOException e) {
+
+                result.ioException = e;
+
+                e.printStackTrace();
+            } catch (RequestException requestFailure){
+
+                result.requestException = requestFailure;
+
+                System.out.println(result.requestException.response.statusCode);
+
+                requestFailure.printStackTrace();
+
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(BackgroundResult result) {
+            super.onPostExecute(result);
+
+            AvailableCanteensPresenter presenter = AvailableCanteensPresenter.this;
+
+            if(presenter.isViewAvailableToInteract){
+
+                if(result.ioException != null){
+
+                    if(!CommunicationMediator.hasInternetConnection((AvailableCanteensActivity)presenter.view)){
+
+                        presenter.view.showNoInternetConnectionError();
+
+                    }else{
+
+                        presenter.view.showServerNotAvailableError();
+
+                    }
+                }else if(result.requestException != null){
+
+                    if(result.requestException.response.statusCode == 404){
+
+                        presenter.view.showUnavailableCanteenError();
+
+                    }else{
+
+                        presenter.view.showUnexepectedServerFailureError();
+
+                    }
+
+                }else{
+
+                    CanteenWithMapLocationModel model = new CanteenWithMapLocationModel();
+
+                    model.id = result.canteen.id;
+
+                    model.name = result.canteen.name;
+
+                    model.latitude = result.canteen.location.latitude;
+
+                    model.longitude = result.canteen.location.longitude;
+
+                    presenter.view.navigateToCanteenOnMapLocation(model);
+
+                }
+
+            }
+        }
+
+        private class TaskRequest {
+
+            public long schoolId;
+
+            public long canteenId;
+        }
+
+        /**
+         * This class encapsulates the possible results of the doInBackground method
+         * It is necessary to create this encapsulation as the method does not allow the throw of
+         * checked exceptions, which may occur
+         */
+        private class BackgroundResult {
+
+            public Canteen canteen;
 
             public IOException ioException;
 
