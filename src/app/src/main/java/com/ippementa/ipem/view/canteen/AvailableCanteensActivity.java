@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.canteen.AvailableCanteensModel;
 import com.ippementa.ipem.presenter.canteen.AvailableCanteensPresenter;
+import com.ippementa.ipem.presenter.canteen.CanteenWithMapLocationModel;
 import com.ippementa.ipem.presenter.school.AvailableSchoolsModel;
 import com.ippementa.ipem.view.menu.AvailableCanteenMenusActivity;
 import com.ippementa.ipem.view.settings.SettingsActivity;
@@ -38,6 +39,8 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
 
     private AvailableCanteensListAdapter adapter;
 
+    private AvailableSchoolsModel.Item school;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +49,7 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
 
         this.presenter = new AvailableCanteensPresenter(this);
 
-        final AvailableSchoolsModel.Item school = getIntent().getParcelableExtra("school");
+        this.school = getIntent().getParcelableExtra("school");
 
         TextView headerTextView = findViewById(R.id.available_canteens_header_text_view);
 
@@ -69,8 +72,6 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AvailableCanteensModel.Item canteen = adapter.getItem(position);
-
-                canteen.schoolId = school.id;
 
                 navigateToCanteenMenusPage(canteen);
             }
@@ -137,9 +138,15 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.canteen_context_menu_map_location:
-                Intent intent = new Intent(AvailableCanteensActivity.this, CanteensLocationOnMapActivity.class);
 
-                startActivity(intent);
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+                int canteenItemPosition = info.position;
+
+                AvailableCanteensModel.Item canteenItem = adapter.getItem(canteenItemPosition);
+
+                presenter.requestCanteenToDisplayOnMap(canteenItem.schoolId, canteenItem.id);
+
                 break;
             default:
                 break;
@@ -184,9 +191,27 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
     }
 
     @Override
+    public void navigateToCanteenOnMapLocation(CanteenWithMapLocationModel canteen) {
+
+        Intent intent = new Intent(AvailableCanteensActivity.this, CanteensLocationOnMapActivity.class);
+
+        intent.putExtra("canteen", canteen);
+
+        startActivity(intent);
+
+    }
+
+    @Override
     public void navigateBackToAvailableSchoolsPage() {
 
         finish();
+
+    }
+
+    @Override
+    public void showUnavailableCanteenError() {
+
+        Toast.makeText(this, "Canteen was not found", Toast.LENGTH_LONG).show();
 
     }
 
@@ -233,6 +258,8 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
             if(convertView == null){
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.available_canteens_list_view_item, parent, false);
             }
+
+            canteen.schoolId = school.id;
 
             TextView canteenNameTextView = convertView.findViewById(R.id.available_canteens_list_view_item_canteen_name_text_view);
 
