@@ -1,16 +1,20 @@
 package com.ippementa.ipem.view.canteen;
 
 import android.app.Activity;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import com.ippementa.ipem.R;
+import com.ippementa.ipem.presenter.canteen.CanteenWithMapLocationModel;
 
 import org.mapsforge.core.model.LatLong;
+import org.mapsforge.map.android.graphics.AndroidBitmap;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.android.util.AndroidUtil;
 import org.mapsforge.map.android.view.MapView;
 import org.mapsforge.map.datastore.MapDataStore;
 import org.mapsforge.map.layer.cache.TileCache;
+import org.mapsforge.map.layer.overlay.Marker;
 import org.mapsforge.map.layer.renderer.TileRendererLayer;
 import org.mapsforge.map.reader.MapFile;
 import org.mapsforge.map.rendertheme.InternalRenderTheme;
@@ -25,7 +29,7 @@ import java.io.OutputStream;
  * Activity that displays canteens as POI in a map
  * Initial boilerplate code was retrieved from: https://github.com/mapsforge/mapsforge/blob/master/mapsforge-samples-android/src/main/java/org/mapsforge/samples/android/GettingStarted.java
  */
-public class CanteensLocationOnMapActivity extends Activity {
+public class CanteensLocationOnMapActivity extends Activity implements CanteensLocationOnMapView{
 
     // Name of the map file in device storage
     private static final String MAP_FILE = "porto.map";
@@ -35,6 +39,8 @@ public class CanteensLocationOnMapActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        CanteenWithMapLocationModel canteen = (CanteenWithMapLocationModel)getIntent().getParcelableExtra("canteen");
 
         /*
          * Before you make any calls on the mapsforge library, you need to initialize the
@@ -104,8 +110,17 @@ public class CanteensLocationOnMapActivity extends Activity {
              * The map also needs to know which area to display and at what zoom level.
              * Note: this map position is specific to Berlin area.
              */
-            mapView.setCenter(new LatLong(41.1496100, -8.6109900));
+            mapView.setCenter(new LatLong(canteen.latitude, canteen.longitude));
             mapView.setZoomLevel((byte) 15);
+
+            Marker canteenMarker = new Marker(
+                    new LatLong(canteen.latitude, canteen.longitude),
+                    new AndroidBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.icon_settings_enable_nearby_canteens_push_notifications)),
+                    0,
+                    0
+            );
+
+            mapView.addLayer(canteenMarker);
 
             mapView.setClickable(true);
         } catch (Exception e) {
@@ -135,4 +150,23 @@ public class CanteensLocationOnMapActivity extends Activity {
         }
     }
 
+    @Override
+    public void navigateBackToSchoolCanteensPage() {
+
+    }
+
+    @Override
+    public void showNoInternetConnectionError() {
+
+    }
+
+    @Override
+    public void showServerNotAvailableError() {
+
+    }
+
+    @Override
+    public void showUnexepectedServerFailureError() {
+
+    }
 }
