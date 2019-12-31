@@ -66,7 +66,7 @@ public class IPEDCanteensRepositoryImpl implements CanteensRepository {
 
             canteen.name = payload.name;
 
-            Canteen.Location location = new Canteen().new Location();
+            Canteen.Location location = new Canteen.Location();
 
             location.latitude = payload.location.latitude;
 

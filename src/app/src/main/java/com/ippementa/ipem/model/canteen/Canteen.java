@@ -29,7 +29,7 @@ public class Canteen {
 
     public Canteen(){}
 
-    public class Location{
+    public static class Location{
 
         public double latitude;
 
