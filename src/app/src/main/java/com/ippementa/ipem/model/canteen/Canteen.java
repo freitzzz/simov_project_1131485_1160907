@@ -2,6 +2,7 @@ package com.ippementa.ipem.model.canteen;
 
 import com.ippementa.ipem.model.school.School;
 
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
@@ -21,8 +22,21 @@ public class Canteen {
 
     public String name;
 
+    @Embedded
+    public Location location;
+
     //public List<Menu> menus;
 
     public Canteen(){}
+
+    public class Location{
+
+        public double latitude;
+
+        public double longitude;
+
+        public Location(){}
+
+    }
 
 }

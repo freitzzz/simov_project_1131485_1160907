@@ -47,4 +47,41 @@ public class IPEDCanteensRepositoryImpl implements CanteensRepository {
         }
     }
 
+    @Override
+    public Canteen canteen(long schoolId, long canteenId) throws IOException {
+
+        URL url = new URL("https://heroku-iped.herokuapp.com/schools/" + schoolId + "/canteens/" + canteenId);
+
+        Client.Response apiResponse = Client.get(url);
+
+        if(apiResponse.statusCode == 200){
+
+            DetailedCanteenInformationResponsePayload payload = new Gson().fromJson(apiResponse.payload, DetailedCanteenInformationResponsePayload.class);
+
+            Canteen canteen = new Canteen();
+
+            canteen.id = canteenId;
+
+            canteen.schoolId = schoolId;
+
+            canteen.name = payload.name;
+
+            Canteen.Location location = new Canteen().new Location();
+
+            location.latitude = payload.location.latitude;
+
+            location.longitude = payload.location.longitude;
+
+            canteen.location = location;
+
+            return canteen;
+
+        }else{
+
+            throw new RequestException(apiResponse);
+
+        }
+
+    }
+
 }

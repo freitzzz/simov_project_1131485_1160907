@@ -7,4 +7,6 @@ public interface CanteensRepository {
 
     List<Canteen> canteens(long schoolId) throws IOException;
 
+    Canteen canteen(long schoolId, long canteenId) throws IOException;
+
 }

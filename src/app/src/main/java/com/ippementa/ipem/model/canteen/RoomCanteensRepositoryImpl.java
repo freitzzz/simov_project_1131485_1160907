@@ -17,6 +17,10 @@ public interface RoomCanteensRepositoryImpl extends CanteensRepository {
     @Insert
     void insertAll(Canteen... canteens);
 
+    @Override
+    @Query("SELECT * FROM Canteen WHERE id = :canteenId AND :schoolId > -1")
+    Canteen canteen(long schoolId, long canteenId) throws IOException;
+
     @Query("DELETE FROM Canteen")
     void clearTable();
 }
