@@ -1,12 +1,11 @@
 package com.ippementa.ipem.view.dish;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.nfc.NfcManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,22 +25,24 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
         this.presenter = new PurchaseDishPresenter(this);
 
-        if(this.checkIfDeviceHasNFCAvaliable())
+        if(this.presenter.checkIfDeviceHasNFCAvaliable() == true)
         {
-            // ask for permission to use nfc
+            // check if nfc is enabled
+            if(this.presenter.checkIfDeviceHasNFCOn() == false) Toast.makeText(this, R.string.nfc_turned_off, Toast.LENGTH_LONG).show();
         }
         else {
-            // ask for permission to use Bluetooth
+            //check if device has bluetooth
+
+            if(this.presenter.checkIfDeviceHasBluetooth() == true) {
+                //check if bluetooth is enabled
+
+                if (this.presenter.checkIfDeviceHasBluetoothOn() == false)
+                    Toast.makeText(this, R.string.bluetooth_turned_off, Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(this, R.string.no_bluetooth_nfc, Toast.LENGTH_LONG).show();
+            }
         }
-    }
-
-    @Override
-    public boolean checkIfDeviceHasNFCAvaliable() {
-        boolean hasNFC = false;
-
-        NfcManager manager = (NfcManager) this.getSystemService(Context.NFC_SERVICE);
-        if(manager != null) hasNFC = true;
-        return hasNFC;
     }
 
     @Override
