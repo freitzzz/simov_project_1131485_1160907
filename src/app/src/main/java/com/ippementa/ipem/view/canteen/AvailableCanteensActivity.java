@@ -2,6 +2,7 @@ package com.ippementa.ipem.view.canteen;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.ippementa.ipem.presenter.canteen.AvailableCanteensModel;
 import com.ippementa.ipem.presenter.canteen.AvailableCanteensPresenter;
 import com.ippementa.ipem.presenter.canteen.CanteenWithMapLocationModel;
 import com.ippementa.ipem.presenter.school.AvailableSchoolsModel;
+import com.ippementa.ipem.util.Provider;
 import com.ippementa.ipem.view.menu.AvailableCanteenMenusActivity;
 import com.ippementa.ipem.view.settings.SettingsActivity;
 
@@ -240,6 +242,23 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
     public void showUnexepectedServerFailureError() {
 
         Toast.makeText(this, "Unexpected Server Failure", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public Resources.Theme getTheme() {
+
+        Resources.Theme theme = super.getTheme();
+
+        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
+
+        if(isInDarkMode){
+            theme.applyStyle(R.style.Theme_AppCompat, true);
+        }else{
+            theme.applyStyle(R.style.Theme_AppCompat_Light, true);
+        }
+
+        return theme;
 
     }
 

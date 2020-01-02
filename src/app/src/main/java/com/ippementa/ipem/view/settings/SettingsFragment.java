@@ -145,12 +145,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
                 boolean checked = (boolean)newValue;
-
+                
                 if(checked){
+
+                    presenter.changeToDarkMode();
 
                     darkModeSwitch.setIcon(R.drawable.icon_settings_enable_dark_mode);
 
                 }else{
+
+                    presenter.changeToLightMode();
 
                     darkModeSwitch.setIcon(R.drawable.icon_settings_disable_dark_mode);
 

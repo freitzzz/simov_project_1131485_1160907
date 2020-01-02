@@ -2,6 +2,7 @@ package com.ippementa.ipem.view.dish;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.dish.MenuDishesModel;
 import com.ippementa.ipem.presenter.dish.MenuDishesPresenter;
 import com.ippementa.ipem.presenter.menu.AvailableCanteenMenusModel;
+import com.ippementa.ipem.util.Provider;
 import com.ippementa.ipem.view.settings.SettingsActivity;
 
 import java.util.ArrayList;
@@ -204,6 +206,23 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
     public void showUnexepectedServerFailureError() {
 
         Toast.makeText(this, "Unexpected Server Failure", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public Resources.Theme getTheme() {
+
+        Resources.Theme theme = super.getTheme();
+
+        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
+
+        if(isInDarkMode){
+            theme.applyStyle(R.style.Theme_AppCompat, true);
+        }else{
+            theme.applyStyle(R.style.Theme_AppCompat_Light, true);
+        }
+
+        return theme;
 
     }
 
