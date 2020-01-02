@@ -24,4 +24,7 @@
     <string name="nearby_canteens_push_notifications">Nearby Canteens Push Notifications</string>
     <string name="settings_dark_mode">Dark Mode</string>
     <string name="purchase_dish">Purchase Dish</string>
+    <string name="nfc_turned_off">Please turn on NFC in your device!</string>
+    <string name="bluetooth_turned_off">Please turn on Bluetooth in your device!</string>
+    <string name="no_bluetooth_nfc">This device doesn´t have NFC or Bluetooth. Purchase via app disabled!</string>
 </resources>
