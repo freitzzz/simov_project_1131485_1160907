@@ -1,4 +1,4 @@
-package com.ippementa.ipem.view.payment;
+package com.ippementa.ipem.view.dish;
 
 public interface PurchaseDishView {
 

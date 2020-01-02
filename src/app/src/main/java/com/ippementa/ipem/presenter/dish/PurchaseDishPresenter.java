@@ -1,7 +1,7 @@
-package com.ippementa.ipem.presenter.payment;
+package com.ippementa.ipem.presenter.dish;
 
 import com.ippementa.ipem.presenter.IPresenter;
-import com.ippementa.ipem.view.payment.PurchaseDishView;
+import com.ippementa.ipem.view.dish.PurchaseDishView;
 
 public class PurchaseDishPresenter implements IPresenter {
 
