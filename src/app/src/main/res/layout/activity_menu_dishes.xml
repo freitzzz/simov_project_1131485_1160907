@@ -17,7 +17,7 @@
             android:id="@+id/menu_dishes_header_back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/sym_call_outgoing"
+            android:drawableLeft="@drawable/icon_arrow_left_black"
             android:background="@android:color/transparent"
             />
 
@@ -36,6 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/menu_dishes_header_text"
+        android:textColor="@android:color/black"
         android:background="@color/colorBackgroundHeaderText"
         android:textStyle="bold"
         />

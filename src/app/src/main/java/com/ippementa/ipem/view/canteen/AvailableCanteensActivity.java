@@ -68,6 +68,12 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
             }
         });
 
+        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
+
+        if(isInDarkMode){
+            headerBackButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_arrow_left_white, 0, 0,0 );
+        }
+
         ListView canteensListView = findViewById(R.id.available_canteens_list_view);
 
         canteensListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -253,10 +259,11 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
         boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
 
         if(isInDarkMode){
-            theme.applyStyle(R.style.Theme_AppCompat, true);
+            theme.applyStyle(R.style.DarkMode, true);
         }else{
-            theme.applyStyle(R.style.Theme_AppCompat_Light, true);
+            theme.applyStyle(R.style.LightMode, true);
         }
+
 
         return theme;
 

@@ -52,6 +52,12 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
         Button headerBackButton = findViewById(R.id.menu_dishes_header_back_button);
 
+        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
+
+        if(isInDarkMode){
+            headerBackButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_arrow_left_white, 0, 0,0 );
+        }
+
         headerBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -217,9 +223,9 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
         boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
 
         if(isInDarkMode){
-            theme.applyStyle(R.style.Theme_AppCompat, true);
+            theme.applyStyle(R.style.DarkMode, true);
         }else{
-            theme.applyStyle(R.style.Theme_AppCompat_Light, true);
+            theme.applyStyle(R.style.LightMode, true);
         }
 
         return theme;

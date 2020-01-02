@@ -9,4 +9,6 @@
     <color name="colorSchoolName">#000000</color>
     <color name="colorCanteenName">#000000</color>
     <color name="colorMenuType">#000000</color>
+    <color name="colorIconInDarkMode">#FFFFFF</color>
+    <color name="colorIconInLightMode">#000000</color>
 </resources>

@@ -15,7 +15,6 @@
     <TextView
         android:id="@+id/available_schools_list_view_item_school_name_text_view"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:textColor="@color/colorSchoolName"/>
+        android:layout_height="match_parent"/>
     
 </LinearLayout>

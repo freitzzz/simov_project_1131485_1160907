@@ -15,20 +15,21 @@
 
         <Button
             android:id="@+id/available_canteens_header_back_button"
-            android:layout_width="wrap_content"
+            android:layout_width="37dp"
             android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/sym_call_outgoing"
+            android:layout_gravity="center"
             android:background="@android:color/transparent"
-            />
+            android:drawableLeft="@drawable/icon_arrow_left_black"
+            android:scaleType="centerInside" />
 
         <ImageView
             android:id="@+id/available_canteens_header_image_view"
-            android:contentDescription="@string/ipp_ementa_header_logo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorBackgroundHeaderLogo"
+            android:contentDescription="@string/ipp_ementa_header_logo"
             android:scaleType="fitStart"
-            app:srcCompat="@drawable/ipp_ementa_header_logo"/>
+            app:srcCompat="@drawable/ipp_ementa_header_logo" />
     </LinearLayout>
 
     <TextView
@@ -37,6 +38,7 @@
         android:layout_height="wrap_content"
         android:text="@string/available_canteens_header_text"
         android:background="@color/colorBackgroundHeaderText"
+        android:textColor="@android:color/black"
         android:textStyle="bold"
         />
 

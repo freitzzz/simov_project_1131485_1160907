@@ -112,9 +112,9 @@ public class SettingsActivity extends AppCompatActivity implements SettingsView{
         boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
 
         if(isInDarkMode){
-            theme.applyStyle(R.style.Theme_AppCompat, true);
+            theme.applyStyle(R.style.DarkMode, true);
         }else{
-            theme.applyStyle(R.style.Theme_AppCompat_Light, true);
+            theme.applyStyle(R.style.LightMode, true);
         }
 
         return theme;
