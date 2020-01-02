@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.settings.SettingsPresenter;
+import com.ippementa.ipem.util.Provider;
+import com.ippementa.ipem.util.Settings;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -23,6 +25,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SwitchPreferenceCompat darkModeSwitch;
 
+    private boolean isInDarkMode;
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
@@ -32,16 +36,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(context);
 
+        this.isInDarkMode = Provider.instance(context).settings().isInDarkMode();
+
         this.offlineModeSwitch = new SwitchPreferenceCompat(context);
 
         this.offlineModeSwitch.setKey("offline-mode");
         this.offlineModeSwitch.setTitle(R.string.settings_offline_mode);
-
-        if(this.offlineModeSwitch.isEnabled()) {
-            this.offlineModeSwitch.setIcon(R.drawable.icon_settings_enable_offline_mode);
-        }else{
-            this.offlineModeSwitch.setIcon(R.drawable.icon_settings_disable_offline_mode);
-        }
 
         this.offlineModeSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -49,15 +49,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 boolean checked = (boolean)newValue;
 
-                if(checked){
+                updateOfflineModeSwitchIcon(checked);
 
-                    offlineModeSwitch.setIcon(R.drawable.icon_settings_enable_offline_mode);
+                if(checked){
 
                     presenter.startOfflineDataDownload();
 
-                }else{
-
-                    offlineModeSwitch.setIcon(R.drawable.icon_settings_disable_offline_mode);
+                }else{;
 
                     presenter.setNotUseOfflineData();
 
@@ -84,13 +82,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 boolean checked = (boolean)newValue;
 
+                updateFavoriteDishesAvailabilityPushNotificationsSwitchIcon(checked);
+
                 if(checked){
 
-                    favoriteDishesAvailabilityPushNotificationsSwitch.setIcon(R.drawable.icon_settings_enable_favorite_dishes_availability_push_notifications);
-
                 }else{
-
-                    favoriteDishesAvailabilityPushNotificationsSwitch.setIcon(R.drawable.icon_settings_disable_favorite_dishes_availability_push_notifications);
 
                 }
 
@@ -103,25 +99,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         this.nearbyCanteensPushNotificationsSwitch.setKey("nearby-canteens-push-notifications");
         this.nearbyCanteensPushNotificationsSwitch.setTitle(R.string.nearby_canteens_push_notifications);
 
-        if(this.nearbyCanteensPushNotificationsSwitch.isEnabled()) {
-            this.nearbyCanteensPushNotificationsSwitch.setIcon(R.drawable.icon_settings_enable_nearby_canteens_push_notifications);
-        }else{
-            this.nearbyCanteensPushNotificationsSwitch.setIcon(R.drawable.icon_settings_disable_nearby_canteens_push_notifications);
-        }
-
         this.nearbyCanteensPushNotificationsSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
                 boolean checked = (boolean)newValue;
 
+                updateNearbyCanteensPushNotificationsSwitchIcon(checked);
+
                 if(checked){
 
-                    nearbyCanteensPushNotificationsSwitch.setIcon(R.drawable.icon_settings_enable_nearby_canteens_push_notifications);
-
                 }else{
-
-                    nearbyCanteensPushNotificationsSwitch.setIcon(R.drawable.icon_settings_disable_nearby_canteens_push_notifications);
 
                 }
 
@@ -134,35 +122,37 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         this.darkModeSwitch.setKey("dark-mode");
         this.darkModeSwitch.setTitle(R.string.settings_dark_mode);
 
-        if(this.darkModeSwitch.isEnabled()) {
-            this.darkModeSwitch.setIcon(R.drawable.icon_settings_enable_dark_mode);
-        }else{
-            this.darkModeSwitch.setIcon(R.drawable.icon_settings_disable_dark_mode);
-        }
-
         this.darkModeSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
                 boolean checked = (boolean)newValue;
-                
+
+                updateDarkModeSwitchIcon(checked);
+
                 if(checked){
 
                     presenter.changeToDarkMode();
 
-                    darkModeSwitch.setIcon(R.drawable.icon_settings_enable_dark_mode);
-
                 }else{
 
                     presenter.changeToLightMode();
-
-                    darkModeSwitch.setIcon(R.drawable.icon_settings_disable_dark_mode);
 
                 }
 
                 return true;
             }
         });
+
+        Settings settings = Provider.instance(context).settings();
+
+        this.updateOfflineModeSwitchIcon(settings.isInOfflineMode());
+
+        this.updateFavoriteDishesAvailabilityPushNotificationsSwitchIcon(this.favoriteDishesAvailabilityPushNotificationsSwitch.isChecked());
+
+        this.updateNearbyCanteensPushNotificationsSwitchIcon(this.nearbyCanteensPushNotificationsSwitch.isChecked());
+
+        this.updateDarkModeSwitchIcon(settings.isInDarkMode());
 
         screen.addPreference(this.offlineModeSwitch);
 
@@ -192,6 +182,104 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         this.offlineModeSwitch.setChecked(false);
 
         this.offlineModeSwitch.callChangeListener(false);
+
+    }
+
+
+
+    public void updateOfflineModeSwitchIcon(boolean isChecked) {
+
+        SwitchPreferenceCompat switchToUpdate = this.offlineModeSwitch;
+
+        if(isChecked) {
+
+            if(isInDarkMode){
+                switchToUpdate.setIcon(R.drawable.icon_wifi_off_white);
+            }else{
+                switchToUpdate.setIcon(R.drawable.icon_wifi_off_black);
+            }
+
+        }else{
+
+            if(isInDarkMode){
+                switchToUpdate.setIcon(R.drawable.icon_wifi_white);
+            }else{
+                switchToUpdate.setIcon(R.drawable.icon_wifi_black);
+            }
+
+        }
+
+    }
+
+    public void updateFavoriteDishesAvailabilityPushNotificationsSwitchIcon(boolean isChecked) {
+
+        SwitchPreferenceCompat switchToUpdate = this.favoriteDishesAvailabilityPushNotificationsSwitch;
+
+        if(isChecked) {
+
+            if(isInDarkMode){
+                switchToUpdate.setIcon(R.drawable.icon_star_white);
+            }else{
+                switchToUpdate.setIcon(R.drawable.icon_star_black);
+            }
+
+        }else{
+
+            if(isInDarkMode){
+                switchToUpdate.setIcon(R.drawable.icon_star_off_white);
+            }else{
+                switchToUpdate.setIcon(R.drawable.icon_star_off_black);
+            }
+
+        }
+
+    }
+
+    public void updateNearbyCanteensPushNotificationsSwitchIcon(boolean isChecked) {
+
+        SwitchPreferenceCompat switchToUpdate = this.nearbyCanteensPushNotificationsSwitch;
+
+        if(isChecked) {
+
+            if(isInDarkMode){
+                switchToUpdate.setIcon(R.drawable.icon_map_marker_white);
+            }else{
+                switchToUpdate.setIcon(R.drawable.icon_map_marker_black);
+            }
+
+        }else{
+
+            if(isInDarkMode){
+                switchToUpdate.setIcon(R.drawable.icon_map_marker_off_white);
+            }else{
+                switchToUpdate.setIcon(R.drawable.icon_map_marker_off_black);
+            }
+
+        }
+
+    }
+
+    public void updateDarkModeSwitchIcon(boolean isChecked) {
+
+        SwitchPreferenceCompat switchToUpdate = this.darkModeSwitch;
+
+        if(isChecked) {
+
+            if(isInDarkMode){
+                switchToUpdate.setIcon(R.drawable.icon_moon_white);
+            }else{
+                switchToUpdate.setIcon(R.drawable.icon_moon_black);
+            }
+
+        }else{
+
+            if(isInDarkMode){
+                switchToUpdate.setIcon(R.drawable.icon_sun_white);
+            }else{
+                switchToUpdate.setIcon(R.drawable.icon_sun_black);
+            }
+
+        }
 
     }
 }
