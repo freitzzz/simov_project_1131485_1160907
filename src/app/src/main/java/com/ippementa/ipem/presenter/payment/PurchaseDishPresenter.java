@@ -16,16 +16,16 @@ public class PurchaseDishPresenter implements IPresenter {
 
     @Override
     public void onDestroy() {
-
+        this.isViewAvaliableToUse = false;
     }
 
     @Override
     public void onResume() {
-
+        this.isViewAvaliableToUse = true;
     }
 
     @Override
     public void onPause() {
-
+        this.isViewAvaliableToUse = false;
     }
 }
