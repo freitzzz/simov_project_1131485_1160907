@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.payment.PurchaseDishActivity"></activity>
+        <activity android:name=".view.dish.PurchaseDishActivity"></activity>
         <activity
             android:name=".view.canteen.CanteensLocationOnMapActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
