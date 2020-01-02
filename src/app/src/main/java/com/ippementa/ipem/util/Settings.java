@@ -10,6 +10,8 @@ public class Settings {
 
     private boolean cachedInOfflineMode;
 
+    private boolean cachedInDarkMode;
+
     protected Settings(Context ctx){
 
         reloadSettings(ctx);
@@ -46,9 +48,47 @@ public class Settings {
         }
     }
 
+    public boolean activateLightMode(Context ctx){
+
+        SharedPreferences preferences
+                = ctx.getSharedPreferences("ipp-ementa-shared-preferences", Context.MODE_PRIVATE);
+
+        boolean writtenWithSuccess = preferences.edit().putBoolean("in-dark-mode", false).commit();
+
+        if(writtenWithSuccess){
+            this.cachedInOfflineMode = false;
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public boolean activateDarkMode(Context ctx){
+
+        SharedPreferences preferences
+                = ctx.getSharedPreferences("ipp-ementa-shared-preferences", Context.MODE_PRIVATE);
+
+        boolean writtenWithSuccess = preferences.edit().putBoolean("in-dark-mode", true).commit();
+
+        if(writtenWithSuccess){
+            this.cachedInDarkMode = true;
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
     public boolean isInOfflineMode(){
 
         return cachedInOfflineMode;
+
+    }
+
+    public boolean isInDarkMode(){
+
+        return cachedInDarkMode;
 
     }
 
@@ -59,7 +99,11 @@ public class Settings {
 
         boolean offlineMode = preferences.getBoolean("in-offline-mode", false);
 
+        boolean darkMode = preferences.getBoolean("in-dark-mode", false);
+
         this.cachedInOfflineMode = offlineMode;
+
+        this.cachedInDarkMode = darkMode;
 
     }
 
