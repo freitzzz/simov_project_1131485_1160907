@@ -41,6 +41,8 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
     private AvailableCanteenMenusModel.Item menu;
 
+    private boolean isInDarkMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +54,9 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
         Button headerBackButton = findViewById(R.id.menu_dishes_header_back_button);
 
-        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
+        this.isInDarkMode = Provider.instance(this).settings().isInDarkMode();
 
-        if(isInDarkMode){
+        if(this.isInDarkMode){
             headerBackButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_arrow_left_white, 0, 0,0 );
         }
 
@@ -263,23 +265,59 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
             switch (dish.type){
 
                 case MEAT:
-                    dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_meat));
+
+                    if(isInDarkMode){
+                        dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_sausage_white));
+                    }else{
+                        dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_sausage_black));
+                    }
+
                     break;
                 case FISH:
-                    dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_fish));
+
+                    if(isInDarkMode){
+                        dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_fish_white));
+                    }else{
+                        dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_fish_black));
+                    }
+
                     break;
                 case VEGETARIAN:
-                    dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_vegetarian));
+
+                    if(isInDarkMode){
+                        dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_leaf_white));
+                    }else{
+                        dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_leaf_black));
+                    }
+
                     break;
                 default:
-                    dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_diet));
+
+                    if(isInDarkMode){
+                        dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_noodles_white));
+                    }else{
+                        dishTypeImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_noodles_black));
+                    }
+
                     break;
             }
 
             if(dish.isFavorite) {
-                dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_is_favorite));
+
+                if(isInDarkMode){
+                    dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_star_white));
+                }else{
+                    dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_star_black));
+                }
+
             }else{
-                dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_is_not_favorite));
+
+                if(isInDarkMode){
+                    dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_star_outline_white));
+                }else{
+                    dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_star_outline_black));
+                }
+
             }
 
             dishFavoriteMarkImageView.setOnClickListener(new View.OnClickListener() {
@@ -290,7 +328,11 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
                         dish.isFavorite = true;
 
-                        dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_is_favorite));
+                        if(isInDarkMode){
+                            dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_star_white));
+                        }else{
+                            dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_star_black));
+                        }
 
                         presenter.markAsFavorite(MenuDishesActivity.this.menu, dish);
 
@@ -298,7 +340,11 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
                         dish.isFavorite = false;
 
-                        dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_dish_is_not_favorite));
+                        if(isInDarkMode){
+                            dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_star_outline_white));
+                        }else{
+                            dishFavoriteMarkImageView.setImageDrawable(ContextCompat.getDrawable(MenuDishesActivity.this, R.drawable.icon_star_outline_black));
+                        }
 
                         presenter.unmarkAsFavorite(MenuDishesActivity.this.menu, dish);
 
