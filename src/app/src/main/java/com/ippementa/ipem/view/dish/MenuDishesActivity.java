@@ -3,6 +3,7 @@ package com.ippementa.ipem.view.dish;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.dish.MenuDishesModel;
 import com.ippementa.ipem.presenter.dish.MenuDishesPresenter;
@@ -23,11 +29,6 @@ import com.ippementa.ipem.view.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 public class MenuDishesActivity extends AppCompatActivity implements MenuDishesView{
 
@@ -60,6 +61,8 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
         });
 
         ListView menusListView = findViewById(R.id.menu_dishes_list_view);
+
+        registerForContextMenu(menusListView);
 
         this.adapter = new MenuDishesActivity.MenuDishesListAdapter(this, new ArrayList<MenuDishesModel.Item>());
 
@@ -122,6 +125,19 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
         }
 
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.menu_dishes_context_menu, menu);
+    }
+
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        Toast.makeText(this,"olha deu", Toast.LENGTH_LONG).show();
+        return true;
     }
 
     @Override
