@@ -26,6 +26,20 @@ public class Dish {
 
     public Dish(){}
 
+    @Override
+    public boolean equals(Object obj){
+        if(!(obj instanceof Dish)){
+            return false;
+        }else{
+            return obj.hashCode() == hashCode();
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return (int)id;
+    }
+
     public enum DishType{
 
         MEAT,
