@@ -50,4 +50,16 @@
     <string name="unmarking_dish_as_favorite_requires_internet_connection">
         Unmarking a dish as favorite requires internet connection
     </string>
+    <string name="registering_favorite_dishes_push_notifications_receive_start">
+        Please wait while favorite dishes push notifications receive are being registered...
+    </string>
+    <string name="registering_favorite_dishes_push_notifications_receive_finish">
+        Push Notifications receive were registered with success
+    </string>
+    <string name="unregistering_favorite_dishes_push_notifications_receive_start">
+        Please wait while favorite dishes push notifications receive are being unregistered...
+    </string>
+    <string name="unregistering_favorite_dishes_push_notifications_receive_finish">
+        Push Notifications receive were unregistered with success
+    </string>
 </resources>

@@ -51,4 +51,18 @@
     <string name="unmarking_dish_as_favorite_requires_internet_connection">
         A desmarcação de um prato como favorito requer conexão à Internet
     </string>
+    <string name="registering_favorite_dishes_push_notifications_receive_start">
+        Por favor aguarde enquanto as push-notifications relativas aos seus pratos favoritos
+        são registadas...
+    </string>
+    <string name="registering_favorite_dishes_push_notifications_receive_finish">
+        As push-notifications foram registadas com successo
+    </string>
+    <string name="unregistering_favorite_dishes_push_notifications_receive_start">
+        Por favor aguarde enquanto as push-notifications relativas aos seus pratos favoritos
+        são removidas...
+    </string>
+    <string name="unregistering_favorite_dishes_push_notifications_receive_finish">
+        As push-notifications foram removidas com successo
+    </string>
 </resources>

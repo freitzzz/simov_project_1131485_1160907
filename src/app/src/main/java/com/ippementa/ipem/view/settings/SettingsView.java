@@ -14,6 +14,7 @@ public interface SettingsView extends ErrorView {
 
     void showOfflineDataDownloadFinishSnackbar();
 
+
     void activateDarkModeSwitch();
 
     void deactivateDarkModeSwitch();
@@ -26,4 +27,20 @@ public interface SettingsView extends ErrorView {
 
     void showErrorDisablingDarkModeSnackBar();
 
+
+    void enableFavoriteDishPushNotificationsSwitchInteraction();
+
+    void disableFavoriteDishPushNotificationsSwitchInteraction();
+
+    void deactivateFavoriteDishPushNotificationsSwitch();
+
+    void showRegisteringFavoriteDishesPushNotificationsReceiveStartToast();
+
+    void showRegisteringFavoriteDishesPushNotificationsReceiveFinishToast();
+
+    void showUnregisteringFavoriteDishesPushNotificationsReceiveStartToast();
+
+    void activateFavoriteDishPushNotificationsSwitch();
+
+    void showUnregisteringFavoriteDishesPushNotificationsReceiveFinishToast();
 }
