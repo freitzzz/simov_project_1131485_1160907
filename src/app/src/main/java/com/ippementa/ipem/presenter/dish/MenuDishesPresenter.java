@@ -289,7 +289,7 @@ public class MenuDishesPresenter implements IPresenter {
 
                     String dishDescription = request.dish.description;
 
-                    String dishType = request.dish.typeAsString;
+                    String dishType = request.dish.type.name().toLowerCase();
 
                     pushNotificationsRepository.enablePushNotificationsForFavoriteDish(
                             deviceFcmRegistrationToken,
@@ -474,7 +474,7 @@ public class MenuDishesPresenter implements IPresenter {
 
                     String dishDescription = request.dish.description;
 
-                    String dishType = request.dish.typeAsString;
+                    String dishType = request.dish.type.name().toLowerCase();
 
                     pushNotificationsRepository.disablePushNotificationsForFavoriteDish(
                             deviceFcmRegistrationToken,
