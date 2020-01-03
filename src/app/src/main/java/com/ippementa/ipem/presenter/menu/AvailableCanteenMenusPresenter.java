@@ -142,16 +142,22 @@ public class AvailableCanteenMenusPresenter implements IPresenter {
 
                         String typeAsString;
 
+                        AvailableCanteenMenusModel.Item.Type type;
+
                         switch (menu.type){
                             case LUNCH:
+                                type = AvailableCanteenMenusModel.Item.Type.LUNCH;
                                 typeAsString = ((AvailableCanteenMenusActivity)view).getString(R.string.menu_lunch_type);
                                 break;
                             default:
+                                type = AvailableCanteenMenusModel.Item.Type.DINNER;
                                 typeAsString = ((AvailableCanteenMenusActivity)view).getString(R.string.menu_dinner_type);
                                 break;
                         }
 
-                        item.type = typeAsString;
+                        item.type = type;
+
+                        item.typeAsString = typeAsString;
 
                         model.add(item);
 

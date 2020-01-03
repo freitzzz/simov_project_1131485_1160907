@@ -15,7 +15,9 @@ public class AvailableCanteenMenusModel extends ArrayList<AvailableCanteenMenusM
 
         public long canteenId;
 
-        public String type;
+        public Type type;
+
+        public String typeAsString;
 
         public Item(){}
 
@@ -23,7 +25,8 @@ public class AvailableCanteenMenusModel extends ArrayList<AvailableCanteenMenusM
             id = in.readLong();
             schoolId = in.readLong();
             canteenId = in.readLong();
-            type = in.readString();
+            typeAsString = in.readString();
+            type = Type.valueOf(in.readString());
         }
 
         public static final Creator<Item> CREATOR = new Creator<Item>() {
@@ -48,7 +51,13 @@ public class AvailableCanteenMenusModel extends ArrayList<AvailableCanteenMenusM
             dest.writeLong(id);
             dest.writeLong(schoolId);
             dest.writeLong(canteenId);
-            dest.writeString(type);
+            dest.writeString(typeAsString);
+            dest.writeString(type.name());
+        }
+
+        public enum Type {
+            LUNCH,
+            DINNER
         }
     }
 }

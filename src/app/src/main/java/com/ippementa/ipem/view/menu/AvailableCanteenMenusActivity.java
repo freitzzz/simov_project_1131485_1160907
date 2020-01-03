@@ -41,6 +41,8 @@ public class AvailableCanteenMenusActivity extends AppCompatActivity implements 
 
     private AvailableCanteenMenusListAdapter adapter;
 
+    private boolean isInDarkMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +58,9 @@ public class AvailableCanteenMenusActivity extends AppCompatActivity implements 
 
         Button headerBackButton = findViewById(R.id.available_canteen_menus_header_back_button);
 
-        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
+        this.isInDarkMode = Provider.instance(this).settings().isInDarkMode();
 
-        if(isInDarkMode){
+        if(this.isInDarkMode){
             headerBackButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_arrow_left_white, 0, 0,0 );
         }
 
@@ -243,15 +245,29 @@ public class AvailableCanteenMenusActivity extends AppCompatActivity implements 
 
             ImageView menuTypeImageView = convertView.findViewById(R.id.available_canteen_menus_list_view_item_menu_type_image_view);
 
-            menuTypeTextView.setText(menu.type);
+            menuTypeTextView.setText(menu.typeAsString);
 
-            switch (menu.type.toLowerCase()){
+            switch (menu.type){
 
-                case "lunch":
-                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(AvailableCanteenMenusActivity.this, android.R.drawable.star_on));
+
+
+                case LUNCH:
+                    
+                    if(isInDarkMode){
+                        menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(AvailableCanteenMenusActivity.this, R.drawable.icon_sun_white));
+                    }else{
+                        menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(AvailableCanteenMenusActivity.this, R.drawable.icon_sun_black));
+                    }
+
                     break;
                 default:
-                    menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(AvailableCanteenMenusActivity.this, android.R.drawable.star_off));
+
+                    if(isInDarkMode){
+                        menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(AvailableCanteenMenusActivity.this, R.drawable.icon_moon_white));
+                    }else{
+                        menuTypeImageView.setImageDrawable(ContextCompat.getDrawable(AvailableCanteenMenusActivity.this, R.drawable.icon_moon_black));
+                    }
+
                     break;
             }
 
