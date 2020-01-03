@@ -9,7 +9,7 @@ import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.view.dish.PurchaseDishActivity;
 import com.ippementa.ipem.view.dish.PurchaseDishView;
 
-public class PurchaseDishPresenter implements IPresenter {
+public class PurchaseDishPresenter implements IPresenter{
 
     private PurchaseDishView view;
 
