@@ -1,7 +1,12 @@
 package com.ippementa.ipem.view.dish;
 
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -20,6 +25,7 @@ import com.ippementa.ipem.util.Provider;
 import com.ippementa.ipem.view.settings.SettingsActivity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class PurchaseDishActivity extends AppCompatActivity implements PurchaseDishView, NfcAdapter.ReaderCallback {
 
@@ -29,9 +35,26 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
     private NfcAdapter adapter;
 
+    private BluetoothAdapter blueAdapter;
+
     private TextView nfcResult;
 
     private int timesTagRead = 0; //number of times that the tag was read by the device
+
+    // Create a BroadcastReceiver for ACTION_FOUND.
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Discovery has found a device. Get the BluetoothDevice
+                // object and its info from the Intent.
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                String deviceName = device.getName();
+                String deviceHardwareAddress = device.getAddress(); // MAC address
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,28 +66,40 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
         this.nfcResult.setText("");
 
-        adapter = (NfcAdapter) NfcAdapter.getDefaultAdapter(this);
-
         this.presenter = new PurchaseDishPresenter(this);
 
-        if(this.presenter.checkIfDeviceHasNFCAvaliable() == true)
+        /*if(this.presenter.checkIfDeviceHasNFCAvaliable() == true)
         {
+            adapter = (NfcAdapter) NfcAdapter.getDefaultAdapter(this);
             // check if nfc is enabled
             if(this.presenter.checkIfDeviceHasNFCOn() == false) Toast.makeText(this, R.string.nfc_turned_off, Toast.LENGTH_LONG).show();
         }
-        else {
+        else {*/
             //check if device has bluetooth
 
             if(this.presenter.checkIfDeviceHasBluetooth() == true) {
                 //check if bluetooth is enabled
 
+                this.blueAdapter = BluetoothAdapter.getDefaultAdapter();
+
                 if (this.presenter.checkIfDeviceHasBluetoothOn() == false)
                     Toast.makeText(this, R.string.bluetooth_turned_off, Toast.LENGTH_SHORT).show();
+                else {
+                    // Register for broadcasts when a device is discovered.
+                    IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+                    registerReceiver(receiver, filter);
+
+                    Intent discoverableIntent =
+                            new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+                    discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+                    startActivity(discoverableIntent);
+
+                }
             }
             else {
                 Toast.makeText(this, R.string.no_bluetooth_nfc, Toast.LENGTH_SHORT).show();
             }
-        }
+        //}
     }
 
     @Override
@@ -85,6 +120,14 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
         super.onPause();
 
         if(adapter != null) adapter.disableReaderMode(this); // nfc
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        unregisterReceiver(receiver);
+
     }
 
     @Override
