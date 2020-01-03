@@ -24,4 +24,8 @@
     <string name="settings_favorite_dishes_availability_push_notifications">Push Notifications dos seus pratos favoritos</string>
     <string name="nearby_canteens_push_notifications">Push Notifications de cantinas na sua proximidade</string>
     <string name="settings_dark_mode">Modo Escuro</string>
+    <string name="settings_dark_mode_enabled">Modo Escuro ativado com sucesso </string>
+    <string name="settings_dark_mode_disabled">Modo Escuro desativado com sucesso</string>
+    <string name="settings_error_enabling_dark_mode">Não foi possível ativar o modo escuro</string>
+    <string name="settings_error_disabling_dark_mode">Não foi possível desativar o modo escuro</string>
 </resources>

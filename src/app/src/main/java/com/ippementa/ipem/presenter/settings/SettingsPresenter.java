@@ -53,6 +53,32 @@ public class SettingsPresenter implements IPresenter {
 
     }
 
+    public void changeToDarkMode() {
+
+        boolean changedWithSuccess = Provider.instance((SettingsActivity)view).settings().activateDarkMode((SettingsActivity)view);
+
+        if(changedWithSuccess){
+            this.view.showDarkModeEnabledSnackbar();
+        }else{
+            this.view.deactivateDarkModeSwitch();
+            this.view.showErrorEnablingDarkModeSnackBar();
+        }
+
+    }
+
+    public void changeToLightMode() {
+
+        boolean changedWithSuccess = Provider.instance((SettingsActivity)view).settings().activateLightMode((SettingsActivity)view);
+
+        if(changedWithSuccess){
+            this.view.showDarkModeDisabledSnackbar();
+        }else{
+            this.view.activateDarkModeSwitch();
+            this.view.showErrorDisablingDarkModeSnackBar();
+        }
+
+    }
+
     @Override
     public void onDestroy() {
         view = null;
@@ -128,6 +154,34 @@ public class SettingsPresenter implements IPresenter {
                 }
 
                 for (Canteen canteen : canteens) {
+
+                    try {
+                        Canteen _canteen
+                                = repositoryFactory
+                                .createCanteensRepository()
+                                .canteen(canteen.schoolId, canteen.id);
+
+                        canteen.location = _canteen.location;
+
+                    } catch (IOException ioException) {
+
+                        ioException.printStackTrace();
+
+                        result.ioException = ioException;
+
+                        return result;
+
+                    } catch (RequestException requestException) {
+
+                        requestException.printStackTrace();
+
+                        if (requestException.response.statusCode != 404) {
+                            result.requestException = requestException;
+
+                            return result;
+                        }
+
+                    }
 
                     System.out.println(canteen.schoolId);
                     try {
@@ -223,7 +277,23 @@ public class SettingsPresenter implements IPresenter {
 
                 menusRepository.clearTable();
 
-                dishRepository.clearTable();
+                List<Dish> allStoredDishes = dishRepository.dishes();
+
+                List<Dish> dishesToDelete = new ArrayList<>();
+
+                for(Dish dish : allStoredDishes) {
+
+                    if(!dishes.contains(dish)) {
+                        dishesToDelete.add(dish);
+                    }
+
+                }
+
+                if(dishesToDelete.isEmpty()) {
+
+                    dishRepository.deleteAll(dishesToDelete.toArray(new Dish[]{}));
+
+                }
 
                 // then insert new data
 
@@ -233,7 +303,7 @@ public class SettingsPresenter implements IPresenter {
 
                 menusRepository.insertAll(menus.toArray(new Menu[]{}));
 
-                dishRepository.insertAll(dishes.toArray(new Dish[]{}));
+                dishRepository.updateAll(dishes.toArray(new Dish[]{}));
 
             }catch (IOException ioException){
 

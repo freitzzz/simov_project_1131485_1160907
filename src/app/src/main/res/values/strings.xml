@@ -23,4 +23,8 @@
     <string name="settings_favorite_dishes_availability_push_notifications">Favorite Dish Push Notifications</string>
     <string name="nearby_canteens_push_notifications">Nearby Canteens Push Notifications</string>
     <string name="settings_dark_mode">Dark Mode</string>
+    <string name="settings_dark_mode_enabled">Dark Mode enabled with success</string>
+    <string name="settings_dark_mode_disabled">Dark Mode disabled with success</string>
+    <string name="settings_error_enabling_dark_mode">It was not possible to enable dark mode</string>
+    <string name="settings_error_disabling_dark_mode">It was not possible to disable dark mode</string>
 </resources>

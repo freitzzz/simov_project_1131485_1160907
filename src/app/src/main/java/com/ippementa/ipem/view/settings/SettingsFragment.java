@@ -282,4 +282,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
 
     }
+
+    public void setDarkModeSwitchToFalse() {
+
+        this.darkModeSwitch.setChecked(false);
+
+        this.updateDarkModeSwitchIcon(false);
+
+    }
+
+    public void setDarkModeSwitchToTrue() {
+
+        this.darkModeSwitch.setChecked(true);
+
+        this.updateDarkModeSwitchIcon(true);
+
+    }
 }

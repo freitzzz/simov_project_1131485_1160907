@@ -14,4 +14,16 @@ public interface SettingsView extends ErrorView {
 
     void showOfflineDataDownloadFinishSnackbar();
 
+    void activateDarkModeSwitch();
+
+    void deactivateDarkModeSwitch();
+
+    void showDarkModeEnabledSnackbar();
+
+    void showDarkModeDisabledSnackbar();
+
+    void showErrorEnablingDarkModeSnackBar();
+
+    void showErrorDisablingDarkModeSnackBar();
+
 }

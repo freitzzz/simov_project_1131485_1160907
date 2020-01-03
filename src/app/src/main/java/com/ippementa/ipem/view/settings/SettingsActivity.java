@@ -79,6 +79,58 @@ public class SettingsActivity extends AppCompatActivity implements SettingsView{
     }
 
     @Override
+    public void activateDarkModeSwitch() {
+        this.contentFragment.setDarkModeSwitchToTrue();
+    }
+
+    @Override
+    public void deactivateDarkModeSwitch() {
+
+        this.contentFragment.setDarkModeSwitchToFalse();
+
+    }
+
+    @Override
+    public void showDarkModeEnabledSnackbar() {
+
+        Toast.makeText(this,
+                R.string.settings_dark_mode_enabled,
+                Toast.LENGTH_SHORT)
+                .show();
+
+    }
+
+    @Override
+    public void showDarkModeDisabledSnackbar() {
+
+        Toast.makeText(this,
+                R.string.settings_dark_mode_disabled,
+                Toast.LENGTH_SHORT)
+                .show();
+
+    }
+
+    @Override
+    public void showErrorEnablingDarkModeSnackBar() {
+
+        Toast.makeText(this,
+                R.string.settings_error_enabling_dark_mode,
+                Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    @Override
+    public void showErrorDisablingDarkModeSnackBar() {
+
+        Toast.makeText(this,
+                R.string.settings_error_disabling_dark_mode,
+                Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    @Override
     public void showNoInternetConnectionError() {
 
         Toast.makeText(this,
