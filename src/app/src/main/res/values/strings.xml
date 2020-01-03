@@ -37,4 +37,5 @@
     <string name="no_bluetooth_nfc">This device doesn´t have NFC or Bluetooth. Purchase via app disabled!</string>
     <string name="servicedesc">X</string>
     <string name="aiddescription">Y</string>
+    <string name="map_rendering_error">An unexpected error occurred while rendering the map</string>
 </resources>

@@ -3,6 +3,7 @@ package com.ippementa.ipem.view.canteen;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.canteen.CanteenWithMapLocationModel;
@@ -88,11 +89,14 @@ public class CanteensLocationOnMapActivity extends Activity implements CanteensL
              */
             File mapFile = new File(getExternalFilesDir(null), MAP_FILE);
 
-            // As map file is packed in application build, it is necessary to read this file
-            // and convert it to a file that will be located on the user external storage
-            FileOutputStream out = new FileOutputStream(mapFile);
-            copyStream (getResources().openRawResource(R.raw.porto), out);
-            out.close();
+            if(!mapFile.exists()) {
+
+                // As map file is packed in application build, it is necessary to read this file
+                // and convert it to a file that will be located on the user external storage
+                FileOutputStream out = new FileOutputStream(mapFile);
+                copyStream(getResources().openRawResource(R.raw.porto), out);
+                out.close();
+            }
 
             MapDataStore mapDataStore = new MapFile(mapFile);
 
@@ -115,7 +119,7 @@ public class CanteensLocationOnMapActivity extends Activity implements CanteensL
 
             Marker canteenMarker = new Marker(
                     new LatLong(canteen.latitude, canteen.longitude),
-                    new AndroidBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.icon_settings_enable_nearby_canteens_push_notifications)),
+                    new AndroidBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.icon_fork_knife_ipp_ementa)),
                     0,
                     0
             );
@@ -128,6 +132,10 @@ public class CanteensLocationOnMapActivity extends Activity implements CanteensL
              * In case of map file errors avoid crash, but developers should handle these cases!
              */
             e.printStackTrace();
+
+            Toast.makeText(this, R.string.map_rendering_error, Toast.LENGTH_LONG);
+
+            navigateBackToSchoolCanteensPage();
         }
     }
 
@@ -152,21 +160,6 @@ public class CanteensLocationOnMapActivity extends Activity implements CanteensL
 
     @Override
     public void navigateBackToSchoolCanteensPage() {
-
-    }
-
-    @Override
-    public void showNoInternetConnectionError() {
-
-    }
-
-    @Override
-    public void showServerNotAvailableError() {
-
-    }
-
-    @Override
-    public void showUnexepectedServerFailureError() {
-
+        finish();
     }
 }
