@@ -71,9 +71,12 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
     protected void onResume() {
         super.onResume();
 
-        adapter.enableReaderMode( this, this,
-                NfcAdapter.FLAG_READER_NFC_A,
-                null);
+        // nfc
+        if(adapter != null) {
+            adapter.enableReaderMode(this, this,
+                    NfcAdapter.FLAG_READER_NFC_A,
+                    null);
+        }
 
     }
 
@@ -81,8 +84,7 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
     protected void onPause() {
         super.onPause();
 
-        adapter.disableReaderMode(this);
-
+        if(adapter != null) adapter.disableReaderMode(this); // nfc
     }
 
     @Override
