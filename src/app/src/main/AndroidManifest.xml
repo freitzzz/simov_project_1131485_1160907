@@ -7,9 +7,14 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature android:name="android.hardware.nfc.hce"
+        android:required="true" />
+    <uses-feature android:name="android.hardware.nfc"
+        android:required="true" />
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
 
     <application
         android:allowBackup="true"
@@ -19,9 +24,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.canteen.CanteensLocationOnMapActivity"
+        <activity android:name=".view.dish.PurchaseDishActivity"></activity>
+        <activity
+            android:name=".view.canteen.CanteensLocationOnMapActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name=".view.settings.SettingsActivity"></activity>
+        <activity android:name=".view.settings.SettingsActivity" />
         <activity android:name=".view.dish.MenuDishesActivity" />
         <activity android:name=".view.menu.AvailableCanteenMenusActivity" />
         <activity android:name=".view.canteen.AvailableCanteensActivity" />
@@ -33,6 +40,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
