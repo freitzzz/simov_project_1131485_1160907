@@ -6,6 +6,7 @@ import com.ippementa.ipem.R;
 import com.ippementa.ipem.model.dish.Dish;
 import com.ippementa.ipem.model.dish.DishRepository;
 import com.ippementa.ipem.model.dish.RoomDishRepositoryImpl;
+import com.ippementa.ipem.model.pushnotifications.PushNotificationsRepository;
 import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.presenter.menu.AvailableCanteenMenusModel;
 import com.ippementa.ipem.util.CommunicationMediator;
@@ -267,6 +268,23 @@ public class MenuDishesPresenter implements IPresenter {
 
             try {
 
+                PushNotificationsRepository pushNotificationsRepository
+                        = Provider
+                        .instance((MenuDishesActivity)view)
+                        .pushNotificationsRepository();
+
+                String deviceFcmRegistrationToken = ""; // TODO: GET DEVICE FCM REGISTRATION TOKEN
+
+                String dishDescription = request.dish.description;
+
+                String dishType = request.dish.typeAsString;
+
+                pushNotificationsRepository.enablePushNotificationsForFavoriteDish(
+                        deviceFcmRegistrationToken,
+                        dishDescription,
+                        dishType
+                );
+
                 RoomDishRepositoryImpl roomDishRepository
                         = Provider
                         .instance((MenuDishesActivity)view)
@@ -337,9 +355,19 @@ public class MenuDishesPresenter implements IPresenter {
 
                 if(result.ioException != null){
 
+                    boolean isInOfflineMode = Provider.instance((MenuDishesActivity)presenter.view).settings().isInOfflineMode();
+
                     if(!CommunicationMediator.hasInternetConnection((MenuDishesActivity)presenter.view)){
 
-                        presenter.view.showNoInternetConnectionError();
+                        if(isInOfflineMode){
+
+                            presenter.view.showMarkingDishAsFavoriteRequiresInternetConnectionToast();
+
+                        }else {
+
+                            presenter.view.showNoInternetConnectionError();
+
+                        }
 
                     }else{
 
@@ -349,9 +377,13 @@ public class MenuDishesPresenter implements IPresenter {
 
                     presenter.view.unmarkDishAsFavorite(result.dish);
 
-                }else if(result.requestException != null){
+                }else if(result.requestException != null) {
 
-                    if(result.requestException.response.statusCode == 404){
+                    if (result.requestException.response.statusCode == 400){
+
+                        presenter.view.showErrorOccurredMarkingDishAsFavoriteToast();
+
+                    }else if(result.requestException.response.statusCode == 404){
 
                         presenter.view.showUnavailableDishError();
 
@@ -406,6 +438,23 @@ public class MenuDishesPresenter implements IPresenter {
             TaskRequest request = item[0];
 
             try {
+
+                PushNotificationsRepository pushNotificationsRepository
+                        = Provider
+                        .instance((MenuDishesActivity)view)
+                        .pushNotificationsRepository();
+
+                String deviceFcmRegistrationToken = ""; // TODO: GET DEVICE FCM REGISTRATION TOKEN
+
+                String dishDescription = request.dish.description;
+
+                String dishType = request.dish.typeAsString;
+
+                pushNotificationsRepository.disablePushNotificationsForFavoriteDish(
+                        deviceFcmRegistrationToken,
+                        dishDescription,
+                        dishType
+                );
 
                 RoomDishRepositoryImpl roomDishRepository
                         = Provider
@@ -472,9 +521,19 @@ public class MenuDishesPresenter implements IPresenter {
 
                 if(result.ioException != null){
 
+                    boolean isInOfflineMode = Provider.instance((MenuDishesActivity)presenter.view).settings().isInOfflineMode();
+
                     if(!CommunicationMediator.hasInternetConnection((MenuDishesActivity)presenter.view)){
 
-                        presenter.view.showNoInternetConnectionError();
+                        if(isInOfflineMode) {
+
+                            presenter.view.showUnmarkingDishAsFavoriteRequiresInternetConnectionToast();
+
+                        }else {
+
+                            presenter.view.showNoInternetConnectionError();
+
+                        }
 
                     }else{
 
@@ -486,7 +545,11 @@ public class MenuDishesPresenter implements IPresenter {
 
                 }else if(result.requestException != null){
 
-                    if(result.requestException.response.statusCode == 404){
+                    if (result.requestException.response.statusCode == 400){
+
+                        presenter.view.showErrorOccurredMarkingDishAsFavoriteToast();
+
+                    }else if(result.requestException.response.statusCode == 404){
 
                         presenter.view.showUnavailableDishError();
 
