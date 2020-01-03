@@ -2,6 +2,7 @@ package com.ippementa.ipem.view.dish;
 
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcA;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.dish.PurchaseDishPresenter;
+import com.ippementa.ipem.util.Provider;
 import com.ippementa.ipem.view.settings.SettingsActivity;
 
 import java.io.IOException;
@@ -128,5 +130,23 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
         }
 
     }
+
+    @Override
+    public Resources.Theme getTheme() {
+
+        Resources.Theme theme = super.getTheme();
+
+        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
+
+        if(isInDarkMode){
+            theme.applyStyle(R.style.DarkMode, true);
+        }else{
+            theme.applyStyle(R.style.LightMode, true);
+        }
+
+        return theme;
+
+    }
+
 
 }
