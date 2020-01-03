@@ -442,7 +442,11 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
             BackgroundResult result = new BackgroundResult();
 
+            Provider.instance(ctx).settings().allowReceiveOfFavoriteDishPushNotifications(ctx);
+
             try {
+
+
 
                 List<Dish> dishes
                         = repositoryFactory
@@ -586,6 +590,8 @@ public class SettingsPresenter implements IPresenter, Parcelable {
             RepositoryFactory.RoomRepositoryFactoryImpl repositoryFactory = Provider.instance(ctx).roomRepositoryFactory();
 
             BackgroundResult result = new BackgroundResult();
+
+            Provider.instance(ctx).settings().disallowReceiveOfFavoriteDishPushNotifications(ctx);
 
             try {
 
