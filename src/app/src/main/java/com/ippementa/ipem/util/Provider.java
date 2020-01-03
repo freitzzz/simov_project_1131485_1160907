@@ -69,6 +69,12 @@ public class Provider {
 
     }
 
+    public RepositoryFactory.IPEPNRepositoryFactoryImpl ipepnRepositoryFactory() {
+
+        return new RepositoryFactory.IPEPNRepositoryFactoryImpl();
+
+    }
+
     public Settings settings(){
 
         return this.settings;
