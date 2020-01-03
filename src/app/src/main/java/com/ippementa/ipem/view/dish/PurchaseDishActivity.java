@@ -31,6 +31,8 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
     private TextView nfcResult;
 
+    private int timesTagRead = 0; //number of times that the tag was read by the device
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +41,7 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
         this.nfcResult = (TextView) findViewById(R.id.nfc_result_text_view);
 
-        this.nfcResult.setText("Result of Card reading: ");
+        this.nfcResult.setText("");
 
         adapter = (NfcAdapter) NfcAdapter.getDefaultAdapter(this);
 
@@ -112,13 +114,13 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
         try {
             nfca.connect();
 
-            final String response = nfca.getAtqa().toString();
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     // Code to run on UI thread
-                    nfcResult.append("\nCard Response: " + response);
+                    if(timesTagRead == 0) nfcResult.setText(R.string.purchase_done);
+                    else nfcResult.setText(R.string.purchase_already_done);
+                    timesTagRead++;
                 }
             });
 
@@ -147,6 +149,5 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
         return theme;
 
     }
-
 
 }
