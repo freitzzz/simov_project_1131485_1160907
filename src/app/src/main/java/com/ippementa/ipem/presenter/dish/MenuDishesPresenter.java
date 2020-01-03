@@ -301,7 +301,7 @@ public class MenuDishesPresenter implements IPresenter {
 
                 }else{
 
-                    dish.isFavorite = false;
+                    dish.isFavorite = true;
 
                     roomDishRepository.update(dish);
 

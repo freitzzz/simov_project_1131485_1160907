@@ -2,6 +2,7 @@ package com.ippementa.ipem.model.dish;
 
 import com.ippementa.ipem.model.menu.Menu;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
@@ -38,6 +39,12 @@ public class Dish {
     @Override
     public int hashCode() {
         return (int)id;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Dish {" + id + "}";
     }
 
     public enum DishType{

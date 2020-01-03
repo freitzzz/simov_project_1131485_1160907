@@ -33,6 +33,9 @@ public interface RoomDishRepositoryImpl extends DishRepository {
     Dish dish(long schoolId, long canteenId, long menuId, long dishId) throws IOException;
 
     @Update
+    void update(Dish dish);
+
+    @Update
     void updateAll(Dish... dishes);
 
 }

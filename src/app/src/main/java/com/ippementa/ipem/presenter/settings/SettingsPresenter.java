@@ -281,15 +281,29 @@ public class SettingsPresenter implements IPresenter {
 
                 List<Dish> dishesToDelete = new ArrayList<>();
 
+                List<Dish> dishesToUpdate = new ArrayList<>();
+
+                List<Dish> dishesToInsert = new ArrayList<>();
+
                 for(Dish dish : allStoredDishes) {
 
                     if(!dishes.contains(dish)) {
                         dishesToDelete.add(dish);
+                    }else{
+                        dishesToUpdate.add(dish);
                     }
 
                 }
 
-                if(dishesToDelete.isEmpty()) {
+                for(Dish dish : dishes) {
+
+                    if(!allStoredDishes.contains(dish)){
+                        dishesToInsert.add(dish);
+                    }
+
+                }
+
+                if(!dishesToDelete.isEmpty()) {
 
                     dishRepository.deleteAll(dishesToDelete.toArray(new Dish[]{}));
 
@@ -303,7 +317,9 @@ public class SettingsPresenter implements IPresenter {
 
                 menusRepository.insertAll(menus.toArray(new Menu[]{}));
 
-                dishRepository.updateAll(dishes.toArray(new Dish[]{}));
+                dishRepository.insertAll(dishesToInsert.toArray(new Dish[]{}));
+
+                dishRepository.updateAll(dishesToUpdate.toArray(new Dish[]{}));
 
             }catch (IOException ioException){
 
