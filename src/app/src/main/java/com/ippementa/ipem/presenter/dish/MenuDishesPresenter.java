@@ -268,26 +268,36 @@ public class MenuDishesPresenter implements IPresenter {
 
             try {
 
-                PushNotificationsRepository pushNotificationsRepository
-                        = Provider
-                        .instance((MenuDishesActivity)view)
-                        .pushNotificationsRepository();
-
-                String deviceFcmRegistrationToken
+                boolean allowReceiveOfFavoriteDishPushNotifications
                         = Provider
                         .instance((MenuDishesActivity)view)
                         .settings()
-                        .fcmRegistrationToken();
+                        .allowsReceiveOfFavoriteDishPushNotifications();
 
-                String dishDescription = request.dish.description;
+                if(allowReceiveOfFavoriteDishPushNotifications){
 
-                String dishType = request.dish.typeAsString;
+                    PushNotificationsRepository pushNotificationsRepository
+                            = Provider
+                            .instance((MenuDishesActivity)view)
+                            .pushNotificationsRepository();
 
-                pushNotificationsRepository.enablePushNotificationsForFavoriteDish(
-                        deviceFcmRegistrationToken,
-                        dishDescription,
-                        dishType
-                );
+                    String deviceFcmRegistrationToken
+                            = Provider
+                            .instance((MenuDishesActivity)view)
+                            .settings()
+                            .fcmRegistrationToken();
+
+                    String dishDescription = request.dish.description;
+
+                    String dishType = request.dish.typeAsString;
+
+                    pushNotificationsRepository.enablePushNotificationsForFavoriteDish(
+                            deviceFcmRegistrationToken,
+                            dishDescription,
+                            dishType
+                    );
+
+                }
 
                 RoomDishRepositoryImpl roomDishRepository
                         = Provider
@@ -443,26 +453,36 @@ public class MenuDishesPresenter implements IPresenter {
 
             try {
 
-                PushNotificationsRepository pushNotificationsRepository
-                        = Provider
-                        .instance((MenuDishesActivity)view)
-                        .pushNotificationsRepository();
-
-                String deviceFcmRegistrationToken
+                boolean allowReceiveOfFavoriteDishPushNotifications
                         = Provider
                         .instance((MenuDishesActivity)view)
                         .settings()
-                        .fcmRegistrationToken();
+                        .allowsReceiveOfFavoriteDishPushNotifications();
 
-                String dishDescription = request.dish.description;
+                if(allowReceiveOfFavoriteDishPushNotifications){
 
-                String dishType = request.dish.typeAsString;
+                    PushNotificationsRepository pushNotificationsRepository
+                            = Provider
+                            .instance((MenuDishesActivity)view)
+                            .pushNotificationsRepository();
 
-                pushNotificationsRepository.disablePushNotificationsForFavoriteDish(
-                        deviceFcmRegistrationToken,
-                        dishDescription,
-                        dishType
-                );
+                    String deviceFcmRegistrationToken
+                            = Provider
+                            .instance((MenuDishesActivity)view)
+                            .settings()
+                            .fcmRegistrationToken();
+
+                    String dishDescription = request.dish.description;
+
+                    String dishType = request.dish.typeAsString;
+
+                    pushNotificationsRepository.disablePushNotificationsForFavoriteDish(
+                            deviceFcmRegistrationToken,
+                            dishDescription,
+                            dishType
+                    );
+
+                }
 
                 RoomDishRepositoryImpl roomDishRepository
                         = Provider
