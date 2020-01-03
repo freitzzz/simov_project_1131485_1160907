@@ -1,10 +1,18 @@
 package com.ippementa.ipem.view.canteen;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.canteen.CanteenWithMapLocationModel;
 
@@ -26,6 +34,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 /**
  * Activity that displays canteens as POI in a map
  * Initial boilerplate code was retrieved from: https://github.com/mapsforge/mapsforge/blob/master/mapsforge-samples-android/src/main/java/org/mapsforge/samples/android/GettingStarted.java
@@ -36,6 +48,14 @@ public class CanteensLocationOnMapActivity extends Activity implements CanteensL
     private static final String MAP_FILE = "porto.map";
 
     private MapView mapView;
+
+    private static final int CANTEENS_LOCATION_ON_MAP_ACTIVITY_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION = 59823589;
+
+    private LocationManager locationManager;
+
+    private LocationListener locationListener;
+
+    private boolean isToCenterMapOnDeviceLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +81,41 @@ public class CanteensLocationOnMapActivity extends Activity implements CanteensL
          * MapView on the fly and make the content view of the activity the MapView. This means
          * that no other elements make up the content of this activity.
          */
-        mapView = new MapView(this);
-        setContentView(mapView);
+        setContentView(R.layout.activity_canteens_location_on_map);
+        mapView = findViewById(R.id.canteens_location_on_map_map_view);
+
+        FloatingActionButton getDeviceLocationFloatingActionButton
+                = findViewById(R.id.canteens_location_on_map_floating_action_button);
+
+        getDeviceLocationFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                boolean hasPermissionToAccessDeviceLocation
+                        = ContextCompat.checkSelfPermission(
+                                CanteensLocationOnMapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+                if(!hasPermissionToAccessDeviceLocation) {
+
+                    ActivityCompat.requestPermissions(
+                            CanteensLocationOnMapActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            CANTEENS_LOCATION_ON_MAP_ACTIVITY_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION
+                    );
+
+                    registerGetLastKnowLocationHandler();
+
+                }else{
+
+                    if(locationManager == null){
+                        registerGetLastKnowLocationHandler();
+                    }else{
+                        isToCenterMapOnDeviceLocation = true;
+                    }
+
+                }
+            }
+        });
 
         try {
             /*
@@ -140,6 +193,80 @@ public class CanteensLocationOnMapActivity extends Activity implements CanteensL
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case CANTEENS_LOCATION_ON_MAP_ACTIVITY_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION:
+
+                if(grantResults.length > 0) {
+
+                    if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                        registerGetLastKnowLocationHandler();
+
+                    }
+
+                }
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void registerGetLastKnowLocationHandler() {
+
+        this.isToCenterMapOnDeviceLocation = true;
+
+        this.locationManager
+                = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        this.locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+                System.out.println(location);
+
+                if(isToCenterMapOnDeviceLocation) {
+
+                    LatLong coordinates = new LatLong(location.getLatitude(), location.getLongitude());
+
+                    mapView.setCenter(coordinates);
+
+                    isToCenterMapOnDeviceLocation = false;
+
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        boolean hasPermissionToAccessDeviceLocation
+                = ContextCompat.checkSelfPermission(
+                CanteensLocationOnMapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        if(hasPermissionToAccessDeviceLocation) {
+
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+        }
+
+
+    }
+
+    @Override
     protected void onDestroy() {
         /*
          * Whenever your activity exits, some cleanup operations have to be performed lest your app
@@ -147,6 +274,7 @@ public class CanteensLocationOnMapActivity extends Activity implements CanteensL
          */
         mapView.destroyAll();
         AndroidGraphicFactory.clearResourceMemoryCache();
+        locationManager.removeUpdates(locationListener);
         super.onDestroy();
     }
 
