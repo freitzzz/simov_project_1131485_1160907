@@ -273,7 +273,11 @@ public class MenuDishesPresenter implements IPresenter {
                         .instance((MenuDishesActivity)view)
                         .pushNotificationsRepository();
 
-                String deviceFcmRegistrationToken = ""; // TODO: GET DEVICE FCM REGISTRATION TOKEN
+                String deviceFcmRegistrationToken
+                        = Provider
+                        .instance((MenuDishesActivity)view)
+                        .settings()
+                        .fcmRegistrationToken();
 
                 String dishDescription = request.dish.description;
 
@@ -444,7 +448,11 @@ public class MenuDishesPresenter implements IPresenter {
                         .instance((MenuDishesActivity)view)
                         .pushNotificationsRepository();
 
-                String deviceFcmRegistrationToken = ""; // TODO: GET DEVICE FCM REGISTRATION TOKEN
+                String deviceFcmRegistrationToken
+                        = Provider
+                        .instance((MenuDishesActivity)view)
+                        .settings()
+                        .fcmRegistrationToken();
 
                 String dishDescription = request.dish.description;
 

@@ -12,6 +12,8 @@ public class Settings {
 
     private boolean cachedInDarkMode;
 
+    private String cachedFcmRegistrationToken;
+
     protected Settings(Context ctx){
 
         reloadSettings(ctx);
@@ -92,6 +94,27 @@ public class Settings {
 
     }
 
+    public boolean changeFcmRegistrationToken(Context ctx, String newRegistrationToken) {
+
+        SharedPreferences preferences
+                = ctx.getSharedPreferences("ipp-ementa-shared-preferences", Context.MODE_PRIVATE);
+
+        boolean writtenWithSuccess = preferences.edit().putString("fcm-registration-token ", newRegistrationToken).commit();
+
+        if(writtenWithSuccess){
+            this.cachedFcmRegistrationToken = newRegistrationToken;
+        }
+
+        return writtenWithSuccess;
+
+    }
+
+    public String fcmRegistrationToken() {
+
+        return this.cachedFcmRegistrationToken;
+
+    }
+
     private void reloadSettings(Context ctx){
 
         SharedPreferences preferences
@@ -101,9 +124,13 @@ public class Settings {
 
         boolean darkMode = preferences.getBoolean("in-dark-mode", false);
 
+        String fcmRegistrationToken = preferences.getString("fcm-registration-token", null);
+
         this.cachedInOfflineMode = offlineMode;
 
         this.cachedInDarkMode = darkMode;
+
+        this.cachedFcmRegistrationToken = fcmRegistrationToken;
 
     }
 
