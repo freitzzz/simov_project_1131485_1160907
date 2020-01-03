@@ -39,4 +39,16 @@
     <string name="servicedesc">X</string>
     <string name="aiddescription">Y</string>
     <string name="map_rendering_error">Um error inesperado aconteceu ao renderizar o mapa</string>
+    <string name="error_occurred_marking_dish_as_favorite">
+        Ocorreu um erro ao marcar o prato como favorite
+    </string>
+    <string name="error_occurred_unmarking_dish_as_favorite">
+        Ocorreu um erro ao desmarcar o prato como favorito
+    </string>
+    <string name="marking_dish_as_favorite_requires_internet_connection">
+        A marcação de um prato como favorito requer conexão à Internet
+    </string>
+    <string name="unmarking_dish_as_favorite_requires_internet_connection">
+        A desmarcação de um prato como favorito requer conexão à Internet
+    </string>
 </resources>

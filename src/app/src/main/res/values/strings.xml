@@ -38,4 +38,16 @@
     <string name="servicedesc">X</string>
     <string name="aiddescription">Y</string>
     <string name="map_rendering_error">An unexpected error occurred while rendering the map</string>
+    <string name="error_occurred_marking_dish_as_favorite">
+        An error occurred while marking the dish as favorite
+    </string>
+    <string name="error_occurred_unmarking_dish_as_favorite">
+        An error occurred while unmarking the dish as favorite
+    </string>
+    <string name="marking_dish_as_favorite_requires_internet_connection">
+        Marking a dish as favorite requires internet connection
+    </string>
+    <string name="unmarking_dish_as_favorite_requires_internet_connection">
+        Unmarking a dish as favorite requires internet connection
+    </string>
 </resources>
