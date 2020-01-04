@@ -80,4 +80,10 @@
     <string name="finished_calculating_path_route_to_canteen">
         O caminho da rota foi calculado com successo. A distância a viagar é:
     </string>
+    <string name="finish_fetch_user_device_location_route_to_canteen">
+        A sua localização foi determinada como successo. O caminho da rota vai agora ser calculado
+    </string>
+    <string name="start_fetch_user_device_location_route_to_canteen">
+        Por favor aguarde enquanto a sua localização é determinada...
+    </string>
 </resources>

@@ -77,4 +77,10 @@
     <string name="finished_calculating_path_route_to_canteen">
         The route path was calculated with success. Distance to travel is:
     </string>
+    <string name="finish_fetch_user_device_location_route_to_canteen">
+        Your location was fetched with success. The route path will now be calculated.
+    </string>
+    <string name="start_fetch_user_device_location_route_to_canteen">
+        Please wait while your location is fetched...
+    </string>
 </resources>

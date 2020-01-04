@@ -1,68 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:layout_height="fill_parent">
 
-    <LinearLayout
+    <org.oscim.android.MapView
+        android:id="@+id/route_to_canteen_map_view"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal" >
+        android:layout_height="fill_parent"/>
 
-        <TextView
-            android:id="@+id/route_to_canteen_welcome_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Welcome to GraphHopper!"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/route_to_canteen_center_position_floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/icon_gps_black"
+        android:layout_margin="16dp" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/route_to_canteen_text_view_1"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:text="Local" />
-
-        <Spinner
-            android:id="@+id/route_to_canteen_locale_area_spinner"
-            android:layout_width="180dp"
-            android:layout_height="60dp"
-            android:layout_weight="0.80" />
-
-        <Button
-            android:id="@+id/route_to_canteen_button"
-            android:layout_width="86dp"
-            android:layout_height="60dp"
-            android:text="OK" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/route_to_canteen_text_view_2"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:text="Remote" />
-
-        <Spinner
-            android:id="@+id/route_to_canteen_remote_area_spinner"
-            android:layout_width="180dp"
-            android:layout_height="60dp"
-            android:layout_weight="0.80" />
-
-        <Button
-            android:id="@+id/route_to_canteen_remote_button"
-            android:layout_width="86dp"
-            android:layout_height="60dp"
-            android:text="Download" />
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

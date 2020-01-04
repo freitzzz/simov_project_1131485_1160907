@@ -1,12 +1,20 @@
 package com.ippementa.ipem.view.canteen;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.graphhopper.GHRequest;
 import com.graphhopper.GHResponse;
 import com.graphhopper.GraphHopper;
@@ -16,6 +24,8 @@ import com.graphhopper.util.Parameters;
 import com.graphhopper.util.PointList;
 import com.graphhopper.util.StopWatch;
 import com.ippementa.ipem.R;
+import com.ippementa.ipem.presenter.canteen.CanteenWithMapLocationModel;
+import com.ippementa.ipem.presenter.canteen.UserLocationOnMap;
 
 import org.oscim.android.MapView;
 import org.oscim.android.canvas.AndroidGraphics;
@@ -41,15 +51,19 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class RouteToCanteenActivity extends AppCompatActivity{
 
     // Name of the mapsforge map file in device storage
     private static final String MAPSFORGE_MAP_FILE = "porto.map";
 
-    // Name of the folder that contains graphhopper files in device storage
-    private static final String GRAPH_HOPPER_FOLDER = "porto-gh";
+    private static final double DEFAULT_SCALE = 1 << 14;
+
+    private static final int ROUTE_TO_CANTEEN_ACTIVITY_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION = 738;
 
     private MapView mapView;
 
@@ -69,18 +83,82 @@ public class RouteToCanteenActivity extends AppCompatActivity{
 
     private File mapsFolder;
 
+    private LocationManager locationManager;
+
+    private LocationListener locationListener;
+
+    private FloatingActionButton centerDeviceLocationFloatingActionButton;
+
+    private MarkerItem userMarker;
+
+    private MarkerItem canteenMarker;
+
+    private Location lastKnownUserLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
+        UserLocationOnMap userLocation = getIntent().getParcelableExtra("user-location");
+
+        CanteenWithMapLocationModel canteenLocation = getIntent().getParcelableExtra("canteen-location");
+
+        if(userLocation == null) {
+
+            // request permissions and get device location
+
+        }
+
+        this.canteenMarker = createMarkerItem(new GeoPoint(canteenLocation.latitude, canteenLocation.longitude), R.drawable.icon_fork_knife_ipp_ementa);
+
         setContentView(R.layout.activity_route_to_canteen);
 
-        mapView = new MapView(this);
+        mapView = findViewById(R.id.route_to_canteen_map_view);
 
-        mapsFolder = new File(getExternalFilesDir(null), GRAPH_HOPPER_FOLDER);
+        mapsFolder = getExternalFilesDir(null);
+
+        this.centerDeviceLocationFloatingActionButton = findViewById(R.id.route_to_canteen_center_position_floating_action_button);
 
         initFiles();
+
+        boolean hasPermissionToAccessDeviceLocation
+                = ContextCompat.checkSelfPermission(
+                RouteToCanteenActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        if(!hasPermissionToAccessDeviceLocation) {
+
+            ActivityCompat.requestPermissions(
+                    RouteToCanteenActivity.this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    ROUTE_TO_CANTEEN_ACTIVITY_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION
+            );
+
+        }else{
+
+            registerGetLastKnowLocationHandler();
+
+        }
+
+        centerDeviceLocationFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // if last know user location is null than wait for the map to be centered by
+                // location listener callback
+                if(lastKnownUserLocation != null){
+
+                    mapView.map().setMapPosition(
+                            lastKnownUserLocation.getLatitude(),
+                            lastKnownUserLocation.getLongitude(),
+                            mapView.map().getMapPosition().scale
+                    );
+
+
+                }
+
+            }
+        });
     }
 
     @Override
@@ -107,6 +185,121 @@ public class RouteToCanteenActivity extends AppCompatActivity{
 
         // Cleanup VTM
         mapView.map().destroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case ROUTE_TO_CANTEEN_ACTIVITY_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION:
+
+                if(grantResults.length > 0) {
+
+                    if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                        registerGetLastKnowLocationHandler();
+
+                    }
+
+                }
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void registerGetLastKnowLocationHandler() {
+
+        Toast.makeText(
+                this,
+                R.string.start_fetch_user_device_location_route_to_canteen,
+                Toast.LENGTH_LONG
+        ).show();
+
+        this.locationManager
+                = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        this.locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+                GeoPoint point = new GeoPoint(location.getLatitude(), location.getLongitude());
+
+                if(userMarker == null){
+
+                    userMarker = createMarkerItem(point, R.drawable.icon_walk_black);
+
+                }
+
+                if(lastKnownUserLocation == null){
+
+                    Toast.makeText(
+                            RouteToCanteenActivity.this,
+                            R.string.finish_fetch_user_device_location_route_to_canteen,
+                            Toast.LENGTH_LONG
+                    ).show();
+
+                    mapView.map().setMapPosition(
+                            location.getLatitude(),
+                            location.getLongitude(),
+                            mapView.map().getMapPosition().scale
+                    );
+
+                    if(hopper != null) {
+
+                        calcPath(
+                                userMarker.geoPoint.getLatitude(),
+                                userMarker.geoPoint.getLongitude(),
+                                canteenMarker.geoPoint.getLatitude(),
+                                canteenMarker.geoPoint.getLongitude()
+                        );
+
+                    }
+
+                    System.out.println("CENTERING POSITION");
+
+                }
+
+                System.out.println(location);
+
+                itemizedLayer.removeItem(userMarker);
+
+                userMarker = createMarkerItem(point, R.drawable.icon_walk_black);
+
+                lastKnownUserLocation = location;
+
+                itemizedLayer.addItem(userMarker);
+
+                mapView.map().updateMap(true);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        boolean hasPermissionToAccessDeviceLocation
+                = ContextCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        if(hasPermissionToAccessDeviceLocation) {
+
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+        }
+
+
     }
 
     private boolean onLongPress(GeoPoint point) {
@@ -236,11 +429,11 @@ public class RouteToCanteenActivity extends AppCompatActivity{
         mapView.map().layers().add(itemizedLayer);
 
         // Map position
-        GeoPoint mapCenter = tileSource.getMapInfo().boundingBox.getCenterPoint();
+        //TODO: GeoPoint mapCenter = tileSource.getMapInfo().boundingBox.getCenterPoint();
 
-        mapView.map().setMapPosition(mapCenter.getLatitude(), mapCenter.getLongitude(), 1 << 15);
+        itemizedLayer.addItem(canteenMarker);
 
-        setContentView(mapView);
+        mapView.map().setMapPosition(canteenMarker.geoPoint.latitudeE6, canteenMarker.geoPoint.longitudeE6, DEFAULT_SCALE);
 
         loadGraphStorage();
     }
@@ -270,6 +463,11 @@ public class RouteToCanteenActivity extends AppCompatActivity{
 
         @Override
         public boolean onGesture(Gesture g, MotionEvent e) {
+
+            System.out.println("Gesture: " + g);
+
+            System.out.println("Motion Event: " + e);
+
             if (g instanceof Gesture.LongPress) {
                 GeoPoint p = mMap.viewport().fromScreenPoint(e.getX(), e.getY());
                 return onLongPress(p);
@@ -321,6 +519,17 @@ public class RouteToCanteenActivity extends AppCompatActivity{
             hopper = result.hopper;
 
             finishPrepare();
+
+            if(userMarker != null) {
+
+                calcPath(
+                        userMarker.geoPoint.getLatitude(),
+                        userMarker.geoPoint.getLongitude(),
+                        canteenMarker.geoPoint.getLatitude(),
+                        canteenMarker.geoPoint.getLongitude()
+                );
+
+            }
         }
 
         public class Result {
@@ -355,6 +564,14 @@ public class RouteToCanteenActivity extends AppCompatActivity{
                     request.toLatitude,
                     request.toLongitude
             ).setAlgorithm(Parameters.Algorithms.DIJKSTRA_BI);
+
+            System.out.println(request.fromLatitude);
+
+            System.out.println(request.fromLongitude);
+
+            System.out.println(request.toLatitude);
+
+            System.out.println(request.toLongitude);
 
             graphhoperRequest.getHints().put(Parameters.Routing.INSTRUCTIONS, "false");
 
