@@ -53,6 +53,28 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
         this.menu = getIntent().getParcelableExtra("menu");
 
+        // If menu is null then the activity was launched from FCM service
+
+        if(this.menu == null){
+
+            Bundle data = getIntent().getExtras();
+
+            this.menu = new AvailableCanteenMenusModel.Item();
+
+            long schoolId = Long.parseLong(data.getString("schoolId"));
+
+            long canteenId = Long.parseLong(data.getString("canteenId"));
+
+            long menuId = Long.parseLong(data.getString("menuId"));
+
+            menu.schoolId = schoolId;
+
+            menu.canteenId = canteenId;
+
+            menu.id = menuId;
+
+        }
+
         Button headerBackButton = findViewById(R.id.menu_dishes_header_back_button);
 
         this.isInDarkMode = Provider.instance(this).settings().isInDarkMode();
