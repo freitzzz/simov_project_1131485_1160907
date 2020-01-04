@@ -17,6 +17,25 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+
+        /* TODO: Better Solution? (This is necessary as both mapsforge and mapsforge vtm themes use the same svg resources*/
+
+        pickFirst 'assets/symbols/shopping/*'
+        pickFirst 'assets/symbols/amenity/*'
+        pickFirst 'assets/symbols/poi/*'
+        pickFirst 'assets/symbols/transport/*'
+        pickFirst 'assets/symbols/place_of_worship/*'
+
+        pickFirst 'assets/patterns/*'
+        pickFirst 'assets/symbols/health/*'
+        pickFirst 'assets/symbols/water/*'
+        pickFirst 'assets/symbols/tourist/*'
+        pickFirst 'assets/symbols/custom/tourist/*'
+        pickFirst 'assets/symbols/*'
+        pickFirst 'assets/symbols/education/*'
+        pickFirst '**/*.svg'
+    }
 }
 
 dependencies {
@@ -68,6 +87,22 @@ dependencies {
     // FCM SDK
 
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
+
+    // Graphopper
+
+    implementation(group: 'com.graphhopper', name: 'graphhopper-core', version: '1.0-SNAPSHOT') {
+        exclude group: 'com.google.protobuf', module: 'protobuf-java'
+        exclude group: 'org.openstreetmap.osmosis', module: 'osmosis-osm-binary'
+        exclude group: 'org.apache.xmlgraphics', module: 'xmlgraphics-commons'
+    }
+    implementation 'org.mapsforge:vtm:0.12.0'
+    implementation 'org.mapsforge:vtm-android:0.12.0'
+    implementation 'org.mapsforge:vtm-android:0.12.0:natives-armeabi-v7a'
+    implementation 'org.mapsforge:vtm-android:0.12.0:natives-arm64-v8a'
+    implementation 'org.mapsforge:vtm-android:0.12.0:natives-x86'
+    implementation 'org.mapsforge:vtm-android:0.12.0:natives-x86_64'
+    implementation 'org.mapsforge:vtm-jts:0.12.0'
+    implementation 'org.mapsforge:vtm-themes:0.12.0'
 
 }
 
