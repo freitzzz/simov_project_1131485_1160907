@@ -18,4 +18,5 @@ public interface AvailableCanteensView extends ErrorView {
 
     void showUnavailableCanteensError();
 
+    void navigateToRouteToCanteen(CanteenWithMapLocationModel model);
 }

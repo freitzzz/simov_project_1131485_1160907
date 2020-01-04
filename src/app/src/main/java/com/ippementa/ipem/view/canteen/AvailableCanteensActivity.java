@@ -156,6 +156,17 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
                 presenter.requestCanteenToDisplayOnMap(canteenItem.schoolId, canteenItem.id);
 
                 break;
+            case R.id.canteen_context_menu_map_routine:
+
+                AdapterView.AdapterContextMenuInfo _info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+                int _canteenItemPosition = _info.position;
+
+                AvailableCanteensModel.Item _canteenItem = adapter.getItem(_canteenItemPosition);
+
+                presenter.requestRouteToCanteen(_canteenItem.schoolId, _canteenItem.id);
+
+                break;
             default:
                 break;
         }
@@ -227,6 +238,17 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
     public void showUnavailableCanteensError() {
 
         Toast.makeText(this, "No Available Canteens", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void navigateToRouteToCanteen(CanteenWithMapLocationModel model) {
+
+        Intent intent = new Intent(AvailableCanteensActivity.this, RouteToCanteenActivity.class);
+
+        intent.putExtra("canteen-location", model);
+
+        startActivity(intent);
 
     }
 
