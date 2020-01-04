@@ -2,17 +2,9 @@ package com.ippementa.ipem.view.canteen;
 
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.graphhopper.GHRequest;
@@ -20,8 +12,6 @@ import com.graphhopper.GHResponse;
 import com.graphhopper.GraphHopper;
 import com.graphhopper.PathWrapper;
 import com.graphhopper.routing.Path;
-import com.graphhopper.util.Constants;
-import com.graphhopper.util.Helper;
 import com.graphhopper.util.Parameters;
 import com.graphhopper.util.PointList;
 import com.graphhopper.util.StopWatch;
@@ -29,7 +19,6 @@ import com.ippementa.ipem.R;
 
 import org.oscim.android.MapView;
 import org.oscim.android.canvas.AndroidGraphics;
-import org.oscim.backend.AssetAdapter;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.GeoPoint;
 import org.oscim.event.Gesture;
@@ -44,27 +33,23 @@ import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.layers.vector.PathLayer;
 import org.oscim.layers.vector.geometries.Style;
-import org.oscim.theme.IRenderTheme;
-import org.oscim.theme.ThemeFile;
-import org.oscim.theme.XmlRenderThemeMenuCallback;
+import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.source.mapfile.MapFileTileSource;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RouteToCanteenActivity extends AppCompatActivity{
 
-    public static final int REQUEST_CODE_FOR_SETTINGS_ACTIVITY = 854;
+    // Name of the mapsforge map file in device storage
+    private static final String MAPSFORGE_MAP_FILE = "porto.map";
+
+    // Name of the folder that contains graphhopper files in device storage
+    private static final String GRAPH_HOPPER_FOLDER = "porto-gh";
 
     private MapView mapView;
 
@@ -84,192 +69,6 @@ public class RouteToCanteenActivity extends AppCompatActivity{
 
     private File mapsFolder;
 
-    private Spinner localSpinner;
-
-    private Button localButton;
-
-    private Spinner remoteSpinner;
-
-    private Button remoteButton;
-
-    protected boolean onLongPress(GeoPoint p) {
-        if (!isReady())
-            return false;
-
-        if (shortestPathRunning) {
-            Log.d("gh","Calculation still in progress");
-            return false;
-        }
-
-        if (start != null && end == null) {
-            end = p;
-            shortestPathRunning = true;
-            itemizedLayer.addItem(createMarkerItem(p, R.drawable.icon_map_marker_black));
-            mapView.map().updateMap(true);
-
-            calcPath(start.getLatitude(), start.getLongitude(), end.getLatitude(),
-                    end.getLongitude());
-        } else {
-            start = p;
-            end = null;
-            // remove routing layers
-            mapView.map().layers().remove(pathLayer);
-            itemizedLayer.removeAllItems();
-
-            itemizedLayer.addItem(createMarkerItem(start, R.drawable.icon_map_marker_white));
-            mapView.map().updateMap(true);
-        }
-        return true;
-    }
-
-    boolean isReady() {
-        // only return true if already loaded
-        if (hopper != null)
-            return true;
-
-        if (prepareInProgress) {
-            Log.d("gh","Preparation still in progress");
-            return false;
-        }
-        Log.d("gh","Prepare finished but GraphHopper not ready. This happens when there was an error while loading the files");
-        return true;
-    }
-
-    @SuppressWarnings("deprecation")
-    private MarkerItem createMarkerItem(GeoPoint p, int resource) {
-        Drawable drawable = getResources().getDrawable(resource);
-
-        Bitmap bitmap = AndroidGraphics.drawableToBitmap(drawable);
-
-        MarkerSymbol markerSymbol = new MarkerSymbol(bitmap, 0.5f, 1);
-
-        MarkerItem markerItem = new MarkerItem("", "", p);
-
-        markerItem.setMarker(markerSymbol);
-
-        return markerItem;
-    }
-
-    public void calcPath(final double fromLat, final double fromLon,
-                         final double toLat, final double toLon) {
-
-        Log.d("gh", "calculating path ...");
-        new AsyncTask<Void, Void, PathWrapper>() {
-            float time;
-
-            protected PathWrapper doInBackground(Void... v) {
-                StopWatch sw = new StopWatch().start();
-
-                GHRequest req = new GHRequest(fromLat, fromLon, toLat, toLon).
-                        setAlgorithm(Parameters.Algorithms.DIJKSTRA_BI);
-
-                req.getHints().
-                        put(Parameters.Routing.INSTRUCTIONS, "false");
-
-                GHResponse resp = hopper.route(req);
-
-                time = sw.stop().getSeconds();
-
-                return resp.getBest();
-            }
-
-            protected void onPostExecute(PathWrapper resp) {
-                if (!resp.hasErrors()) {
-                    Log.d("gh", "from:" + fromLat + "," + fromLon + " to:" + toLat + ","
-                            + toLon + " found path with distance:" + resp.getDistance()
-                            / 1000f + ", nodes:" + resp.getPoints().getSize() + ", time:"
-                            + time + " " + resp.getDebugInfo());
-                    Log.d("gh", "the route is " + (int) (resp.getDistance() / 100) / 10f
-                            + "km long, time:" + resp.getTime() / 60000f + "min, debug:" + time);
-
-                    pathLayer = createPathLayer(resp);
-                    mapView.map().layers().add(pathLayer);
-                    mapView.map().updateMap(true);
-                } else {
-                    Toast.makeText(RouteToCanteenActivity.this, "Error:" + resp.getErrors(), Toast.LENGTH_LONG).show();
-                }
-                shortestPathRunning = false;
-            }
-        }.execute();
-    }
-
-    private PathLayer createPathLayer(PathWrapper response) {
-        Style style = Style.builder()
-                .fixed(true)
-                .generalization(Style.GENERALIZATION_SMALL)
-                .strokeColor(0x9900cc33)
-                .strokeWidth(4 * getResources().getDisplayMetrics().density)
-                .build();
-
-        PathLayer pathLayer = new PathLayer(mapView.map(), style);
-
-        List<GeoPoint> geoPoints = new ArrayList<>();
-
-        PointList pointList = response.getPoints();
-
-        for (int i = 0; i < pointList.getSize(); i++)
-            geoPoints.add(new GeoPoint(pointList.getLatitude(i), pointList.getLongitude(i)));
-
-        pathLayer.setPoints(geoPoints);
-
-        return pathLayer;
-    }
-
-    void loadMap(File areaFolder) {
-        Toast.makeText(this,"loading map", Toast.LENGTH_LONG).show();
-
-        // Map events receiver
-        mapView.map().layers().add(new MapEventsReceiver(mapView.map()));
-
-        // Map file source
-        MapFileTileSource tileSource = new MapFileTileSource();
-        tileSource.setMapFile(new File(areaFolder, "../../../porto" + ".map").getAbsolutePath());
-        VectorTileLayer l = mapView.map().setBaseMap(tileSource);
-        mapView.map().setTheme(VtmThemes2.DEFAULT);
-        mapView.map().layers().add(new BuildingLayer(mapView.map(), l));
-        mapView.map().layers().add(new LabelLayer(mapView.map(), l));
-
-        // Markers layer
-        itemizedLayer = new ItemizedLayer<>(mapView.map(), (MarkerSymbol) null);
-        mapView.map().layers().add(itemizedLayer);
-
-        // Map position
-        GeoPoint mapCenter = tileSource.getMapInfo().boundingBox.getCenterPoint();
-        mapView.map().setMapPosition(mapCenter.getLatitude(), mapCenter.getLongitude(), 1 << 15);
-
-        setContentView(mapView);
-        loadGraphStorage();
-    }
-
-    void loadGraphStorage() {
-        Toast.makeText(this,"\"loading graph (\" + Constants.VERSION + \") ... \")", Toast.LENGTH_LONG).show();
-        new GHAsyncTask<Void, Void, Path>() {
-            protected Path saveDoInBackground(Void... v) throws Exception {
-                GraphHopper tmpHopp = new GraphHopper().forMobile();
-                tmpHopp.load(new File(mapsFolder, "porto").getAbsolutePath());
-                Log.d("gh", "found graph " + tmpHopp.getGraphHopperStorage().toString() + ", nodes:" + tmpHopp.getGraphHopperStorage().getNodes());
-                hopper = tmpHopp;
-                return null;
-            }
-
-            protected void onPostExecute(Path o) {
-                if (hasError()) {
-                    Toast.makeText(RouteToCanteenActivity.this,"An error happened while creating graph:" + getErrorMessage(), Toast.LENGTH_LONG).show();
-
-                } else {
-
-                    Toast.makeText(RouteToCanteenActivity.this,"Finished loading graph. Long press to define where to start and end the route.", Toast.LENGTH_LONG).show();
-                }
-
-                finishPrepare();
-            }
-        }.execute();
-    }
-
-    private void finishPrepare() {
-        prepareInProgress = false;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -279,38 +78,9 @@ public class RouteToCanteenActivity extends AppCompatActivity{
 
         mapView = new MapView(this);
 
-        final EditText input = new EditText(this);
+        mapsFolder = new File(getExternalFilesDir(null), GRAPH_HOPPER_FOLDER);
 
-        input.setText("porto");
-
-        boolean greaterOrEqKitkat = Build.VERSION.SDK_INT >= 19;
-
-        if (greaterOrEqKitkat) {
-            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                Toast.makeText(this, "GraphHopper is not usable without an external storage!", Toast.LENGTH_LONG).show();
-                return;
-            }
-            mapsFolder = new File(getExternalFilesDir(null), "/graphhopper/maps/");
-
-            System.out.println(mapsFolder.getPath());
-
-        } else {
-            mapsFolder = new File(Environment.getExternalStorageDirectory(), "/graphhopper/maps/");
-        }
-
-        if (!mapsFolder.exists())
-            mapsFolder.mkdirs();
-
-        TextView welcome = (TextView) findViewById(R.id.route_to_canteen_welcome_text_view);
-        welcome.setText("Welcome to GraphHopper " + Constants.VERSION + "!");
-        welcome.setPadding(6, 3, 3, 3);
-        localSpinner = (Spinner) findViewById(R.id.route_to_canteen_locale_area_spinner);
-        localButton = (Button) findViewById(R.id.route_to_canteen_button);
-        remoteSpinner = (Spinner) findViewById(R.id.route_to_canteen_remote_area_spinner);
-        remoteButton = (Button) findViewById(R.id.route_to_canteen_remote_button);
-        // TODO get user confirmation to download
-        // if (AndroidHelper.isFastDownload(this))
-        chooseAreaFromLocal();
+        initFiles();
     }
 
     @Override
@@ -339,361 +109,160 @@ public class RouteToCanteenActivity extends AppCompatActivity{
         mapView.map().destroy();
     }
 
-    private void chooseAreaFromLocal() {
-        List<String> nameList = new ArrayList<>();
-        /*String[] files = mapsFolder.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String filename) {
-                return filename != null
-                        && (filename.endsWith(".ghz") || filename
-                        .endsWith("-gh"));
-            }
-        });*/
-
-        String[] files = mapsFolder.list();
-
-        System.out.println(mapsFolder.listFiles().length);
-
-        System.out.println(files.length);
-
-        if(files == null){
-            return;
+    private boolean onLongPress(GeoPoint point) {
+        if (!isReady()) {
+            return false;
         }
 
-        Collections.addAll(nameList, files);
+        if (shortestPathRunning) {
+            Log.d("gh","Calculation still in progress");
+            return false;
+        }
 
-        System.out.println(nameList);
+        if (start != null && end == null) {
+            end = point;
+            shortestPathRunning = true;
+            itemizedLayer.addItem(createMarkerItem(point, R.drawable.icon_map_marker_black));
+            mapView.map().updateMap(true);
 
-        if (nameList.isEmpty())
-            return;
+            calcPath(start.getLatitude(), start.getLongitude(), end.getLatitude(),
+                    end.getLongitude());
+        } else {
+            start = point;
+            end = null;
+            // remove routing layers
+            mapView.map().layers().remove(pathLayer);
+            itemizedLayer.removeAllItems();
 
-        chooseArea(localButton, localSpinner, nameList,
-                new MySpinnerListener() {
-                    @Override
-                    public void onSelect(String selectedArea, String selectedFile) {
-                        initFiles();
-                    }
-                });
+            itemizedLayer.addItem(createMarkerItem(start, R.drawable.icon_map_marker_white));
+            mapView.map().updateMap(true);
+        }
+        return true;
     }
 
-    private void chooseArea(Button button, final Spinner spinner,
-                            List<String> nameList, final MySpinnerListener myListener) {
-        final Map<String, String> nameToFullName = new TreeMap<>();
-        for (String fullName : nameList) {
-            String tmp = Helper.pruneFileEnd(fullName);
-            if (tmp.endsWith("-gh"))
-                tmp = tmp.substring(0, tmp.length() - 3);
+    private boolean isReady() {
+        // only return true if already loaded
+        if (hopper != null)
+            return true;
 
-            tmp = AndroidHelper.getFileName(tmp);
-            nameToFullName.put(tmp, fullName);
+        if (prepareInProgress) {
+            Log.d("gh","Preparation still in progress");
+            return false;
         }
-        nameList.clear();
-        nameList.addAll(nameToFullName.keySet());
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_dropdown_item, nameList);
-        spinner.setAdapter(spinnerArrayAdapter);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Object o = spinner.getSelectedItem();
-                if (o != null && o.toString().length() > 0 && !nameToFullName.isEmpty()) {
-                    String area = o.toString();
-                    myListener.onSelect(area, nameToFullName.get(area));
-                } else {
-                    myListener.onSelect(null, null);
-                }
-            }
-        });
+        Log.d("gh","Prepare finished but GraphHopper not ready. This happens when there was an error while loading the files");
+        return true;
+    }
+
+    @SuppressWarnings("deprecation")
+    private MarkerItem createMarkerItem(GeoPoint p, int resource) {
+        Drawable drawable = getResources().getDrawable(resource);
+
+        Bitmap bitmap = AndroidGraphics.drawableToBitmap(drawable);
+
+        MarkerSymbol markerSymbol = new MarkerSymbol(bitmap, 0.5f, 1);
+
+        MarkerItem markerItem = new MarkerItem("", "", p);
+
+        markerItem.setMarker(markerSymbol);
+
+        return markerItem;
+    }
+
+    private void calcPath(final double fromLat, final double fromLon,
+                         final double toLat, final double toLon) {
+
+        Log.d("gh", "calculating path ...");
+
+        CalculatePathAsyncTask calculatePathAsyncTask = new CalculatePathAsyncTask();
+
+        CalculatePathAsyncTask.Request request = calculatePathAsyncTask.new Request();
+
+        request.fromLatitude = fromLat;
+
+        request.fromLongitude = fromLon;
+
+        request.toLatitude = toLat;
+
+        request.toLongitude = toLon;
+
+        calculatePathAsyncTask.execute(request);
+
+    }
+
+    private PathLayer createPathLayer(PathWrapper response) {
+        Style style = Style.builder()
+                .fixed(true)
+                .generalization(Style.GENERALIZATION_SMALL)
+                .strokeColor(0x9900cc33)
+                .strokeWidth(4 * getResources().getDisplayMetrics().density)
+                .build();
+
+        PathLayer pathLayer = new PathLayer(mapView.map(), style);
+
+        List<GeoPoint> geoPoints = new ArrayList<>();
+
+        PointList pointList = response.getPoints();
+
+        for (int i = 0; i < pointList.getSize(); i++)
+            geoPoints.add(new GeoPoint(pointList.getLatitude(i), pointList.getLongitude(i)));
+
+        pathLayer.setPoints(geoPoints);
+
+        return pathLayer;
+    }
+
+    private void loadMap() {
+        Toast.makeText(this,R.string.loading_map_route_to_canteen, Toast.LENGTH_LONG).show();
+
+        // Map events receiver
+        mapView.map().layers().add(new MapEventsReceiver(mapView.map()));
+
+        // Map file source
+        MapFileTileSource tileSource = new MapFileTileSource();
+
+        tileSource.setMapFile(new File(getExternalFilesDir(null), MAPSFORGE_MAP_FILE).getAbsolutePath());
+
+        VectorTileLayer mapLayer = mapView.map().setBaseMap(tileSource);
+
+        mapView.map().setTheme(VtmThemes.DEFAULT);
+
+        mapView.map().layers().add(new BuildingLayer(mapView.map(), mapLayer));
+
+        mapView.map().layers().add(new LabelLayer(mapView.map(), mapLayer));
+
+        // Markers layer
+        itemizedLayer = new ItemizedLayer<>(mapView.map(), (MarkerSymbol) null);
+
+        mapView.map().layers().add(itemizedLayer);
+
+        // Map position
+        GeoPoint mapCenter = tileSource.getMapInfo().boundingBox.getCenterPoint();
+
+        mapView.map().setMapPosition(mapCenter.getLatitude(), mapCenter.getLongitude(), 1 << 15);
+
+        setContentView(mapView);
+
+        loadGraphStorage();
+    }
+
+    private void loadGraphStorage() {
+        LoadGraphHopperFilesAsyncTask loadGraphHopperFiles = new LoadGraphHopperFilesAsyncTask();
+
+        loadGraphHopperFiles.execute();
+    }
+
+    private void finishPrepare() {
+        prepareInProgress = false;
     }
 
     private void initFiles() {
         prepareInProgress = true;
 
-        loadMap(new File(mapsFolder, "porto"));
+        loadMap();
 
     }
 
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_available_canteens);
-
-        this.presenter = new AvailableCanteensPresenter(this);
-
-        this.school = getIntent().getParcelableExtra("school");
-
-        TextView headerTextView = findViewById(R.id.available_canteens_header_text_view);
-
-        headerTextView.setText(headerTextView.getText().toString() + " " + school.acronym);
-
-        Button headerBackButton = findViewById(R.id.available_canteens_header_back_button);
-
-        headerBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                navigateBackToAvailableSchoolsPage();
-
-            }
-        });
-
-        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
-
-        if(isInDarkMode){
-            headerBackButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_arrow_left_white, 0, 0,0 );
-        }
-
-        ListView canteensListView = findViewById(R.id.available_canteens_list_view);
-
-        canteensListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AvailableCanteensModel.Item canteen = adapter.getItem(position);
-
-                navigateToCanteenMenusPage(canteen);
-            }
-        });
-
-        registerForContextMenu(canteensListView);
-
-        this.adapter = new RouteToCanteenActivity.AvailableCanteensListAdapter(this, new ArrayList<AvailableCanteensModel.Item>());
-
-        canteensListView.setAdapter(adapter);
-
-        this.presenter.requestCanteens(school.id);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        presenter.onDestroy();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        presenter.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        presenter.onPause();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.option_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.option_menu_settings_item:
-
-                Intent intent = new Intent(this, SettingsActivity.class);
-
-                startActivityForResult(intent, REQUEST_CODE_FOR_SETTINGS_ACTIVITY);
-
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.canteen_context_menu, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.canteen_context_menu_map_location:
-
-                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-                int canteenItemPosition = info.position;
-
-                AvailableCanteensModel.Item canteenItem = adapter.getItem(canteenItemPosition);
-
-                presenter.requestCanteenToDisplayOnMap(canteenItem.schoolId, canteenItem.id);
-
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == REQUEST_CODE_FOR_SETTINGS_ACTIVITY){
-
-            final AvailableSchoolsModel.Item school = getIntent().getParcelableExtra("school");
-
-            presenter.requestCanteens(school.id);
-
-        }
-
-    }
-
-    @Override
-    public void showCanteens(AvailableCanteensModel canteens) {
-
-        adapter.clear();
-
-        adapter.addAll(canteens);
-
-        adapter.notifyDataSetChanged();
-
-    }
-
-    @Override
-    public void navigateToCanteenMenusPage(AvailableCanteensModel.Item canteen) {
-
-        Intent intent = new Intent(this, AvailableCanteenMenusActivity.class);
-
-        intent.putExtra("canteen", canteen);
-
-        startActivity(intent);
-
-    }
-
-    @Override
-    public void navigateToCanteenOnMapLocation(CanteenWithMapLocationModel canteen) {
-
-        Intent intent = new Intent(RouteToCanteenActivity.this, CanteensLocationOnMapActivity.class);
-
-        intent.putExtra("canteen", canteen);
-
-        startActivity(intent);
-
-    }
-
-    @Override
-    public void navigateBackToAvailableSchoolsPage() {
-
-        finish();
-
-    }
-
-    @Override
-    public void showUnavailableCanteenError() {
-
-        Toast.makeText(this, "Canteen was not found", Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void showUnavailableCanteensError() {
-
-        Toast.makeText(this, "No Available Canteens", Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void showNoInternetConnectionError() {
-
-        Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void showServerNotAvailableError() {
-
-        Toast.makeText(this, "Server Not Available", Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void showUnexepectedServerFailureError() {
-
-        Toast.makeText(this, "Unexpected Server Failure", Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public Resources.Theme getTheme() {
-
-        Resources.Theme theme = super.getTheme();
-
-        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
-
-        if(isInDarkMode){
-            theme.applyStyle(R.style.DarkMode, true);
-        }else{
-            theme.applyStyle(R.style.LightMode, true);
-        }
-
-
-        return theme;
-
-    }
-
-    private class AvailableCanteensListAdapter extends ArrayAdapter<AvailableCanteensModel.Item> {
-
-        public AvailableCanteensListAdapter(Context context, List<AvailableCanteensModel.Item> objects) {
-            super(context, 0, objects);
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
-            AvailableCanteensModel.Item canteen = getItem(position);
-
-            if(convertView == null){
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.available_canteens_list_view_item, parent, false);
-            }
-
-            canteen.schoolId = school.id;
-
-            TextView canteenNameTextView = convertView.findViewById(R.id.available_canteens_list_view_item_canteen_name_text_view);
-
-            canteenNameTextView.setText(canteen.name);
-
-            return convertView;
-        }
-    }*/
-
-    public interface MySpinnerListener {
-        void onSelect(String selectedArea, String selectedFile);
-    }
-
-    public static class AndroidHelper {
-        public static List<String> readFile(Reader simpleReader) throws IOException {
-            BufferedReader reader = new BufferedReader(simpleReader);
-            try {
-                List<String> res = new ArrayList<String>();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    res.add(line);
-                }
-                return res;
-            } finally {
-                reader.close();
-            }
-        }
-
-        public static String getFileName(String str) {
-            int index = str.lastIndexOf("/");
-            if (index > 0) {
-                return str.substring(index + 1);
-            }
-            return str;
-        }
-    }
-
-    class MapEventsReceiver extends Layer implements GestureListener {
+    private class MapEventsReceiver extends Layer implements GestureListener {
 
         MapEventsReceiver(org.oscim.map.Map map) {
             super(map);
@@ -709,74 +278,130 @@ public class RouteToCanteenActivity extends AppCompatActivity{
         }
     }
 
-    enum VtmThemes2 implements ThemeFile {
+    /**
+     * Loads GraphHopper files and creates a new instance of GraphHopper assigning it as a property of the activity
+     */
+    private class LoadGraphHopperFilesAsyncTask extends AsyncTask<Void, Void, LoadGraphHopperFilesAsyncTask.Result> {
 
-        DEFAULT("vtm/default.xml"),
-        MAPZEN("vtm/mapzen.xml"),
-        NEWTRON("vtm/newtron.xml"),
-        OPENMAPTILES("vtm/openmaptiles.xml"),
-        OSMAGRAY("vtm/osmagray.xml"),
-        OSMARENDER("vtm/osmarender.xml"),
-        TRONRENDER("vtm/tronrender.xml");
+        @Override
+        protected Result doInBackground(Void... v) {
 
-        private final String mPath;
+            Result result = new Result();
 
-        VtmThemes2(String path) {
-            mPath = path;
+            try {
+
+                GraphHopper graphHopper = new GraphHopper().forMobile();
+
+                graphHopper.load(mapsFolder.getAbsolutePath());
+
+                Log.d("gh", "found graph " + graphHopper.getGraphHopperStorage().toString() + ", nodes:" + graphHopper.getGraphHopperStorage().getNodes());
+
+                result.hopper = graphHopper;
+
+            }catch (Throwable error) {
+                result.error = error;
+            }
+
+            return result;
         }
 
         @Override
-        public XmlRenderThemeMenuCallback getMenuCallback() {
-            return null;
+        protected void onPostExecute(Result result) {
+
+            boolean hasError = result.error != null;
+
+            if (hasError) {
+                Toast.makeText(RouteToCanteenActivity.this,R.string.error_loading_graph_hopper_route_to_canteen + result.error.getMessage(), Toast.LENGTH_LONG).show();
+
+            } else {
+
+                Toast.makeText(RouteToCanteenActivity.this,R.string.finished_loading_graph_hopper_route_to_canteen, Toast.LENGTH_LONG).show();
+            }
+
+            hopper = result.hopper;
+
+            finishPrepare();
         }
 
-        @Override
-        public String getRelativePathPrefix() {
-            return "";
+        public class Result {
+
+            public GraphHopper hopper;
+
+            public Throwable error;
+
+            public Path path;
+
         }
 
-        @Override
-        public InputStream getRenderThemeAsStream() throws IRenderTheme.ThemeException {
-            return AssetAdapter.readFileAsStream(mPath);
-        }
-
-        @Override
-        public boolean isMapsforgeTheme() {
-            return false;
-        }
-
-        @Override
-        public void setMenuCallback(XmlRenderThemeMenuCallback menuCallback) {
-        }
     }
 
-    public abstract class GHAsyncTask<A, B, C> extends AsyncTask<A, B, C> {
-        private Throwable error;
+    /**
+     * Calculates the shortest path of two points
+     */
+    private class CalculatePathAsyncTask extends AsyncTask<CalculatePathAsyncTask.Request, Void, PathWrapper> {
 
-        protected abstract C saveDoInBackground(A... params) throws Exception;
+        private float time;
 
-        protected C doInBackground(A... params) {
-            try {
-                return saveDoInBackground(params);
-            } catch (Throwable t) {
-                error = t;
-                return null;
+        @Override
+        protected PathWrapper doInBackground(Request... requests) {
+
+            Request request = requests[0];
+
+            StopWatch stopWatch = new StopWatch().start();
+
+            GHRequest graphhoperRequest = new GHRequest(
+                    request.fromLatitude,
+                    request.fromLongitude,
+                    request.toLatitude,
+                    request.toLongitude
+            ).setAlgorithm(Parameters.Algorithms.DIJKSTRA_BI);
+
+            graphhoperRequest.getHints().put(Parameters.Routing.INSTRUCTIONS, "false");
+
+            GHResponse graphhopperResponse = hopper.route(graphhoperRequest);
+
+            time = stopWatch.stop().getSeconds();
+
+            return graphhopperResponse.getBest();
+        }
+
+        @Override
+        protected void onPostExecute(PathWrapper resp) {
+            if (!resp.hasErrors()) {
+
+                double distanceToTravelInKM = (int) (resp.getDistance() / 100) / 10f;
+
+                Log.d("gh", "the route is " + distanceToTravelInKM
+                        + "km long, time:" + resp.getTime() / 60000f + "min, debug:" + time);
+
+                pathLayer = createPathLayer(resp);
+
+                mapView.map().layers().add(pathLayer);
+
+                mapView.map().updateMap(true);
+
+                String finishedCalculatingMessage = getString(R.string.finished_calculating_path_route_to_canteen);
+
+                float roundedDistance = BigDecimal.valueOf(distanceToTravelInKM).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+
+                Toast.makeText(RouteToCanteenActivity.this, finishedCalculatingMessage + roundedDistance + "KM", Toast.LENGTH_LONG).show();
+
+            } else {
+                Toast.makeText(RouteToCanteenActivity.this, R.string.error_calculating_path_route_to_canteen, Toast.LENGTH_LONG).show();
             }
+            shortestPathRunning = false;
         }
 
-        public boolean hasError() {
-            return error != null;
-        }
+        public class Request {
 
-        public Throwable getError() {
-            return error;
-        }
+            public double fromLatitude;
 
-        public String getErrorMessage() {
-            if (hasError()) {
-                return error.getMessage();
-            }
-            return "No Error";
+            public double fromLongitude;
+
+            public double toLatitude;
+
+            public double toLongitude;
+
         }
     }
 }

@@ -65,4 +65,19 @@
     </string>
     <string name="purchase_done">A sua compra foi registada com sucesso.</string>
     <string name="purchase_already_done">Este prato já se encontra registado como comprado.</string>
+    <string name="loading_map_route_to_canteen">
+        Por favor aguarde enquanto o mapa é carregado
+    </string>
+    <string name="error_loading_graph_hopper_route_to_canteen">
+        Um erro inesperado ocorreu ao carregar o mapa
+    </string>
+    <string name="finished_loading_graph_hopper_route_to_canteen">
+        O mapa foi carregado com successo. Pode começar agora a sua viagem
+    </string>
+    <string name="error_calculating_path_route_to_canteen">
+        Um erro inesperado ocorreu ao calcular o caminho da rota
+    </string>
+    <string name="finished_calculating_path_route_to_canteen">
+        O caminho da rota foi calculado com successo. A distância a viagar é:
+    </string>
 </resources>
