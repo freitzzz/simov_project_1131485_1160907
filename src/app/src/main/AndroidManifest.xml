@@ -29,6 +29,9 @@
         <activity
             android:name=".view.canteen.CanteensLocationOnMapActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".view.canteen.RouteToCanteenActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name=".view.settings.SettingsActivity" />
         <activity android:name=".view.dish.MenuDishesActivity">
             <intent-filter>
