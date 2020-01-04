@@ -36,8 +36,6 @@
     <string name="nfc_turned_off">Por favor ligue NFC no seu dispositivo!</string>
     <string name="bluetooth_turned_off">Por favor ligue Bluetooth no seu dispositivo!</string>
     <string name="no_bluetooth_nfc">Este dispositivo não possui Bluetooth nem NFC. Compra via app encontra-se indisponível.</string>
-    <string name="servicedesc">X</string>
-    <string name="aiddescription">Y</string>
     <string name="map_rendering_error">Um error inesperado aconteceu ao renderizar o mapa</string>
     <string name="error_occurred_marking_dish_as_favorite">
         Ocorreu um erro ao marcar o prato como favorite
@@ -65,4 +63,6 @@
     <string name="unregistering_favorite_dishes_push_notifications_receive_finish">
         As push-notifications foram removidas com successo
     </string>
+    <string name="purchase_done">A sua compra foi registada com sucesso.</string>
+    <string name="purchase_already_done">Este prato já se encontra registado como comprado.</string>
 </resources>

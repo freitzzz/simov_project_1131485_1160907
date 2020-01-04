@@ -35,8 +35,6 @@
     <string name="nfc_turned_off">Please turn on NFC in your device!</string>
     <string name="bluetooth_turned_off">Please turn on Bluetooth in your device!</string>
     <string name="no_bluetooth_nfc">This device doesn´t have NFC or Bluetooth. Purchase via app disabled!</string>
-    <string name="servicedesc">X</string>
-    <string name="aiddescription">Y</string>
     <string name="map_rendering_error">An unexpected error occurred while rendering the map</string>
     <string name="error_occurred_marking_dish_as_favorite">
         An error occurred while marking the dish as favorite
@@ -62,4 +60,6 @@
     <string name="unregistering_favorite_dishes_push_notifications_receive_finish">
         Push Notifications receive were unregistered with success
     </string>
+    <string name="purchase_done">Your purchase has been complete.</string>
+    <string name="purchase_already_done">This dish has been already registered as purchase.</string>
 </resources>
