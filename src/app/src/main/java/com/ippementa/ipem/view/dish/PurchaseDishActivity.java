@@ -4,13 +4,10 @@ package com.ippementa.ipem.view.dish;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
-import android.companion.AssociationRequest;
-import android.companion.BluetoothDeviceFilter;
-import android.companion.CompanionDeviceManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -29,6 +26,7 @@ import com.ippementa.ipem.util.Provider;
 import com.ippementa.ipem.view.settings.SettingsActivity;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 public class PurchaseDishActivity extends AppCompatActivity implements PurchaseDishView, NfcAdapter.ReaderCallback {
 
@@ -49,23 +47,36 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
     private int timesTagRead = 0; //number of times that the tag was read by the device
 
     // Create a BroadcastReceiver for ACTION_FOUND.
-    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+
+    private final BroadcastReceiver mPairReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Discovery has found a device. Get the BluetoothDevice
-                // object and its info from the Intent.
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
+
+            if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
+                final int state        = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR);
+                final int prevState    = intent.getIntExtra(BluetoothDevice.EXTRA_PREVIOUS_BOND_STATE, BluetoothDevice.ERROR);
+
+                if (state == BluetoothDevice.BOND_BONDED && prevState == BluetoothDevice.BOND_BONDING) {
+                    showToast("Paired");
+                } else if (state == BluetoothDevice.BOND_NONE && prevState == BluetoothDevice.BOND_BONDED){
+                    showToast("Unpaired");
+                }
+
             }
         }
     };
 
+    private void showToast(String toast) {
+        Toast.makeText(this,toast,Toast.LENGTH_LONG).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Register Receiver
+        IntentFilter intent = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        registerReceiver(mPairReceiver, intent);
 
         setContentView(R.layout.activity_purchase_dish);
 
@@ -86,13 +97,18 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
             if(this.presenter.checkIfDeviceHasBluetooth() == true) {
                 //check if bluetooth is enabled
-                checkIfDeviceSupportsBLE();
                 this.bluetoothManager =  (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
                 this.blueAdapter = BluetoothAdapter.getDefaultAdapter();
 
                 if (this.presenter.checkIfDeviceHasBluetoothOn() == false) {
                     Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                }
+                else {
+                    BluetoothDevice harmonyDevice = this.blueAdapter.getRemoteDevice("ED:2F:34:31:B4:BF");
+                    if(harmonyDevice != null) {
+                        this.pairDevice(harmonyDevice);
+                    }
                 }
             }
             else {
@@ -192,10 +208,12 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
     }
 
-    private void checkIfDeviceSupportsBLE() {
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, "BLE not supported", Toast.LENGTH_SHORT).show();
-            finish();
+    private void pairDevice(BluetoothDevice device) {
+        try {
+            Method method = device.getClass().getMethod("createBond", (Class[]) null);
+            method.invoke(device, (Object[]) null);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
