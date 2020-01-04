@@ -113,7 +113,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 if(checked){
 
+                    presenter.registerNearbyCanteensPushNotificationsReceive();
+
                 }else{
+
+                    presenter.unregisterNearbyCanteensPushNotificationsReceive();
 
                 }
 
@@ -319,7 +323,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         this.favoriteDishesAvailabilityPushNotificationsSwitch.setChecked(false);
 
-        updateFavoriteDishesAvailabilityPushNotificationsSwitchIcon(true);
+        updateFavoriteDishesAvailabilityPushNotificationsSwitchIcon(false);
 
     }
 
@@ -328,6 +332,34 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         this.favoriteDishesAvailabilityPushNotificationsSwitch.setChecked(true);
 
         updateFavoriteDishesAvailabilityPushNotificationsSwitchIcon(true);
+
+    }
+
+    public void setNearbyCanteensPushNotificationsSwitchToTrue() {
+
+        this.nearbyCanteensPushNotificationsSwitch.setChecked(true);
+
+        updateNearbyCanteensPushNotificationsSwitchIcon(true);
+
+    }
+
+    public void setNearbyCanteensPushNotificationsSwitchToFalse() {
+
+        this.nearbyCanteensPushNotificationsSwitch.setChecked(false);
+
+        updateNearbyCanteensPushNotificationsSwitchIcon(false);
+
+    }
+
+    public void disableNearbyCanteensPushNotificationsSwitchInteraction() {
+
+        this.favoriteDishesAvailabilityPushNotificationsSwitch.setSelectable(false);
+
+    }
+
+    public void enableNearbyCanteensPushNotificationsSwitchInteraction() {
+
+        this.favoriteDishesAvailabilityPushNotificationsSwitch.setSelectable(true);
 
     }
 }

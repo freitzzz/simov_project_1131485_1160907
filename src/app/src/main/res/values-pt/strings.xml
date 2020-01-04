@@ -86,4 +86,18 @@
     <string name="start_fetch_user_device_location_route_to_canteen">
         Por favor aguarde enquanto a sua localização é determinada...
     </string>
+    <string name="unregistering_nearby_canteens_push_notifications_receive_finish">
+        As push-notifications foram removidas com successo
+    </string>
+    <string name="unregistering_nearby_canteens_push_notifications_receive_start">
+        Por favor aguarde enquanto as push-notifications relativas a cantinas perto de si
+        são removidas...
+    </string>
+    <string name="registering_nearby_canteens_push_notifications_receive_finish">
+        As push-notifications foram registadas com successo
+    </string>
+    <string name="registering_nearby_canteens_push_notifications_receive_start">
+        Por favor aguarde enquanto as push-notifications relativas a cantinas perto de si
+        são registadas...
+    </string>
 </resources>

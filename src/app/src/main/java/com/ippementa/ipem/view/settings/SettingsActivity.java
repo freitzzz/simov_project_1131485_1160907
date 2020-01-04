@@ -199,6 +199,74 @@ public class SettingsActivity extends AppCompatActivity implements SettingsView{
     }
 
     @Override
+    public void enableNearbyCanteensPushNotificationsSwitchInteraction() {
+
+        this.contentFragment.enableNearbyCanteensPushNotificationsSwitchInteraction();
+
+    }
+
+    @Override
+    public void disableNearbyCanteensPushNotificationsSwitchInteraction() {
+
+        this.contentFragment.disableNearbyCanteensPushNotificationsSwitchInteraction();
+
+    }
+
+    @Override
+    public void deactivateNearbyCanteensDishPushNotificationsSwitch() {
+
+        this.contentFragment.setNearbyCanteensPushNotificationsSwitchToFalse();
+
+    }
+
+    @Override
+    public void showRegisteringNearbyCanteensPushNotificationsReceiveStartToast() {
+
+        Toast.makeText(this,
+                R.string.registering_nearby_canteens_push_notifications_receive_start,
+                Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    @Override
+    public void showRegisteringNearbyCanteensPushNotificationsReceiveFinishToast() {
+
+        Toast.makeText(this,
+                R.string.registering_nearby_canteens_push_notifications_receive_finish,
+                Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    @Override
+    public void showUnregisteringNearbyCanteensPushNotificationsReceiveStartToast() {
+
+        Toast.makeText(this,
+                R.string.unregistering_nearby_canteens_push_notifications_receive_start,
+                Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    @Override
+    public void activateNearbyCanteensPushNotificationsSwitch() {
+
+        this.contentFragment.setNearbyCanteensPushNotificationsSwitchToTrue();
+
+    }
+
+    @Override
+    public void showUnregisteringNearbyCanteensPushNotificationsReceiveFinishToast() {
+
+        Toast.makeText(this,
+                R.string.unregistering_nearby_canteens_push_notifications_receive_finish,
+                Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    @Override
     public void showNoInternetConnectionError() {
 
         Toast.makeText(this,

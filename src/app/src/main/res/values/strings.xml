@@ -83,4 +83,16 @@
     <string name="start_fetch_user_device_location_route_to_canteen">
         Please wait while your location is fetched...
     </string>
+    <string name="unregistering_nearby_canteens_push_notifications_receive_finish">
+        Push Notifications receive were unregistered with success
+    </string>
+    <string name="unregistering_nearby_canteens_push_notifications_receive_start">
+        Please wait while nearby canteen push notifications receive are being unregistered...
+    </string>
+    <string name="registering_nearby_canteens_push_notifications_receive_finish">
+        Please wait while nearby canteen push notifications receive are being registered...
+    </string>
+    <string name="registering_nearby_canteens_push_notifications_receive_start">
+        Push Notifications receive were registered with success
+    </string>
 </resources>

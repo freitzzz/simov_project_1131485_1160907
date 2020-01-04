@@ -43,4 +43,21 @@ public interface SettingsView extends ErrorView {
     void activateFavoriteDishPushNotificationsSwitch();
 
     void showUnregisteringFavoriteDishesPushNotificationsReceiveFinishToast();
+
+
+    void enableNearbyCanteensPushNotificationsSwitchInteraction();
+
+    void disableNearbyCanteensPushNotificationsSwitchInteraction();
+
+    void deactivateNearbyCanteensDishPushNotificationsSwitch();
+
+    void showRegisteringNearbyCanteensPushNotificationsReceiveStartToast();
+
+    void showRegisteringNearbyCanteensPushNotificationsReceiveFinishToast();
+
+    void showUnregisteringNearbyCanteensPushNotificationsReceiveStartToast();
+
+    void activateNearbyCanteensPushNotificationsSwitch();
+
+    void showUnregisteringNearbyCanteensPushNotificationsReceiveFinishToast();
 }
