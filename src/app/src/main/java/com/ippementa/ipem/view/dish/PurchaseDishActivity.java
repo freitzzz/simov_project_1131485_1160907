@@ -3,10 +3,14 @@ package com.ippementa.ipem.view.dish;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.companion.AssociationRequest;
+import android.companion.BluetoothDeviceFilter;
+import android.companion.CompanionDeviceManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -25,7 +29,6 @@ import com.ippementa.ipem.util.Provider;
 import com.ippementa.ipem.view.settings.SettingsActivity;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class PurchaseDishActivity extends AppCompatActivity implements PurchaseDishView, NfcAdapter.ReaderCallback {
 
@@ -33,9 +36,13 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
     public static final int REQUEST_CODE_FOR_SETTINGS_ACTIVITY = 854;
 
+    public static final int REQUEST_ENABLE_BT = 550;
+
     private NfcAdapter adapter;
 
     private BluetoothAdapter blueAdapter;
+
+    private  BluetoothManager bluetoothManager;
 
     private TextView nfcResult;
 
@@ -79,21 +86,13 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
             if(this.presenter.checkIfDeviceHasBluetooth() == true) {
                 //check if bluetooth is enabled
-
+                checkIfDeviceSupportsBLE();
+                this.bluetoothManager =  (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
                 this.blueAdapter = BluetoothAdapter.getDefaultAdapter();
 
-                if (this.presenter.checkIfDeviceHasBluetoothOn() == false)
-                    Toast.makeText(this, R.string.bluetooth_turned_off, Toast.LENGTH_SHORT).show();
-                else {
-                    // Register for broadcasts when a device is discovered.
-                    IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-                    registerReceiver(receiver, filter);
-
-                    Intent discoverableIntent =
-                            new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-                    discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-                    startActivity(discoverableIntent);
-
+                if (this.presenter.checkIfDeviceHasBluetoothOn() == false) {
+                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
                 }
             }
             else {
@@ -125,8 +124,6 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        unregisterReceiver(receiver);
 
     }
 
@@ -193,6 +190,13 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
         return theme;
 
+    }
+
+    private void checkIfDeviceSupportsBLE() {
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, "BLE not supported", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
 }
