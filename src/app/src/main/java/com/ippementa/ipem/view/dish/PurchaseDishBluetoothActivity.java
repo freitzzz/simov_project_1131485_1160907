@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 
-public class PurchaseDishActivity extends AppCompatActivity implements PurchaseDishView, NfcAdapter.ReaderCallback {
+public class PurchaseDishBluetoothActivity extends AppCompatActivity implements PurchaseDishView, NfcAdapter.ReaderCallback {
 
     private PurchaseDishPresenter presenter;
 
