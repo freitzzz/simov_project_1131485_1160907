@@ -1,5 +1,6 @@
 package com.ippementa.ipem.view.dish;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -39,7 +40,10 @@ public class PurchaseDishNFCActivity extends AppCompatActivity implements Purcha
         {
             this.adapter = NfcAdapter.getDefaultAdapter(this);
             // check if nfc is enabled
-            if(this.presenter.checkIfDeviceHasNFCOn() == false) Toast.makeText(this, R.string.nfc_turned_off, Toast.LENGTH_LONG).show();
+            if(this.presenter.checkIfDeviceHasNFCOn() == false) {
+                Toast.makeText(getApplicationContext(), R.string.activate_nfc, Toast.LENGTH_LONG).show();
+                startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+            }
         }
     }
 

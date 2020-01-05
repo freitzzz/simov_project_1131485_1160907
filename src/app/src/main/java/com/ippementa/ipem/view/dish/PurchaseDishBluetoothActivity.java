@@ -75,7 +75,7 @@ public class PurchaseDishBluetoothActivity extends AppCompatActivity implements 
             this.blueAdapter = BluetoothAdapter.getDefaultAdapter();
 
         } else {
-            Toast.makeText(this, R.string.no_bluetooth_nfc, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.no_bluetooth, Toast.LENGTH_SHORT).show();
         }
     }
 
