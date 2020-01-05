@@ -1,13 +1,24 @@
 package com.ippementa.ipem.presenter.settings;
 
+import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.ippementa.ipem.model.RepositoryFactory;
 import com.ippementa.ipem.model.canteen.Canteen;
 import com.ippementa.ipem.model.canteen.RoomCanteensRepositoryImpl;
+import com.ippementa.ipem.model.canteen.UserNearbyCanteensGeofencingBroadcastReceiver;
 import com.ippementa.ipem.model.dish.Dish;
 import com.ippementa.ipem.model.dish.RoomDishRepositoryImpl;
 import com.ippementa.ipem.model.menu.Menu;
@@ -26,13 +37,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+
 public class SettingsPresenter implements IPresenter, Parcelable {
 
     private SettingsView view;
 
     private boolean isViewAvailableToInteract;
 
-    public SettingsPresenter(SettingsView view){
+    public SettingsPresenter(SettingsView view) {
 
         this.view = view;
 
@@ -56,7 +70,7 @@ public class SettingsPresenter implements IPresenter, Parcelable {
         }
     };
 
-    public void startOfflineDataDownload(){
+    public void startOfflineDataDownload() {
 
         this.view.showOfflineDataDownloadStartSnackbar();
 
@@ -80,17 +94,17 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
     public void setNotUseOfflineData() {
 
-        Provider.instance((SettingsActivity)view).settings().activateOnlineMode((SettingsActivity)view);
+        Provider.instance((SettingsActivity) view).settings().activateOnlineMode((SettingsActivity) view);
 
     }
 
     public void changeToDarkMode() {
 
-        boolean changedWithSuccess = Provider.instance((SettingsActivity)view).settings().activateDarkMode((SettingsActivity)view);
+        boolean changedWithSuccess = Provider.instance((SettingsActivity) view).settings().activateDarkMode((SettingsActivity) view);
 
-        if(changedWithSuccess){
+        if (changedWithSuccess) {
             this.view.showDarkModeEnabledSnackbar();
-        }else{
+        } else {
             this.view.deactivateDarkModeSwitch();
             this.view.showErrorEnablingDarkModeSnackBar();
         }
@@ -99,11 +113,11 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
     public void changeToLightMode() {
 
-        boolean changedWithSuccess = Provider.instance((SettingsActivity)view).settings().activateLightMode((SettingsActivity)view);
+        boolean changedWithSuccess = Provider.instance((SettingsActivity) view).settings().activateLightMode((SettingsActivity) view);
 
-        if(changedWithSuccess){
+        if (changedWithSuccess) {
             this.view.showDarkModeDisabledSnackbar();
-        }else{
+        } else {
             this.view.activateDarkModeSwitch();
             this.view.showErrorDisablingDarkModeSnackBar();
         }
@@ -136,13 +150,29 @@ public class SettingsPresenter implements IPresenter, Parcelable {
         dest.writeByte((byte) (isViewAvailableToInteract ? 1 : 0));
     }
 
+    public void registerNearbyCanteensPushNotificationsReceive() {
+
+        view.showRegisteringNearbyCanteensPushNotificationsReceiveStartToast();
+
+        view.disableNearbyCanteensPushNotificationsSwitchInteraction();
+
+        new RegisterNearbyCanteensPushNotificationsReceiveAsyncTask().execute();
+
+    }
+
+    public void unregisterNearbyCanteensPushNotificationsReceive() {
+
+        new UnregisterNearbyCanteensPushNotificationsReceiveAsyncTask().execute();
+
+    }
+
     private class DownloadOfflineDataAsyncTask extends AsyncTask<Void, Void, BackgroundResult> {
         @Override
         protected BackgroundResult doInBackground(Void... voids) {
 
             // view.getContext() instead of cast...
 
-            Context ctx = (SettingsActivity)view;
+            Context ctx = (SettingsActivity) view;
 
             // repository wont change so we can declare it to a variable
 
@@ -326,25 +356,25 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
                 List<Dish> dishesToInsert = new ArrayList<>();
 
-                for(Dish dish : allStoredDishes) {
+                for (Dish dish : allStoredDishes) {
 
-                    if(!dishes.contains(dish)) {
+                    if (!dishes.contains(dish)) {
                         dishesToDelete.add(dish);
-                    }else{
+                    } else {
                         dishesToUpdate.add(dish);
                     }
 
                 }
 
-                for(Dish dish : dishes) {
+                for (Dish dish : dishes) {
 
-                    if(!allStoredDishes.contains(dish)){
+                    if (!allStoredDishes.contains(dish)) {
                         dishesToInsert.add(dish);
                     }
 
                 }
 
-                if(!dishesToDelete.isEmpty()) {
+                if (!dishesToDelete.isEmpty()) {
 
                     dishRepository.deleteAll(dishesToDelete.toArray(new Dish[]{}));
 
@@ -362,7 +392,7 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
                 dishRepository.updateAll(dishesToUpdate.toArray(new Dish[]{}));
 
-            }catch (IOException ioException){
+            } catch (IOException ioException) {
 
                 ioException.printStackTrace();
 
@@ -370,11 +400,11 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
                 return result;
 
-            }catch (RequestException requestException){
+            } catch (RequestException requestException) {
 
                 requestException.printStackTrace();
 
-                if(requestException.response.statusCode != 404){
+                if (requestException.response.statusCode != 404) {
                     result.requestException = requestException;
 
                     return result;
@@ -393,15 +423,15 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
             SettingsPresenter presenter = SettingsPresenter.this;
 
-            if(presenter.isViewAvailableToInteract){
+            if (presenter.isViewAvailableToInteract) {
 
-                if(result.ioException != null){
+                if (result.ioException != null) {
 
-                    if(!CommunicationMediator.hasInternetConnection((SettingsActivity)presenter.view)){
+                    if (!CommunicationMediator.hasInternetConnection((SettingsActivity) presenter.view)) {
 
                         presenter.view.showNoInternetConnectionError();
 
-                    }else{
+                    } else {
 
                         presenter.view.showServerNotAvailableError();
 
@@ -409,13 +439,13 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
                     presenter.view.deactivateOfflineModeSwitch();
 
-                }else if(result.requestException != null){
+                } else if (result.requestException != null) {
 
                     presenter.view.showUnexepectedServerFailureError();
 
                     presenter.view.deactivateOfflineModeSwitch();
 
-                }else{
+                } else {
 
                     view.showOfflineDataDownloadFinishSnackbar();
 
@@ -434,7 +464,7 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
             // view.getContext() instead of cast...
 
-            Context ctx = (SettingsActivity)view;
+            Context ctx = (SettingsActivity) view;
 
             // repository wont change so we can declare it to a variable
 
@@ -447,15 +477,14 @@ public class SettingsPresenter implements IPresenter, Parcelable {
             try {
 
 
-
                 List<Dish> dishes
                         = repositoryFactory
                         .createDishRepository()
                         .dishes();
 
-                if(!dishes.isEmpty()){
+                if (!dishes.isEmpty()) {
 
-                    ((SettingsActivity)view).runOnUiThread(new Runnable() {
+                    ((SettingsActivity) view).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
@@ -477,9 +506,9 @@ public class SettingsPresenter implements IPresenter, Parcelable {
                             .settings()
                             .fcmRegistrationToken();
 
-                    for(Dish dish : dishes) {
+                    for (Dish dish : dishes) {
 
-                        if(dish.isFavorite){
+                        if (dish.isFavorite) {
 
                             String dishDescription = dish.description;
 
@@ -495,13 +524,13 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
                     }
 
-                }else{
+                } else {
 
                     result.noDishesToRegister = true;
 
                 }
 
-            }catch (IOException ioException){
+            } catch (IOException ioException) {
 
                 ioException.printStackTrace();
 
@@ -509,7 +538,7 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
                 return result;
 
-            }catch (RequestException requestException){
+            } catch (RequestException requestException) {
 
                 requestException.printStackTrace();
 
@@ -528,9 +557,9 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
             SettingsPresenter presenter = SettingsPresenter.this;
 
-            if(presenter.isViewAvailableToInteract){
+            if (presenter.isViewAvailableToInteract) {
 
-                if(!result.noDishesToRegister) {
+                if (!result.noDishesToRegister) {
 
                     if (result.ioException != null) {
 
@@ -583,7 +612,7 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
             // view.getContext() instead of cast...
 
-            Context ctx = (SettingsActivity)view;
+            Context ctx = (SettingsActivity) view;
 
             // repository wont change so we can declare it to a variable
 
@@ -600,9 +629,9 @@ public class SettingsPresenter implements IPresenter, Parcelable {
                         .createDishRepository()
                         .dishes();
 
-                if(!dishes.isEmpty()){
+                if (!dishes.isEmpty()) {
 
-                    ((SettingsActivity)view).runOnUiThread(new Runnable() {
+                    ((SettingsActivity) view).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
@@ -624,9 +653,9 @@ public class SettingsPresenter implements IPresenter, Parcelable {
                             .settings()
                             .fcmRegistrationToken();
 
-                    for(Dish dish : dishes) {
+                    for (Dish dish : dishes) {
 
-                        if(dish.isFavorite){
+                        if (dish.isFavorite) {
 
                             String dishDescription = dish.description;
 
@@ -642,13 +671,13 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
                     }
 
-                }else{
+                } else {
 
                     result.noDishesToRegister = true;
 
                 }
 
-            }catch (IOException ioException){
+            } catch (IOException ioException) {
 
                 ioException.printStackTrace();
 
@@ -656,7 +685,7 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
                 return result;
 
-            }catch (RequestException requestException){
+            } catch (RequestException requestException) {
 
                 requestException.printStackTrace();
 
@@ -675,9 +704,9 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
             SettingsPresenter presenter = SettingsPresenter.this;
 
-            if(presenter.isViewAvailableToInteract){
+            if (presenter.isViewAvailableToInteract) {
 
-                if(!result.noDishesToRegister) {
+                if (!result.noDishesToRegister) {
 
                     if (result.ioException != null) {
 
@@ -720,6 +749,389 @@ public class SettingsPresenter implements IPresenter, Parcelable {
             public IOException ioException;
 
             public RequestException requestException;
+
+        }
+    }
+
+    private class RegisterNearbyCanteensPushNotificationsReceiveAsyncTask extends AsyncTask<Void, Void, RegisterNearbyCanteensPushNotificationsReceiveAsyncTask.BackgroundResult> {
+        @Override
+        protected BackgroundResult doInBackground(Void... voids) {
+
+            // view.getContext() instead of cast...
+
+            final Context ctx = (SettingsActivity) view;
+
+            // repository wont change so we can declare it to a variable
+
+            RepositoryFactory repositoryFactory = Provider.instance(ctx).repositoryFactory(ctx);
+
+            BackgroundResult result = new BackgroundResult();
+
+            try {
+
+                List<School> schools
+                        = repositoryFactory
+                        .createSchoolsRepository()
+                        .availableSchools();
+
+                if (schools.isEmpty()) {
+
+                    // if schools list is empty then offline mode is activated
+
+                    Provider.instance(ctx).settings().activateOnlineMode(ctx);
+
+                    repositoryFactory = Provider.instance(ctx).repositoryFactory(ctx);
+
+                    schools = repositoryFactory.createSchoolsRepository().availableSchools();
+
+                    Provider.instance(ctx).settings().activateOfflineMode(ctx);
+
+                    repositoryFactory = Provider.instance(ctx).repositoryFactory(ctx);
+
+                }
+
+                List<Canteen> allCanteens = new ArrayList<>();
+
+                for (School school : schools) {
+
+                    List<Canteen> schoolCanteens
+                            = repositoryFactory
+                            .createCanteensRepository()
+                            .canteens(school.id);
+
+                    if (schoolCanteens.isEmpty()) {
+
+                        // if school canteens is empty then offline mode is activated
+
+                        Provider.instance(ctx).settings().activateOnlineMode(ctx);
+
+                        repositoryFactory = Provider.instance(ctx).repositoryFactory(ctx);
+
+                        schoolCanteens = repositoryFactory.createCanteensRepository().canteens(school.id);
+
+                        Provider.instance(ctx).settings().activateOfflineMode(ctx);
+
+                        repositoryFactory = Provider.instance(ctx).repositoryFactory(ctx);
+
+                    }
+
+                    allCanteens.addAll(schoolCanteens);
+
+                }
+
+                for (Canteen canteen : allCanteens) {
+
+                    if (canteen.location == null) {
+
+                        Canteen canteenDetails
+                                = repositoryFactory
+                                .createCanteensRepository()
+                                .canteen(canteen.schoolId, canteen.id);
+
+                        if (canteenDetails == null) {
+
+                            // if canteen details is null then offline mode is activated
+
+                            Provider.instance(ctx).settings().activateOnlineMode(ctx);
+
+                            repositoryFactory = Provider.instance(ctx).repositoryFactory(ctx);
+
+                            canteenDetails = repositoryFactory.createCanteensRepository().canteen(canteen.schoolId, canteen.id);
+
+                            Provider.instance(ctx).settings().activateOfflineMode(ctx);
+
+                            repositoryFactory = Provider.instance(ctx).repositoryFactory(ctx);
+
+                        }
+
+                        canteen.location = canteenDetails.location;
+
+                    }
+
+                }
+
+                List<Geofence> geofences = new ArrayList<>();
+
+                for (Canteen canteen : allCanteens) {
+
+                    // Geofence id will be a join of the canteen name + its id and school id
+                    // (e.g. cantinadoh-1-1)
+                    // By doing so, we create a unique identifier for the geofence and will be able
+                    // to identify the canteen and school identifiers on the broadcast receiver
+
+                    String geofenceId
+                            = new StringBuilder()
+                            .append(canteen.name.toLowerCase().replaceAll("\\s+", ""))
+                            .append("-")
+                            .append(canteen.id)
+                            .append("-")
+                            .append(canteen.schoolId)
+                            .toString();
+
+                    Geofence geofence
+                            = new Geofence
+                            .Builder()
+                            .setRequestId(geofenceId)
+                            .setCircularRegion(
+                                    canteen.location.latitude,
+                                    canteen.location.longitude,
+                                    50
+                            )
+                            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                            .build();
+
+                    geofences.add(geofence);
+
+                }
+
+                GeofencingRequest geofencingRequest
+                        = new GeofencingRequest
+                        .Builder()
+                        .addGeofences(geofences)
+                        .build();
+
+                PendingIntent geofencingPendingIntent;
+
+                Intent intent = new Intent(ctx, UserNearbyCanteensGeofencingBroadcastReceiver.class);
+
+                geofencingPendingIntent
+                        = PendingIntent.getBroadcast(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                GeofencingClient geofencingClient = LocationServices.getGeofencingClient(ctx);
+
+                if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                    OnSuccessListener<Void> onAddGeofencesSuccessListener = new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+
+                            if(isViewAvailableToInteract) {
+
+                                view.showRegisteringNearbyCanteensPushNotificationsReceiveFinishToast();
+
+                                view.enableNearbyCanteensPushNotificationsSwitchInteraction();
+
+                            }
+
+                            Provider.instance(ctx).settings().allowReceiveOfNearbyCanteensPushNotifications(ctx);
+                        }
+                    };
+
+                    OnFailureListener onAddGeofencesFailureListener = new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                            if(isViewAvailableToInteract) {
+
+                                view.showRegisteringNearbyCanteensPushNotificationsReceiveFailedToast();
+
+                                view.enableNearbyCanteensPushNotificationsSwitchInteraction();
+
+                            }
+
+                        }
+                    };
+
+                    geofencingClient.addGeofences(geofencingRequest, geofencingPendingIntent)
+                            .addOnSuccessListener(onAddGeofencesSuccessListener)
+                            .addOnFailureListener(onAddGeofencesFailureListener);
+
+                } else {
+                    result.hasNoFineLocationAccessPermission = true;
+                }
+
+            }catch (IOException ioException){
+
+                ioException.printStackTrace();
+
+                result.ioException = ioException;
+
+                return result;
+
+            }catch (RequestException requestException){
+
+                requestException.printStackTrace();
+
+                result.requestException = requestException;
+
+            }
+
+            return result;
+
+        }
+
+        @Override
+        protected void onPostExecute(BackgroundResult result) {
+
+            super.onPostExecute(result);
+
+            SettingsPresenter presenter = SettingsPresenter.this;
+
+            if(presenter.isViewAvailableToInteract){
+
+                if(!result.hasNoFineLocationAccessPermission) {
+
+                    if (result.ioException != null) {
+
+                        if (!CommunicationMediator.hasInternetConnection((SettingsActivity) presenter.view)) {
+
+                            presenter.view.showNoInternetConnectionError();
+
+                        } else {
+
+                            presenter.view.showServerNotAvailableError();
+
+                        }
+
+                        presenter.view.deactivateNearbyCanteensDishPushNotificationsSwitch();
+
+                        view.enableNearbyCanteensPushNotificationsSwitchInteraction();
+
+                    } else if (result.requestException != null) {
+
+                        presenter.view.showUnexepectedServerFailureError();
+
+                        presenter.view.deactivateNearbyCanteensDishPushNotificationsSwitch();
+
+                        view.enableNearbyCanteensPushNotificationsSwitchInteraction();
+
+                    }
+
+                } else {
+
+                    view.showApplicationRequireFineLocationAccessPermissionToast();
+
+                    view.enableNearbyCanteensPushNotificationsSwitchInteraction();
+
+                }
+
+            }
+
+        }
+
+        private class BackgroundResult {
+
+            public boolean hasNoFineLocationAccessPermission;
+
+            public IOException ioException;
+
+            public RequestException requestException;
+
+        }
+    }
+
+    private class UnregisterNearbyCanteensPushNotificationsReceiveAsyncTask extends AsyncTask<Void, Void, UnregisterNearbyCanteensPushNotificationsReceiveAsyncTask.BackgroundResult> {
+        @Override
+        protected BackgroundResult doInBackground(Void... voids) {
+
+            // view.getContext() instead of cast...
+
+            final Context ctx = (SettingsActivity) view;
+
+            BackgroundResult result = new BackgroundResult();
+
+            try {
+
+                PendingIntent geofencingPendingIntent;
+
+                Intent intent = new Intent(ctx, UserNearbyCanteensGeofencingBroadcastReceiver.class);
+
+                geofencingPendingIntent
+                        = PendingIntent.getBroadcast(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                GeofencingClient geofencingClient = LocationServices.getGeofencingClient(ctx);
+
+                OnSuccessListener<Void> onAddGeofencesSuccessListener = new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        if(isViewAvailableToInteract) {
+
+                            view.showUnregisteringNearbyCanteensPushNotificationsReceiveFinishToast();
+
+                            view.enableNearbyCanteensPushNotificationsSwitchInteraction();
+
+                        }
+
+                        Provider.instance(ctx).settings().disallowReceiveOfNearbyCanteensPushNotifications(ctx);
+                    }
+                };
+
+                OnFailureListener onAddGeofencesFailureListener = new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        if(isViewAvailableToInteract) {
+
+                            view.showUnregisteringNearbyCanteensPushNotificationsReceiveFailedToast();
+
+                            view.enableNearbyCanteensPushNotificationsSwitchInteraction();
+
+                        }
+
+                    }
+                };
+
+                geofencingClient.removeGeofences(geofencingPendingIntent)
+                        .addOnSuccessListener(onAddGeofencesSuccessListener)
+                        .addOnFailureListener(onAddGeofencesFailureListener);
+
+            }catch (RequestException requestException){
+
+                requestException.printStackTrace();
+
+                result.requestException = requestException;
+
+            }
+
+            return result;
+
+        }
+
+        @Override
+        protected void onPostExecute(BackgroundResult result) {
+
+            super.onPostExecute(result);
+
+            SettingsPresenter presenter = SettingsPresenter.this;
+
+            if(presenter.isViewAvailableToInteract){
+
+                if (result.ioException != null) {
+
+                    if (!CommunicationMediator.hasInternetConnection((SettingsActivity) presenter.view)) {
+
+                        presenter.view.showNoInternetConnectionError();
+
+                    } else {
+
+                        presenter.view.showServerNotAvailableError();
+
+                    }
+
+                    presenter.view.activateNearbyCanteensPushNotificationsSwitch();
+
+                    view.enableNearbyCanteensPushNotificationsSwitchInteraction();
+
+                } else if (result.requestException != null) {
+
+                    presenter.view.showUnexepectedServerFailureError();
+
+                    presenter.view.activateNearbyCanteensPushNotificationsSwitch();
+
+                    view.enableNearbyCanteensPushNotificationsSwitchInteraction();
+
+                }
+
+            }
+
+        }
+
+        private class BackgroundResult {
+
+            public IOException ioException; // TODO: Not necessary anymore
+
+            public RequestException requestException; // TODO: Not necessary anymore
 
         }
     }

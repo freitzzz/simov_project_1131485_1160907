@@ -100,4 +100,13 @@
         Por favor aguarde enquanto as push-notifications relativas a cantinas perto de si
         são registadas...
     </string>
+    <string name="application_requires_fine_location_access_permission">
+        É necessário permissão ao accesso fino da localização do dispositivo
+    </string>
+    <string name="registering_nearby_canteens_push_notifications_receive_failed">
+        Um erro inesperado ocorreu ao registar as push-notifications das cantinas perto de si
+    </string>
+    <string name="unregistering_nearby_canteens_push_notifications_receive_failed">
+        Um erro inesperado ocorreu ao remove as push-notifications das cantinas perto de si
+    </string>
 </resources>

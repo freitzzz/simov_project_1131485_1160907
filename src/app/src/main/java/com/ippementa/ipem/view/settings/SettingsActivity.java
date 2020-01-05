@@ -267,6 +267,36 @@ public class SettingsActivity extends AppCompatActivity implements SettingsView{
     }
 
     @Override
+    public void showApplicationRequireFineLocationAccessPermissionToast() {
+
+        Toast.makeText(this,
+                R.string.application_requires_fine_location_access_permission,
+                Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    @Override
+    public void showRegisteringNearbyCanteensPushNotificationsReceiveFailedToast() {
+
+        Toast.makeText(this,
+                R.string.registering_nearby_canteens_push_notifications_receive_failed,
+                Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    @Override
+    public void showUnregisteringNearbyCanteensPushNotificationsReceiveFailedToast() {
+
+        Toast.makeText(this,
+                R.string.unregistering_nearby_canteens_push_notifications_receive_failed,
+                Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    @Override
     public void showNoInternetConnectionError() {
 
         Toast.makeText(this,

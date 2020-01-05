@@ -1,6 +1,8 @@
 package com.ippementa.ipem.view.settings;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.ippementa.ipem.R;
@@ -8,12 +10,16 @@ import com.ippementa.ipem.presenter.settings.SettingsPresenter;
 import com.ippementa.ipem.util.Provider;
 import com.ippementa.ipem.util.Settings;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreferenceCompat;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
+
+    private static final int SETTINGS_FRAGMENT_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION = 532;
 
     private SettingsPresenter presenter;
 
@@ -113,7 +119,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 if(checked){
 
-                    presenter.registerNearbyCanteensPushNotificationsReceive();
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                        ActivityCompat.requestPermissions(
+                                SettingsFragment.this.getActivity(),
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                SETTINGS_FRAGMENT_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION
+                        );
+
+                    } else {
+
+                        presenter.registerNearbyCanteensPushNotificationsReceive();
+
+                    }
 
                 }else{
 
@@ -171,6 +189,34 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         screen.addPreference(this.darkModeSwitch);
 
         setPreferenceScreen(screen);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode){
+            case SETTINGS_FRAGMENT_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION:
+
+                if(grantResults.length > 0) {
+
+                    if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                        presenter.registerNearbyCanteensPushNotificationsReceive();
+
+                    } else {
+
+                        setNearbyCanteensPushNotificationsSwitchToFalse();
+
+                    }
+
+                }
+
+                break;
+            default:
+                break;
+        }
+
     }
 
     public void enableOfflineModeSwitchInteraction(){

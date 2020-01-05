@@ -95,4 +95,13 @@
     <string name="registering_nearby_canteens_push_notifications_receive_start">
         Push Notifications receive were registered with success
     </string>
+    <string name="application_requires_fine_location_access_permission">
+        Fine Location Access Permission is required
+    </string>
+    <string name="registering_nearby_canteens_push_notifications_receive_failed">
+        An unexpected error occurred while registering nearby canteens push notifications
+    </string>
+    <string name="unregistering_nearby_canteens_push_notifications_receive_failed">
+        An unexpected error occurred while unregistering nearby canteens push notifications
+    </string>
 </resources>

@@ -60,4 +60,10 @@ public interface SettingsView extends ErrorView {
     void activateNearbyCanteensPushNotificationsSwitch();
 
     void showUnregisteringNearbyCanteensPushNotificationsReceiveFinishToast();
+
+    void showApplicationRequireFineLocationAccessPermissionToast();
+
+    void showRegisteringNearbyCanteensPushNotificationsReceiveFailedToast();
+
+    void showUnregisteringNearbyCanteensPushNotificationsReceiveFailedToast();
 }
