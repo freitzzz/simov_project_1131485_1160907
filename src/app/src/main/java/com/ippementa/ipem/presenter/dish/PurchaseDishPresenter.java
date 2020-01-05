@@ -7,6 +7,7 @@ import android.nfc.NfcManager;
 
 import com.ippementa.ipem.presenter.IPresenter;
 import com.ippementa.ipem.view.dish.PurchaseDishBluetoothActivity;
+import com.ippementa.ipem.view.dish.PurchaseDishNFCActivity;
 import com.ippementa.ipem.view.dish.PurchaseDishView;
 
 public class PurchaseDishPresenter implements IPresenter{
@@ -40,11 +41,11 @@ public class PurchaseDishPresenter implements IPresenter{
 
         boolean hasNFC = false;
 
-        PurchaseDishBluetoothActivity context = (PurchaseDishBluetoothActivity) this.view;
+        PurchaseDishNFCActivity context = (PurchaseDishNFCActivity) this.view;
 
         NfcManager manager = (NfcManager)  context.getSystemService(Context.NFC_SERVICE);
         if(manager != null) {
-            NfcAdapter adapter = (NfcAdapter) NfcAdapter.getDefaultAdapter(context);
+            NfcAdapter adapter = NfcAdapter.getDefaultAdapter(context);
             if (adapter != null) hasNFC = true;
         }
         return hasNFC;
@@ -54,11 +55,11 @@ public class PurchaseDishPresenter implements IPresenter{
 
         boolean isNFCOn = false;
 
-        PurchaseDishBluetoothActivity context = (PurchaseDishBluetoothActivity) this.view;
+        PurchaseDishNFCActivity context = (PurchaseDishNFCActivity) this.view;
 
         NfcManager manager = (NfcManager)  context.getSystemService(Context.NFC_SERVICE);
 
-        NfcAdapter adapter = (NfcAdapter) NfcAdapter.getDefaultAdapter(context);
+        NfcAdapter adapter = NfcAdapter.getDefaultAdapter(context);
         if (adapter.isEnabled()) isNFCOn = true;
 
         return isNFCOn;
