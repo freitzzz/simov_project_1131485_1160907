@@ -168,16 +168,17 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        Intent intent;
         switch(item.getItemId()) {
             case R.id.purchase_dish_bluetooth:
-                Intent intent = (Intent) new Intent(this, PurchaseDishBluetoothActivity.class);
+                 intent = new Intent(this, PurchaseDishBluetoothActivity.class);
 
                 startActivity(intent);
 
                 return true;
 
             case R.id.purchase_dish_nfc:
-
+                intent = new Intent(this,PurchaseDishNFCActivity.class);
                 return true;
         }
         return true;
