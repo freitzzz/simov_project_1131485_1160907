@@ -32,10 +32,14 @@
     </string>
     <string name="settings_error_enabling_dark_mode">Não foi possível ativar o modo escuro</string>
     <string name="settings_error_disabling_dark_mode">Não foi possível desativar o modo escuro</string>
-    <string name="purchase_dish">Comprar Prato</string>
+    <string name="purchase_dish_nfc">Comprar prato com NFC</string>
+    <string name="purchase_dish_bluetooth">Comprar prato com Bluetooth</string>
     <string name="nfc_turned_off">Por favor ligue NFC no seu dispositivo!</string>
     <string name="bluetooth_turned_off">Por favor ligue Bluetooth no seu dispositivo!</string>
-    <string name="no_bluetooth_nfc">Este dispositivo não possui Bluetooth nem NFC. Compra via app encontra-se indisponível.</string>
+    <string name="no_bluetooth">Este dispositivo não possui Bluetooth. </string>
+    <string name="no_nfc">Este dispositivo não possui NFC.</string>
+    <string name="activate_nfc">Por favor ative NFC e pressione no botão Retroceder para voltar à aplicação.</string>
+    <string name="read_nfc">Dispositivo está pronto para ler o seu cartão.</string>
     <string name="map_rendering_error">Um error inesperado aconteceu ao renderizar o mapa</string>
     <string name="error_occurred_marking_dish_as_favorite">
         Ocorreu um erro ao marcar o prato como favorite

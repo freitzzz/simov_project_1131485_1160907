@@ -9,13 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
-import android.nfc.NfcAdapter;
-import android.nfc.Tag;
-import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,11 +21,10 @@ import com.ippementa.ipem.presenter.dish.PurchaseDishPresenter;
 import com.ippementa.ipem.util.Provider;
 import com.ippementa.ipem.view.settings.SettingsActivity;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 
 
-public class PurchaseDishActivity extends AppCompatActivity implements PurchaseDishView, NfcAdapter.ReaderCallback {
+public class PurchaseDishBluetoothActivity extends AppCompatActivity implements PurchaseDishView {
 
     private PurchaseDishPresenter presenter;
 
@@ -37,15 +32,9 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
     public static final int REQUEST_ENABLE_BT = 550;
 
-    private NfcAdapter adapter;
-
     private BluetoothAdapter blueAdapter;
 
     private BluetoothManager bluetoothManager;
-
-    private TextView nfcResult;
-
-    private int timesTagRead = 0; //number of times that the tag was read by the device
 
     // Create a BroadcastReceiver for ACTION_FOUND.
 
@@ -74,21 +63,10 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
         IntentFilter intent = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
         registerReceiver(mPairReceiver, intent);
 
-        setContentView(R.layout.activity_purchase_dish);
-
-        this.nfcResult = (TextView) findViewById(R.id.nfc_result_text_view);
-
-        this.nfcResult.setText("");
+        setContentView(R.layout.activity_purchase_dish_bluetooth);
 
         this.presenter = new PurchaseDishPresenter(this);
 
-        /*if(this.presenter.checkIfDeviceHasNFCAvaliable() == true)
-        {
-            adapter = (NfcAdapter) NfcAdapter.getDefaultAdapter(this);
-            // check if nfc is enabled
-            if(this.presenter.checkIfDeviceHasNFCOn() == false) Toast.makeText(this, R.string.nfc_turned_off, Toast.LENGTH_LONG).show();
-        }
-        else {*/
         //check if device has bluetooth
 
         if (this.presenter.checkIfDeviceHasBluetooth() == true) {
@@ -97,9 +75,8 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
             this.blueAdapter = BluetoothAdapter.getDefaultAdapter();
 
         } else {
-            Toast.makeText(this, R.string.no_bluetooth_nfc, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.no_bluetooth, Toast.LENGTH_SHORT).show();
         }
-        //}
     }
 
     @Override
@@ -122,20 +99,13 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
     protected void onResume() {
         super.onResume();
 
-        // nfc
-        if (adapter != null) {
-            adapter.enableReaderMode(this, this,
-                    NfcAdapter.FLAG_READER_NFC_A,
-                    null);
-        }
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        if (adapter != null) adapter.disableReaderMode(this); // nfc
+
     }
 
     @Override
@@ -162,32 +132,6 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
             default:
                 return false;
         }
-    }
-
-    @Override
-    public void onTagDiscovered(Tag tag) {
-
-        NfcA nfca = NfcA.get(tag);
-
-        try {
-            nfca.connect();
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    // Code to run on UI thread
-                    if (timesTagRead == 0) nfcResult.setText(R.string.purchase_done);
-                    else nfcResult.setText(R.string.purchase_already_done);
-                    timesTagRead++;
-                }
-            });
-
-            nfca.close();
-
-        } catch (IOException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
     }
 
     @Override

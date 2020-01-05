@@ -12,12 +12,16 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.NFC" />
-    <uses-feature android:name="android.hardware.nfc.hce"
+
+    <uses-feature
+        android:name="android.hardware.nfc.hce"
         android:required="true" />
-    <uses-feature android:name="android.hardware.nfc"
+    <uses-feature
+        android:name="android.hardware.nfc"
         android:required="true" />
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -27,7 +31,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.dish.PurchaseDishActivity"></activity>
+        <activity android:name=".view.dish.PurchaseDishNFCActivity"></activity>
+        <activity android:name=".view.dish.PurchaseDishBluetoothActivity" />
         <activity
             android:name=".view.canteen.CanteensLocationOnMapActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
@@ -35,15 +40,17 @@
             android:name=".view.canteen.RouteToCanteenActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
-                <action android:name="FCM_OPEN_ROUTE_TO_CANTEEN_ACTIVITY"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="FCM_OPEN_ROUTE_TO_CANTEEN_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".view.settings.SettingsActivity" />
         <activity android:name=".view.dish.MenuDishesActivity">
             <intent-filter>
-                <action android:name="FCM_OPEN_MENU_DISHES_ACTIVITY"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="FCM_OPEN_MENU_DISHES_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".view.menu.AvailableCanteenMenusActivity" />
@@ -67,23 +74,24 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".model.canteen.UserNearbyCanteensGeofencingBroadcastReceiver"/>
-
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more. -->
+        <receiver android:name=".model.canteen.UserNearbyCanteensGeofencingBroadcastReceiver" />
+        <!--
+ Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ipp_ementa_header_logo" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
     </application>
 
 </manifest>
