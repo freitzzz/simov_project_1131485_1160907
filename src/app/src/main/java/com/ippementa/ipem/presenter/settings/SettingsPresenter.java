@@ -92,6 +92,22 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
     }
 
+    public void registerNearbyCanteensPushNotificationsReceive() {
+
+        view.showRegisteringNearbyCanteensPushNotificationsReceiveStartToast();
+
+        view.disableNearbyCanteensPushNotificationsSwitchInteraction();
+
+        new RegisterNearbyCanteensPushNotificationsReceiveAsyncTask().execute();
+
+    }
+
+    public void unregisterNearbyCanteensPushNotificationsReceive() {
+
+        new UnregisterNearbyCanteensPushNotificationsReceiveAsyncTask().execute();
+
+    }
+
     public void setNotUseOfflineData() {
 
         Provider.instance((SettingsActivity) view).settings().activateOnlineMode((SettingsActivity) view);
@@ -148,22 +164,6 @@ public class SettingsPresenter implements IPresenter, Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeByte((byte) (isViewAvailableToInteract ? 1 : 0));
-    }
-
-    public void registerNearbyCanteensPushNotificationsReceive() {
-
-        view.showRegisteringNearbyCanteensPushNotificationsReceiveStartToast();
-
-        view.disableNearbyCanteensPushNotificationsSwitchInteraction();
-
-        new RegisterNearbyCanteensPushNotificationsReceiveAsyncTask().execute();
-
-    }
-
-    public void unregisterNearbyCanteensPushNotificationsReceive() {
-
-        new UnregisterNearbyCanteensPushNotificationsReceiveAsyncTask().execute();
-
     }
 
     private class DownloadOfflineDataAsyncTask extends AsyncTask<Void, Void, BackgroundResult> {
@@ -848,6 +848,8 @@ public class SettingsPresenter implements IPresenter, Parcelable {
 
                     }
 
+                    System.out.println(canteen.name);
+
                 }
 
                 List<Geofence> geofences = new ArrayList<>();
@@ -868,6 +870,8 @@ public class SettingsPresenter implements IPresenter, Parcelable {
                             .append(canteen.schoolId)
                             .toString();
 
+
+
                     Geofence geofence
                             = new Geofence
                             .Builder()
@@ -877,6 +881,7 @@ public class SettingsPresenter implements IPresenter, Parcelable {
                                     canteen.location.longitude,
                                     50
                             )
+                            .setExpirationDuration(60000)
                             .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                             .build();
 
@@ -921,9 +926,13 @@ public class SettingsPresenter implements IPresenter, Parcelable {
                         @Override
                         public void onFailure(@NonNull Exception e) {
 
+                            e.printStackTrace();
+
                             if(isViewAvailableToInteract) {
 
                                 view.showRegisteringNearbyCanteensPushNotificationsReceiveFailedToast();
+
+                                view.deactivateNearbyCanteensDishPushNotificationsSwitch();
 
                                 view.enableNearbyCanteensPushNotificationsSwitchInteraction();
 
@@ -1064,6 +1073,8 @@ public class SettingsPresenter implements IPresenter, Parcelable {
                         if(isViewAvailableToInteract) {
 
                             view.showUnregisteringNearbyCanteensPushNotificationsReceiveFailedToast();
+
+                            view.activateNearbyCanteensPushNotificationsSwitch();
 
                             view.enableNearbyCanteensPushNotificationsSwitchInteraction();
 

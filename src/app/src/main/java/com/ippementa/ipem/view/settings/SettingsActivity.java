@@ -1,5 +1,6 @@
 package com.ippementa.ipem.view.settings;
 
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -8,6 +9,7 @@ import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.settings.SettingsPresenter;
 import com.ippementa.ipem.util.Provider;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingsActivity extends AppCompatActivity implements SettingsView{
@@ -35,6 +37,34 @@ public class SettingsActivity extends AppCompatActivity implements SettingsView{
                 .beginTransaction()
                 .replace(R.id.activity_settings_root_layout, this.contentFragment)
                 .commit();
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode){
+            case SettingsFragment.SETTINGS_FRAGMENT_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION:
+
+                if(grantResults.length > 0) {
+
+                    if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                        presenter.registerNearbyCanteensPushNotificationsReceive();
+
+                    } else {
+
+                        contentFragment.setNearbyCanteensPushNotificationsSwitchToFalse();
+
+                    }
+
+                }
+
+                break;
+            default:
+                break;
+        }
 
     }
 

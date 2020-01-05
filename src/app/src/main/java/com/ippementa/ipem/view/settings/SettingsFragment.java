@@ -10,7 +10,6 @@ import com.ippementa.ipem.presenter.settings.SettingsPresenter;
 import com.ippementa.ipem.util.Provider;
 import com.ippementa.ipem.util.Settings;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -19,7 +18,7 @@ import androidx.preference.SwitchPreferenceCompat;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    private static final int SETTINGS_FRAGMENT_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION = 532;
+    public static final int SETTINGS_FRAGMENT_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION = 532;
 
     private SettingsPresenter presenter;
 
@@ -127,6 +126,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                 SETTINGS_FRAGMENT_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION
                         );
 
+                        // TODO: WARNING IF USER SELECTS GIVE PERMISSION ONLY ON THIS APP GEOFENCING DOES NOT WORK FOR SOME REASON
+                        // SEE https://stackoverflow.com/questions/56659325/adding-geofence-gives-apiexception-status-13
+
                     } else {
 
                         presenter.registerNearbyCanteensPushNotificationsReceive();
@@ -189,34 +191,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         screen.addPreference(this.darkModeSwitch);
 
         setPreferenceScreen(screen);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode){
-            case SETTINGS_FRAGMENT_REQUEST_CODE_FOR_ACCESSING_DEVICE_LOCATION:
-
-                if(grantResults.length > 0) {
-
-                    if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                        presenter.registerNearbyCanteensPushNotificationsReceive();
-
-                    } else {
-
-                        setNearbyCanteensPushNotificationsSwitchToFalse();
-
-                    }
-
-                }
-
-                break;
-            default:
-                break;
-        }
-
     }
 
     public void enableOfflineModeSwitchInteraction(){
@@ -399,13 +373,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     public void disableNearbyCanteensPushNotificationsSwitchInteraction() {
 
-        this.favoriteDishesAvailabilityPushNotificationsSwitch.setSelectable(false);
+        this.nearbyCanteensPushNotificationsSwitch.setSelectable(false);
 
     }
 
     public void enableNearbyCanteensPushNotificationsSwitchInteraction() {
 
-        this.favoriteDishesAvailabilityPushNotificationsSwitch.setSelectable(true);
+        this.nearbyCanteensPushNotificationsSwitch.setSelectable(true);
 
     }
 }
