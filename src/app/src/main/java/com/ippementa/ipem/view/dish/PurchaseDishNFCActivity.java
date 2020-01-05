@@ -48,6 +48,7 @@ public class PurchaseDishNFCActivity extends AppCompatActivity implements Purcha
                 startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
             }
         }
+        else this.nfcResult.setText(R.string.no_nfc);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class PurchaseDishNFCActivity extends AppCompatActivity implements Purcha
     protected void onResume() {
         super.onResume();
 
-        if(this.presenter.checkIfDeviceHasNFCOn()) changeTextNFCReady();
+        if(this.adapter != null && this.presenter.checkIfDeviceHasNFCOn()) changeTextNFCReady();
 
         // nfc
         if (this.adapter != null) {

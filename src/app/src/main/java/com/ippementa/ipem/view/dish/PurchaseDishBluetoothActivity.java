@@ -59,17 +59,18 @@ public class PurchaseDishBluetoothActivity extends AppCompatActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Register Receiver
-        IntentFilter intent = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
-        registerReceiver(mPairReceiver, intent);
-
         setContentView(R.layout.activity_purchase_dish_bluetooth);
 
         this.presenter = new PurchaseDishPresenter(this);
 
+        //Register Receiver
+        IntentFilter intent = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        registerReceiver(mPairReceiver, intent);
+
         //check if device has bluetooth
 
         if (this.presenter.checkIfDeviceHasBluetooth() == true) {
+
             //check if bluetooth is enabled
             this.bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
             this.blueAdapter = BluetoothAdapter.getDefaultAdapter();
