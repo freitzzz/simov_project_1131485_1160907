@@ -47,8 +47,6 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
     private int timesTagRead = 0; //number of times that the tag was read by the device
 
-    private boolean connected = false; //flag that indicates the bluetooth connection
-
     // Create a BroadcastReceiver for ACTION_FOUND.
 
     private final BroadcastReceiver mPairReceiver = new BroadcastReceiver() {
