@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,15 +56,21 @@ public class AvailableCanteenMenusActivity extends AppCompatActivity implements 
 
         headerTextView.setText(headerTextView.getText().toString() + " " + canteen.name);
 
-        Button headerBackButton = findViewById(R.id.available_canteen_menus_header_back_button);
+        ImageView headerBackImageView = findViewById(R.id.available_canteen_menus_header_back_image_view);
 
         this.isInDarkMode = Provider.instance(this).settings().isInDarkMode();
 
         if(this.isInDarkMode){
-            headerBackButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_arrow_left_white, 0, 0,0 );
+
+            headerBackImageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_arrow_left_white));
+
+            LinearLayout layoutBackAndHeader = findViewById(R.id.available_canteen_menus_header_linear_layout);
+
+            layoutBackAndHeader.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDark));
+
         }
 
-        headerBackButton.setOnClickListener(new View.OnClickListener() {
+        headerBackImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -183,28 +189,28 @@ public class AvailableCanteenMenusActivity extends AppCompatActivity implements 
     @Override
     public void showUnavailableMenusError() {
 
-        Toast.makeText(this, "Menus Not Available", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.no_menus_found_available_canteen_menus_activity, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showNoInternetConnectionError() {
 
-        Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.no_internet_connection_error, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showServerNotAvailableError() {
 
-        Toast.makeText(this, "Server Not Available", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.server_not_available_error, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showUnexepectedServerFailureError() {
 
-        Toast.makeText(this, "Unexpected Server Failure", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.unexpected_server_failure_error, Toast.LENGTH_LONG).show();
 
     }
 

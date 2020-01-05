@@ -11,14 +11,17 @@
         android:id="@+id/menu_dishes_header_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorBackgroundHeaderLogo"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/menu_dishes_header_back_button"
+        <ImageView
+            android:id="@+id/menu_dishes_header_back_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/icon_arrow_left_black"
-            android:background="@android:color/transparent"
+            android:layout_gravity="center"
+            android:paddingStart="5dp"
+            android:src="@drawable/icon_arrow_left_black"
+            android:scaleType="centerInside"
             />
 
         <ImageView
@@ -26,9 +29,10 @@
             android:contentDescription="@string/ipp_ementa_header_logo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorBackgroundHeaderLogo"
             android:scaleType="fitStart"
-            app:srcCompat="@drawable/ipp_ementa_header_logo"/>
+            android:adjustViewBounds="true"
+            android:maxHeight="60dp"
+            app:srcCompat="@drawable/ipp_ementa_header_logo_transparent"/>
     </LinearLayout>
 
     <TextView
@@ -38,6 +42,9 @@
         android:text="@string/menu_dishes_header_text"
         android:textColor="@android:color/black"
         android:background="@color/colorBackgroundHeaderText"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:textStyle="bold"
         />
 

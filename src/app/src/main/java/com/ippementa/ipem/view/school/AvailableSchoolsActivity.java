@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class AvailableSchoolsActivity extends AppCompatActivity implements AvailableSchoolsView {
 
@@ -55,6 +57,17 @@ public class AvailableSchoolsActivity extends AppCompatActivity implements Avail
                 navigateToSchoolCanteensPage(school);
             }
         });
+
+        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
+
+        if (isInDarkMode) {
+
+            ImageView headerLogo = findViewById(R.id.available_schools_header_image_view);
+
+            headerLogo.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDark));
+
+        }
+
 
         adapter = new AvailableSchoolsListAdapter(this, new ArrayList<AvailableSchoolsModel.Item>());
 
@@ -142,28 +155,28 @@ public class AvailableSchoolsActivity extends AppCompatActivity implements Avail
     @Override
     public void showUnavailableSchoolsError() {
 
-        Toast.makeText(this, "No Schools Available", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.no_schools_found_available_schools_activity, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showNoInternetConnectionError() {
 
-        Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.no_internet_connection_error, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showServerNotAvailableError() {
 
-        Toast.makeText(this, "Server Not Available", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.server_not_available_error, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showUnexepectedServerFailureError() {
 
-        Toast.makeText(this, "Unexpected Server Failure", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.unexpected_server_failure_error, Toast.LENGTH_LONG).show();
 
     }
 

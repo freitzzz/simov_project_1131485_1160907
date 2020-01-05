@@ -12,7 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class AvailableCanteensActivity extends AppCompatActivity implements AvailableCanteensView{
 
@@ -57,9 +59,9 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
 
         headerTextView.setText(headerTextView.getText().toString() + " " + school.acronym);
 
-        Button headerBackButton = findViewById(R.id.available_canteens_header_back_button);
+        ImageView headerBackImageView = findViewById(R.id.available_canteens_header_back_image_view);
 
-        headerBackButton.setOnClickListener(new View.OnClickListener() {
+        headerBackImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -71,7 +73,12 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
         boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
 
         if(isInDarkMode){
-            headerBackButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_arrow_left_white, 0, 0,0 );
+
+            headerBackImageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_arrow_left_white));
+
+            LinearLayout layoutBackAndHeader = findViewById(R.id.available_canteens_header_linear_layout);
+
+            layoutBackAndHeader.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDark));
         }
 
         ListView canteensListView = findViewById(R.id.available_canteens_list_view);
@@ -230,14 +237,14 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
     @Override
     public void showUnavailableCanteenError() {
 
-        Toast.makeText(this, "Canteen was not found", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.canteen_not_found_available_canteens_activity, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showUnavailableCanteensError() {
 
-        Toast.makeText(this, "No Available Canteens", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.canteens_not_found_available_canteens_activity,Toast.LENGTH_LONG).show();
 
     }
 
@@ -255,21 +262,21 @@ public class AvailableCanteensActivity extends AppCompatActivity implements Avai
     @Override
     public void showNoInternetConnectionError() {
 
-        Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.no_internet_connection_error, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showServerNotAvailableError() {
 
-        Toast.makeText(this, "Server Not Available", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.server_not_available_error, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showUnexepectedServerFailureError() {
 
-        Toast.makeText(this, "Unexpected Server Failure", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.unexpected_server_failure_error, Toast.LENGTH_LONG).show();
 
     }
 

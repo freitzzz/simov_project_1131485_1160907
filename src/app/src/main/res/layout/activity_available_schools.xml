@@ -9,18 +9,23 @@
 
     <ImageView
         android:id="@+id/available_schools_header_image_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scaleType="fitStart"
+        android:adjustViewBounds="true"
+        android:maxHeight="60dp"
         android:background="@color/colorBackgroundHeaderLogo"
         android:contentDescription="@string/ipp_ementa_header_logo"
-        android:scaleType="fitStart"
-        app:srcCompat="@drawable/ipp_ementa_header_logo" />
+        app:srcCompat="@drawable/ipp_ementa_header_logo_transparent" />
     
     <TextView
         android:id="@+id/available_schools_header_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/available_schools_header_text"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:background="@color/colorBackgroundHeaderText"
         android:textColor="@android:color/black"
         android:textStyle="bold"

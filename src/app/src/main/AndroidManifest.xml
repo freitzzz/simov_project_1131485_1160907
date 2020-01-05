@@ -56,7 +56,9 @@
         <activity android:name=".view.menu.AvailableCanteenMenusActivity" />
         <activity android:name=".view.canteen.AvailableCanteensActivity" />
         <activity android:name=".view.school.AvailableSchoolsActivity" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

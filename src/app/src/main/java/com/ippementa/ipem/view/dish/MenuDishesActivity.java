@@ -11,8 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,15 +75,21 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
         }
 
-        Button headerBackButton = findViewById(R.id.menu_dishes_header_back_button);
+        ImageView headerBackImageView = findViewById(R.id.menu_dishes_header_back_image_view);
 
         this.isInDarkMode = Provider.instance(this).settings().isInDarkMode();
 
         if(this.isInDarkMode){
-            headerBackButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_arrow_left_white, 0, 0,0 );
+
+            headerBackImageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_arrow_left_white));
+
+            LinearLayout layoutBackAndHeader = findViewById(R.id.menu_dishes_header_linear_layout);
+
+            layoutBackAndHeader.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDark));
+
         }
 
-        headerBackButton.setOnClickListener(new View.OnClickListener() {
+        headerBackImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -206,28 +212,28 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
     @Override
     public void showUnavailableDishesError() {
 
-        Toast.makeText(this, "No Dishes Available", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.dishes_not_found_menu_dishes_activity, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showUnavailableDishError() {
 
-        Toast.makeText(this, "Dish is not available", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.dish_not_found_menu_dishes_activity, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showDishWasMarkedFavoriteWithSuccessToast() {
 
-        Toast.makeText(this, "Dish was marked as favorite with success!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.dish_marked_as_favorite_with_success_menu_dishes_activity, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showDishWasUnmarkedFavoriteWithSuccessToast() {
 
-        Toast.makeText(this, "Dish was unmarked as favorite with success!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.dish_unmarked_as_favorite_with_success_menu_dishes_activity, Toast.LENGTH_LONG).show();
 
     }
 
@@ -280,21 +286,21 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
     @Override
     public void showNoInternetConnectionError() {
 
-        Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.no_internet_connection_error, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showServerNotAvailableError() {
 
-        Toast.makeText(this, "Server Not Available", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.server_not_available_error, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showUnexepectedServerFailureError() {
 
-        Toast.makeText(this, "Unexpected Server Failure", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.unexpected_server_failure_error, Toast.LENGTH_LONG).show();
 
     }
 

@@ -11,4 +11,5 @@
     <color name="colorMenuType">#000000</color>
     <color name="colorIconInDarkMode">#FFFFFF</color>
     <color name="colorIconInLightMode">#000000</color>
+    <color name="colorDark">#121212</color>
 </resources>

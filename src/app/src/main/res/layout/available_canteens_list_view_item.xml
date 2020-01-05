@@ -7,6 +7,9 @@
     <TextView
         android:id="@+id/available_canteens_list_view_item_canteen_name_text_view"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:paddingStart="5dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"/>
     
 </LinearLayout>

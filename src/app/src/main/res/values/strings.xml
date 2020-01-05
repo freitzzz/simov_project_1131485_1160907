@@ -108,4 +108,28 @@
     <string name="unregistering_nearby_canteens_push_notifications_receive_failed">
         An unexpected error occurred while unregistering nearby canteens push notifications
     </string>
+    <string name="canteen_not_found_available_canteens_activity">
+        Canteen was not found
+    </string>
+    <string name="canteens_not_found_available_canteens_activity">
+        No canteens available
+    </string>
+    <string name="dishes_not_found_menu_dishes_activity">
+        No dishes available
+    </string>
+    <string name="dish_not_found_menu_dishes_activity">
+        Dish is not available
+    </string>
+    <string name="dish_marked_as_favorite_with_success_menu_dishes_activity">
+        Dish was marked as favorite with success!
+    </string>
+    <string name="dish_unmarked_as_favorite_with_success_menu_dishes_activity">
+        Dish was unmarked as favorite with success!
+    </string>
+    <string name="no_menus_found_available_canteen_menus_activity">
+        No menus available
+    </string>
+    <string name="no_schools_found_available_schools_activity">
+        No schools available
+    </string>
 </resources>

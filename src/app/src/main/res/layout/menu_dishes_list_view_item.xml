@@ -7,12 +7,18 @@
     <ImageView
         android:id="@+id/menu_dishes_list_view_item_type_image_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingStart="5dp" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="0.8"
+        android:paddingStart="5dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
         <TextView
             android:id="@+id/menu_dishes_list_view_item_type_text_view"
@@ -31,6 +37,10 @@
     <ImageView
         android:id="@+id/menu_dishes_list_view_item_favorite_mark_image_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|right"
+        android:paddingEnd="10dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"/>
     
 </LinearLayout>
