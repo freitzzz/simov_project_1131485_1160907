@@ -17,8 +17,16 @@ public interface MenuDishesView extends ErrorView {
 
     void showDishWasUnmarkedFavoriteWithSuccessToast();
 
+    void showErrorOccurredMarkingDishAsFavoriteToast();
+
+    void showErrorOccurredUnmarkingDishAsFavoriteToast();
+
     void markDishAsFavorite(MenuDishesModel.Item dish);
 
     void unmarkDishAsFavorite(MenuDishesModel.Item dish);
+
+    void showMarkingDishAsFavoriteRequiresInternetConnectionToast();
+
+    void showUnmarkingDishAsFavoriteRequiresInternetConnectionToast();
 
 }

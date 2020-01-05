@@ -12,6 +12,10 @@ public class Settings {
 
     private boolean cachedInDarkMode;
 
+    private String cachedFcmRegistrationToken;
+
+    private boolean cachedAllowsFavoriteDishPushNotifications;
+
     protected Settings(Context ctx){
 
         reloadSettings(ctx);
@@ -80,6 +84,36 @@ public class Settings {
 
     }
 
+    public boolean allowReceiveOfFavoriteDishPushNotifications(Context ctx){
+
+        SharedPreferences preferences
+                = ctx.getSharedPreferences("ipp-ementa-shared-preferences", Context.MODE_PRIVATE);
+
+        boolean writtenWithSuccess = preferences.edit().putBoolean("allows-favorite-dish-push-notifications", true).commit();
+
+        if(writtenWithSuccess){
+            this.cachedAllowsFavoriteDishPushNotifications = true;
+        }
+
+        return writtenWithSuccess;
+
+    }
+
+    public boolean disallowReceiveOfFavoriteDishPushNotifications(Context ctx){
+
+        SharedPreferences preferences
+                = ctx.getSharedPreferences("ipp-ementa-shared-preferences", Context.MODE_PRIVATE);
+
+        boolean writtenWithSuccess = preferences.edit().putBoolean("allows-favorite-dish-push-notifications", false).commit();
+
+        if(writtenWithSuccess){
+            this.cachedAllowsFavoriteDishPushNotifications = false;
+        }
+
+        return writtenWithSuccess;
+
+    }
+
     public boolean isInOfflineMode(){
 
         return cachedInOfflineMode;
@@ -92,6 +126,33 @@ public class Settings {
 
     }
 
+    public boolean allowsReceiveOfFavoriteDishPushNotifications(){
+
+        return cachedAllowsFavoriteDishPushNotifications;
+
+    }
+
+    public boolean changeFcmRegistrationToken(Context ctx, String newRegistrationToken) {
+
+        SharedPreferences preferences
+                = ctx.getSharedPreferences("ipp-ementa-shared-preferences", Context.MODE_PRIVATE);
+
+        boolean writtenWithSuccess = preferences.edit().putString("fcm-registration-token ", newRegistrationToken).commit();
+
+        if(writtenWithSuccess){
+            this.cachedFcmRegistrationToken = newRegistrationToken;
+        }
+
+        return writtenWithSuccess;
+
+    }
+
+    public String fcmRegistrationToken() {
+
+        return this.cachedFcmRegistrationToken;
+
+    }
+
     private void reloadSettings(Context ctx){
 
         SharedPreferences preferences
@@ -101,9 +162,17 @@ public class Settings {
 
         boolean darkMode = preferences.getBoolean("in-dark-mode", false);
 
+        boolean allowsFavoriteDishPushNotifications = preferences.getBoolean("allows-favorite-dish-push-notifications", false);
+
+        String fcmRegistrationToken = preferences.getString("fcm-registration-token", null);
+
         this.cachedInOfflineMode = offlineMode;
 
         this.cachedInDarkMode = darkMode;
+
+        this.cachedAllowsFavoriteDishPushNotifications = allowsFavoriteDishPushNotifications;
+
+        this.cachedFcmRegistrationToken = fcmRegistrationToken;
 
     }
 

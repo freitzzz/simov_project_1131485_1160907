@@ -86,7 +86,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 if(checked){
 
+                    presenter.registerFavoriteDishesPushNotificationsReceive();
+
                 }else{
+
+                    presenter.unregisterFavoriteDishesPushNotificationsReceive();
 
                 }
 
@@ -296,6 +300,34 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         this.darkModeSwitch.setChecked(true);
 
         this.updateDarkModeSwitchIcon(true);
+
+    }
+
+    public void enableFavoriteDishPushNotificationsSwitchInteraction() {
+
+        this.favoriteDishesAvailabilityPushNotificationsSwitch.setSelectable(true);
+
+    }
+
+    public void disableFavoriteDishPushNotificationsSwitchInteraction() {
+
+        this.favoriteDishesAvailabilityPushNotificationsSwitch.setSelectable(false);
+
+    }
+
+    public void setFavoriteDishPushNotificationsSwitchToFalse() {
+
+        this.favoriteDishesAvailabilityPushNotificationsSwitch.setChecked(false);
+
+        updateFavoriteDishesAvailabilityPushNotificationsSwitchIcon(true);
+
+    }
+
+    public void setFavoriteDishPushNotificationsSwitchToTrue() {
+
+        this.favoriteDishesAvailabilityPushNotificationsSwitch.setChecked(true);
+
+        updateFavoriteDishesAvailabilityPushNotificationsSwitchIcon(true);
 
     }
 }

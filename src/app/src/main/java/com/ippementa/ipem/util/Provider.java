@@ -3,6 +3,8 @@ package com.ippementa.ipem.util;
 import android.content.Context;
 
 import com.ippementa.ipem.model.RepositoryFactory;
+import com.ippementa.ipem.model.pushnotifications.IPEPNPushNotificationsRepositoryImpl;
+import com.ippementa.ipem.model.pushnotifications.PushNotificationsRepository;
 
 import androidx.room.Room;
 
@@ -66,6 +68,12 @@ public class Provider {
     public RepositoryFactory.RoomRepositoryFactoryImpl roomRepositoryFactory(){
 
         return roomRepositoryFactory;
+
+    }
+
+    public PushNotificationsRepository pushNotificationsRepository() {
+
+        return new IPEPNPushNotificationsRepositoryImpl();
 
     }
 

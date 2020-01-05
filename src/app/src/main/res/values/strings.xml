@@ -36,6 +36,30 @@
     <string name="bluetooth_turned_off">Please turn on Bluetooth in your device!</string>
     <string name="no_bluetooth_nfc">This device doesn´t have NFC or Bluetooth. Purchase via app disabled!</string>
     <string name="map_rendering_error">An unexpected error occurred while rendering the map</string>
+    <string name="error_occurred_marking_dish_as_favorite">
+        An error occurred while marking the dish as favorite
+    </string>
+    <string name="error_occurred_unmarking_dish_as_favorite">
+        An error occurred while unmarking the dish as favorite
+    </string>
+    <string name="marking_dish_as_favorite_requires_internet_connection">
+        Marking a dish as favorite requires internet connection
+    </string>
+    <string name="unmarking_dish_as_favorite_requires_internet_connection">
+        Unmarking a dish as favorite requires internet connection
+    </string>
+    <string name="registering_favorite_dishes_push_notifications_receive_start">
+        Please wait while favorite dishes push notifications receive are being registered...
+    </string>
+    <string name="registering_favorite_dishes_push_notifications_receive_finish">
+        Push Notifications receive were registered with success
+    </string>
+    <string name="unregistering_favorite_dishes_push_notifications_receive_start">
+        Please wait while favorite dishes push notifications receive are being unregistered...
+    </string>
+    <string name="unregistering_favorite_dishes_push_notifications_receive_finish">
+        Push Notifications receive were unregistered with success
+    </string>
     <string name="purchase_done">Your purchase has been complete.</string>
     <string name="purchase_already_done">This dish has been already registered as purchase.</string>
 </resources>

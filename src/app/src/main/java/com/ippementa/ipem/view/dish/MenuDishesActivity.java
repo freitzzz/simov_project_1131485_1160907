@@ -17,11 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.dish.MenuDishesModel;
 import com.ippementa.ipem.presenter.dish.MenuDishesPresenter;
@@ -31,6 +26,11 @@ import com.ippementa.ipem.view.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class MenuDishesActivity extends AppCompatActivity implements MenuDishesView{
 
@@ -202,6 +202,20 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
     }
 
     @Override
+    public void showErrorOccurredMarkingDishAsFavoriteToast() {
+
+        Toast.makeText(this, R.string.error_occurred_marking_dish_as_favorite, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showErrorOccurredUnmarkingDishAsFavoriteToast() {
+
+        Toast.makeText(this, R.string.error_occurred_unmarking_dish_as_favorite, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
     public void markDishAsFavorite(MenuDishesModel.Item dish) {
 
         dish.isFavorite = true;
@@ -216,6 +230,20 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
         dish.isFavorite = false;
 
         adapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void showMarkingDishAsFavoriteRequiresInternetConnectionToast() {
+
+        Toast.makeText(this, R.string.marking_dish_as_favorite_requires_internet_connection, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showUnmarkingDishAsFavoriteRequiresInternetConnectionToast() {
+
+        Toast.makeText(this, R.string.unmarking_dish_as_favorite_requires_internet_connection, Toast.LENGTH_SHORT).show();
 
     }
 

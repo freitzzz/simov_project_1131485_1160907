@@ -131,6 +131,74 @@ public class SettingsActivity extends AppCompatActivity implements SettingsView{
     }
 
     @Override
+    public void enableFavoriteDishPushNotificationsSwitchInteraction() {
+
+        this.contentFragment.enableFavoriteDishPushNotificationsSwitchInteraction();
+
+    }
+
+    @Override
+    public void disableFavoriteDishPushNotificationsSwitchInteraction() {
+
+        this.contentFragment.disableFavoriteDishPushNotificationsSwitchInteraction();
+
+    }
+
+    @Override
+    public void deactivateFavoriteDishPushNotificationsSwitch() {
+
+        this.contentFragment.setFavoriteDishPushNotificationsSwitchToFalse();
+
+    }
+
+    @Override
+    public void showRegisteringFavoriteDishesPushNotificationsReceiveStartToast() {
+
+        Toast.makeText(this,
+                R.string.registering_favorite_dishes_push_notifications_receive_start,
+                Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    @Override
+    public void showRegisteringFavoriteDishesPushNotificationsReceiveFinishToast() {
+
+        Toast.makeText(this,
+                R.string.registering_favorite_dishes_push_notifications_receive_finish,
+                Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    @Override
+    public void showUnregisteringFavoriteDishesPushNotificationsReceiveStartToast() {
+
+        Toast.makeText(this,
+                R.string.unregistering_favorite_dishes_push_notifications_receive_start,
+                Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    @Override
+    public void activateFavoriteDishPushNotificationsSwitch() {
+
+        this.contentFragment.setFavoriteDishPushNotificationsSwitchToTrue();
+
+    }
+
+    @Override
+    public void showUnregisteringFavoriteDishesPushNotificationsReceiveFinishToast() {
+
+        Toast.makeText(this,
+                R.string.unregistering_favorite_dishes_push_notifications_receive_finish,
+                Toast.LENGTH_LONG)
+                .show();
+
+    }
+
+    @Override
     public void showNoInternetConnectionError() {
 
         Toast.makeText(this,

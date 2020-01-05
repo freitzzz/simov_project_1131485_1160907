@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -61,4 +62,14 @@ dependencies {
 
     implementation "com.google.android.material:material:1.0.0"
 
+    // Firebase Analytics
+
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
+
+    // FCM SDK
+
+    implementation 'com.google.firebase:firebase-messaging:20.1.0'
+
 }
+
+apply plugin: 'com.google.gms.google-services'
