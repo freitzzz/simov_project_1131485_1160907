@@ -3,6 +3,9 @@ package com.ippementa.ipem;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        ImageView ippementaLogoImageView = findViewById(R.id.ippementa_logo_main_activity);
+
+        Animation splashAnimation = AnimationUtils.loadAnimation(this, R.anim.splash);
+
+        ippementaLogoImageView.startAnimation(splashAnimation);
 
         try {
             grantThatAllFilesExistInInternalStorage();
@@ -73,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, AvailableSchoolsActivity.class);
 
-        startActivity(intent);
+        //startActivity(intent);
     }
 
     private void grantThatAllFilesExistInInternalStorage() throws IOException{
