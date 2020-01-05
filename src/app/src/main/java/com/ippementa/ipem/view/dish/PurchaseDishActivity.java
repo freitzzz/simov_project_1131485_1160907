@@ -4,6 +4,7 @@ package com.ippementa.ipem.view.dish;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import com.ippementa.ipem.view.settings.SettingsActivity;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+
 public class PurchaseDishActivity extends AppCompatActivity implements PurchaseDishView, NfcAdapter.ReaderCallback {
 
     private PurchaseDishPresenter presenter;
@@ -40,11 +42,13 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
     private BluetoothAdapter blueAdapter;
 
-    private  BluetoothManager bluetoothManager;
+    private BluetoothManager bluetoothManager;
 
     private TextView nfcResult;
 
     private int timesTagRead = 0; //number of times that the tag was read by the device
+
+    private boolean connected = false; //flag that indicates the bluetooth connection
 
     // Create a BroadcastReceiver for ACTION_FOUND.
 
@@ -53,22 +57,17 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
             String action = intent.getAction();
 
             if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
-                final int state        = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR);
-                final int prevState    = intent.getIntExtra(BluetoothDevice.EXTRA_PREVIOUS_BOND_STATE, BluetoothDevice.ERROR);
+                final int state = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR);
+                final int prevState = intent.getIntExtra(BluetoothDevice.EXTRA_PREVIOUS_BOND_STATE, BluetoothDevice.ERROR);
 
                 if (state == BluetoothDevice.BOND_BONDED && prevState == BluetoothDevice.BOND_BONDING) {
-                    showToast("Paired");
-                } else if (state == BluetoothDevice.BOND_NONE && prevState == BluetoothDevice.BOND_BONDED){
-                    showToast("Unpaired");
+                    //connected with headset //only if not already paired
+                    purchaseDish();
                 }
 
             }
         }
     };
-
-    private void showToast(String toast) {
-        Toast.makeText(this,toast,Toast.LENGTH_LONG).show();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,28 +92,33 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
             if(this.presenter.checkIfDeviceHasNFCOn() == false) Toast.makeText(this, R.string.nfc_turned_off, Toast.LENGTH_LONG).show();
         }
         else {*/
-            //check if device has bluetooth
+        //check if device has bluetooth
 
-            if(this.presenter.checkIfDeviceHasBluetooth() == true) {
-                //check if bluetooth is enabled
-                this.bluetoothManager =  (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-                this.blueAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (this.presenter.checkIfDeviceHasBluetooth() == true) {
+            //check if bluetooth is enabled
+            this.bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+            this.blueAdapter = BluetoothAdapter.getDefaultAdapter();
 
-                if (this.presenter.checkIfDeviceHasBluetoothOn() == false) {
-                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-                }
-                else {
-                    BluetoothDevice harmonyDevice = this.blueAdapter.getRemoteDevice("ED:2F:34:31:B4:BF");
-                    if(harmonyDevice != null) {
-                        this.pairDevice(harmonyDevice);
-                    }
-                }
-            }
-            else {
-                Toast.makeText(this, R.string.no_bluetooth_nfc, Toast.LENGTH_SHORT).show();
-            }
+        } else {
+            Toast.makeText(this, R.string.no_bluetooth_nfc, Toast.LENGTH_SHORT).show();
+        }
         //}
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+        if (this.presenter.checkIfDeviceHasBluetoothOn() == false) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        } else {
+            BluetoothDevice harmonyDevice = this.blueAdapter.getRemoteDevice("ED:2F:34:31:B4:BF");
+            if (harmonyDevice != null) {
+                this.pairDevice(harmonyDevice);
+            }
+        }
     }
 
     @Override
@@ -122,7 +126,7 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
         super.onResume();
 
         // nfc
-        if(adapter != null) {
+        if (adapter != null) {
             adapter.enableReaderMode(this, this,
                     NfcAdapter.FLAG_READER_NFC_A,
                     null);
@@ -134,13 +138,12 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
     protected void onPause() {
         super.onPause();
 
-        if(adapter != null) adapter.disableReaderMode(this); // nfc
+        if (adapter != null) adapter.disableReaderMode(this); // nfc
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
     }
 
     @Override
@@ -151,7 +154,7 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.option_menu_settings_item:
 
                 Intent intent = new Intent(this, SettingsActivity.class);
@@ -176,7 +179,7 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
                 @Override
                 public void run() {
                     // Code to run on UI thread
-                    if(timesTagRead == 0) nfcResult.setText(R.string.purchase_done);
+                    if (timesTagRead == 0) nfcResult.setText(R.string.purchase_done);
                     else nfcResult.setText(R.string.purchase_already_done);
                     timesTagRead++;
                 }
@@ -184,8 +187,7 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
             nfca.close();
 
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
@@ -198,9 +200,9 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
 
         boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
 
-        if(isInDarkMode){
+        if (isInDarkMode) {
             theme.applyStyle(R.style.DarkMode, true);
-        }else{
+        } else {
             theme.applyStyle(R.style.LightMode, true);
         }
 
@@ -217,4 +219,10 @@ public class PurchaseDishActivity extends AppCompatActivity implements PurchaseD
         }
     }
 
+    private void purchaseDish () {
+
+        Toast.makeText(this, R.string.purchase_done, Toast.LENGTH_LONG).show();
+    }
+
 }
+
