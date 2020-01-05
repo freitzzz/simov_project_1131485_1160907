@@ -1,12 +1,13 @@
 package com.ippementa.ipem;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,6 +24,7 @@ import java.io.OutputStream;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,51 +41,122 @@ public class MainActivity extends AppCompatActivity {
             "string_index_vals"
     };
 
+    private boolean finishedInitializingApplication;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
+
         ImageView ippementaLogoImageView = findViewById(R.id.ippementa_logo_main_activity);
+
+        if (isInDarkMode) {
+
+            RelativeLayout mainActivityRelativeLayout = findViewById(R.id.main_activity_relative_layout);
+
+            mainActivityRelativeLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDark));
+
+        }
+
 
         Animation splashAnimation = AnimationUtils.loadAnimation(this, R.anim.splash);
 
         ippementaLogoImageView.startAnimation(splashAnimation);
 
-        try {
-            grantThatAllFilesExistInInternalStorage();
-        } catch (IOException e) {
-            e.printStackTrace();
+        splashAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
 
-            // If an IOException occurs then not all required files exist in the internal storage
-            // This means that the application state is not valid to continue usage
+                try {
+                    grantThatAllFilesExistInInternalStorage();
+                } catch (IOException e) {
+                    e.printStackTrace();
 
-            finish();
+                    // If an IOException occurs then not all required files exist in the internal storage
+                    // This means that the application state is not valid to continue usage
+
+                    finish();
+                }
+
+                FirebaseInstanceId.getInstance().getInstanceId()
+                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                if (!task.isSuccessful()) {
+                                    Log.w("fcm", "getInstanceId failed", task.getException());
+                                    return;
+                                }
+
+                                // Get new Instance ID token
+                                String token = task.getResult().getToken();
+
+                                // Log and toast
+                                Log.d("fcm", token);
+                                // DEBUG ONLY: Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+
+                                Provider.instance(getApplicationContext()).settings().changeFcmRegistrationToken(getApplicationContext(), token);
+
+
+                                finishedInitializingApplication = true;
+                            }
+                        });
+
+            }
+
+            @Override
+            public void onAnimationEnd(final Animation animation) {
+
+                if (finishedInitializingApplication) {
+
+                    Intent intent = new Intent(MainActivity.this, AvailableSchoolsActivity.class);
+
+                    startActivity(intent);
+
+                } else {
+
+                    new Runnable() {
+                        @Override
+                        public void run() {
+
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }finally {
+                                onAnimationEnd(animation);
+                            }
+
+                        }
+                    }.run();
+
+                }
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    @Override
+    public Resources.Theme getTheme() {
+
+        Resources.Theme theme = super.getTheme();
+
+        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
+
+        if(isInDarkMode){
+            theme.applyStyle(R.style.DarkMode, true);
+        }else{
+            theme.applyStyle(R.style.LightMode, true);
         }
 
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("fcm", "getInstanceId failed", task.getException());
-                            return;
-                        }
+        return theme;
 
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-
-                        // Log and toast
-                        Log.d("fcm", token);
-                        Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
-
-                        Provider.instance(getApplicationContext()).settings().changeFcmRegistrationToken(getApplicationContext(), token);
-                    }
-                });
-
-        Intent intent = new Intent(this, AvailableSchoolsActivity.class);
-
-        startActivity(intent);
     }
 
     private void grantThatAllFilesExistInInternalStorage() throws IOException{
