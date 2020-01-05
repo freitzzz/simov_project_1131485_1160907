@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, AvailableSchoolsActivity.class);
 
-        //startActivity(intent);
+        startActivity(intent);
     }
 
     private void grantThatAllFilesExistInInternalStorage() throws IOException{
