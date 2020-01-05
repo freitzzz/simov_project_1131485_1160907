@@ -179,6 +179,9 @@ public class MenuDishesActivity extends AppCompatActivity implements MenuDishesV
 
             case R.id.purchase_dish_nfc:
                 intent = new Intent(this,PurchaseDishNFCActivity.class);
+
+                startActivity(intent);
+
                 return true;
         }
         return true;
