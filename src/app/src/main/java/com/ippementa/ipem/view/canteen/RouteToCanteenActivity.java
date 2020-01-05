@@ -183,6 +183,13 @@ public class RouteToCanteenActivity extends AppCompatActivity{
             hopper.close();
 
         hopper = null;
+
+        if (locationManager != null) {
+
+            locationManager.removeUpdates(locationListener);
+
+        }
+
         // necessary?
         System.gc();
 

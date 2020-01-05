@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.canteen.CanteenWithMapLocationModel;
+import com.ippementa.ipem.util.Provider;
 
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.android.graphics.AndroidBitmap;
@@ -274,8 +276,31 @@ public class CanteensLocationOnMapActivity extends Activity implements CanteensL
          */
         mapView.destroyAll();
         AndroidGraphicFactory.clearResourceMemoryCache();
-        locationManager.removeUpdates(locationListener);
+
+        if (locationManager != null) {
+
+            locationManager.removeUpdates(locationListener);
+
+        }
+
         super.onDestroy();
+    }
+
+    @Override
+    public Resources.Theme getTheme() {
+
+        Resources.Theme theme = super.getTheme();
+
+        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
+
+        if(isInDarkMode){
+            theme.applyStyle(R.style.DarkMode, true);
+        }else{
+            theme.applyStyle(R.style.LightMode, true);
+        }
+
+        return theme;
+
     }
 
     private static void copyStream(InputStream in, OutputStream out) throws IOException {
