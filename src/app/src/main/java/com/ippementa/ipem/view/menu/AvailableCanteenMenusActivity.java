@@ -189,28 +189,28 @@ public class AvailableCanteenMenusActivity extends AppCompatActivity implements 
     @Override
     public void showUnavailableMenusError() {
 
-        Toast.makeText(this, "Menus Not Available", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.no_menus_found_available_canteen_menus_activity, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showNoInternetConnectionError() {
 
-        Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.no_internet_connection_error, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showServerNotAvailableError() {
 
-        Toast.makeText(this, "Server Not Available", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.server_not_available_error, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void showUnexepectedServerFailureError() {
 
-        Toast.makeText(this, "Unexpected Server Failure", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.unexpected_server_failure_error, Toast.LENGTH_LONG).show();
 
     }
 

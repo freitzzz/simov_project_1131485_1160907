@@ -109,4 +109,28 @@
     <string name="unregistering_nearby_canteens_push_notifications_receive_failed">
         Um erro inesperado ocorreu ao remove as push-notifications das cantinas perto de si
     </string>
+    <string name="canteen_not_found_available_canteens_activity">
+        Cantina não foi encontrada
+    </string>
+    <string name="canteens_not_found_available_canteens_activity">
+        Não existem cantinas disponíveis de momento
+    </string>
+    <string name="dishes_not_found_menu_dishes_activity">
+        Não existem pratos disponíveis de momento
+    </string>
+    <string name="dish_not_found_menu_dishes_activity">
+        Prato não está disponível
+    </string>
+    <string name="dish_marked_as_favorite_with_success_menu_dishes_activity">
+        Prato foi marcado como favorito com sucesso!
+    </string>
+    <string name="dish_unmarked_as_favorite_with_success_menu_dishes_activity">
+        Prato favorito foi removido com sucesso!
+    </string>
+    <string name="no_menus_found_available_canteen_menus_activity">
+        Não existem ementas disponíveis de momento
+    </string>
+    <string name="no_schools_found_available_schools_activity">
+        Não existem escolas disponíveis de momento
+    </string>
 </resources>
