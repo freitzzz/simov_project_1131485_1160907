@@ -8,6 +8,11 @@
     tools:context=".view.dish.PurchaseDishNFCActivity">
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/is_nfc_ready"/>
+
+    <TextView
         android:id="@+id/nfc_result_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

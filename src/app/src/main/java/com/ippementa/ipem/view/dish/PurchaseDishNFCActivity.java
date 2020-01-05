@@ -21,6 +21,8 @@ public class PurchaseDishNFCActivity extends AppCompatActivity implements Purcha
 
     private PurchaseDishPresenter presenter;
 
+    private TextView isNfcReady;
+
     private TextView nfcResult;
 
     private NfcAdapter adapter;
@@ -33,6 +35,7 @@ public class PurchaseDishNFCActivity extends AppCompatActivity implements Purcha
         setContentView(R.layout.activity_purchase_dish_nfc);
 
         this.presenter = new PurchaseDishPresenter(this);
+        this.isNfcReady = findViewById(R.id.is_nfc_ready);
         this.nfcResult = findViewById(R.id.nfc_result_text_view);
         this.timesTagRead = 0;
 
@@ -67,6 +70,8 @@ public class PurchaseDishNFCActivity extends AppCompatActivity implements Purcha
     @Override
     protected void onResume() {
         super.onResume();
+
+        if(this.presenter.checkIfDeviceHasNFCOn()) changeTextNFCReady();
 
         // nfc
         if (this.adapter != null) {
@@ -106,5 +111,9 @@ public class PurchaseDishNFCActivity extends AppCompatActivity implements Purcha
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private void changeTextNFCReady() {
+        this.isNfcReady.setText(R.string.read_nfc);
     }
 }

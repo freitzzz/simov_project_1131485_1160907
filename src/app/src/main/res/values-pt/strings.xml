@@ -39,6 +39,7 @@
     <string name="no_bluetooth">Este dispositivo não possui Bluetooth. </string>
     <string name="no_nfc">Este dispositivo não possui NFC.</string>
     <string name="activate_nfc">Por favor ative NFC e pressione no botão Retroceder para voltar à aplicação.</string>
+    <string name="read_nfc">Dispositivo está pronto para ler o seu cartão.</string>
     <string name="map_rendering_error">Um error inesperado aconteceu ao renderizar o mapa</string>
     <string name="error_occurred_marking_dish_as_favorite">
         Ocorreu um erro ao marcar o prato como favorite
