@@ -870,8 +870,6 @@ public class SettingsPresenter implements IPresenter, Parcelable {
                             .append(canteen.schoolId)
                             .toString();
 
-
-
                     Geofence geofence
                             = new Geofence
                             .Builder()
@@ -879,10 +877,11 @@ public class SettingsPresenter implements IPresenter, Parcelable {
                             .setCircularRegion(
                                     canteen.location.latitude,
                                     canteen.location.longitude,
-                                    50
+                                    75
                             )
+                            .setLoiteringDelay(5)
                             .setExpirationDuration(60000)
-                            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL)
                             .build();
 
                     geofences.add(geofence);

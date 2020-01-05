@@ -25,7 +25,6 @@ import com.graphhopper.util.PointList;
 import com.graphhopper.util.StopWatch;
 import com.ippementa.ipem.R;
 import com.ippementa.ipem.presenter.canteen.CanteenWithMapLocationModel;
-import com.ippementa.ipem.presenter.canteen.UserLocationOnMap;
 
 import org.oscim.android.MapView;
 import org.oscim.android.canvas.AndroidGraphics;
@@ -100,13 +99,17 @@ public class RouteToCanteenActivity extends AppCompatActivity{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-        UserLocationOnMap userLocation = getIntent().getParcelableExtra("user-location");
-
         CanteenWithMapLocationModel canteenLocation = getIntent().getParcelableExtra("canteen-location");
 
-        if(userLocation == null) {
+        if(canteenLocation == null) {
 
-            // request permissions and get device location
+            canteenLocation = new CanteenWithMapLocationModel();
+
+            canteenLocation.name = getIntent().getStringExtra("name");
+
+            canteenLocation.latitude = Double.parseDouble(getIntent().getStringExtra("latitude"));
+
+            canteenLocation.longitude = Double.parseDouble(getIntent().getStringExtra("longitude"));
 
         }
 

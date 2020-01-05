@@ -32,7 +32,12 @@
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".view.canteen.RouteToCanteenActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize">
+            <intent-filter>
+                <action android:name="FCM_OPEN_ROUTE_TO_CANTEEN_ACTIVITY"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".view.settings.SettingsActivity" />
         <activity android:name=".view.dish.MenuDishesActivity">
             <intent-filter>
@@ -59,6 +64,8 @@
             </intent-filter>
         </service>
 
+        <receiver android:name=".model.canteen.UserNearbyCanteensGeofencingBroadcastReceiver"/>
+
         <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
      See README(https://goo.gl/l4GJaQ) for more. -->
         <meta-data
@@ -69,6 +76,10 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
     </application>
 
