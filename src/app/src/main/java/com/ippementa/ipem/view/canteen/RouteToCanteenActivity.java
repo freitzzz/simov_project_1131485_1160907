@@ -97,6 +97,7 @@ public class RouteToCanteenActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
 
         CanteenWithMapLocationModel canteenLocation = getIntent().getParcelableExtra("canteen-location");
