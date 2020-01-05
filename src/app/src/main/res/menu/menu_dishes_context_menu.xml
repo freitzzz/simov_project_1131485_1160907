@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/purchase_dish"
-        android:title="@string/purchase_dish"/>
+    <item android:id="@+id/purchase_dish_nfc"
+        android:title="@string/purchase_dish_nfc"/>
+    <item android:id="@+id/purchase_dish_bluetooth"
+        android:title="@string/purchase_dish_bluetooth"/>
 </menu>
