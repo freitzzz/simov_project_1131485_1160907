@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,15 +56,21 @@ public class AvailableCanteenMenusActivity extends AppCompatActivity implements 
 
         headerTextView.setText(headerTextView.getText().toString() + " " + canteen.name);
 
-        Button headerBackButton = findViewById(R.id.available_canteen_menus_header_back_button);
+        ImageView headerBackImageView = findViewById(R.id.available_canteen_menus_header_back_image_view);
 
         this.isInDarkMode = Provider.instance(this).settings().isInDarkMode();
 
         if(this.isInDarkMode){
-            headerBackButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_arrow_left_white, 0, 0,0 );
+
+            headerBackImageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_arrow_left_white));
+
+            LinearLayout layoutBackAndHeader = findViewById(R.id.available_canteen_menus_header_linear_layout);
+
+            layoutBackAndHeader.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDark));
+
         }
 
-        headerBackButton.setOnClickListener(new View.OnClickListener() {
+        headerBackImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

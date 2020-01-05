@@ -3,11 +3,14 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
+
     <TextView
         android:id="@+id/available_schools_list_view_item_school_acronym_text_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:paddingStart="5dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:textColor="@color/colorSchoolAcronym"
         android:textStyle="bold"
         />
@@ -15,6 +18,9 @@
     <TextView
         android:id="@+id/available_schools_list_view_item_school_name_text_view"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
-    
+        android:layout_height="match_parent"
+        android:paddingStart="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"/>
+
 </LinearLayout>

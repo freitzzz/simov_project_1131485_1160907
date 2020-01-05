@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class AvailableSchoolsActivity extends AppCompatActivity implements AvailableSchoolsView {
 
@@ -55,6 +57,17 @@ public class AvailableSchoolsActivity extends AppCompatActivity implements Avail
                 navigateToSchoolCanteensPage(school);
             }
         });
+
+        boolean isInDarkMode = Provider.instance(this).settings().isInDarkMode();
+
+        if (isInDarkMode) {
+
+            ImageView headerLogo = findViewById(R.id.available_schools_header_image_view);
+
+            headerLogo.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDark));
+
+        }
+
 
         adapter = new AvailableSchoolsListAdapter(this, new ArrayList<AvailableSchoolsModel.Item>());
 

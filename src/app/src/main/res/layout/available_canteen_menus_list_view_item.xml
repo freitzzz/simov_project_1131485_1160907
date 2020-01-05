@@ -7,11 +7,19 @@
     <TextView
         android:id="@+id/available_canteen_menus_list_view_item_menu_type_text_view"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_weight="0.9"
+        android:paddingStart="5dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"/>
 
     <ImageView
         android:id="@+id/available_canteen_menus_list_view_item_menu_type_image_view"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:paddingEnd="10dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"/>
     
 </LinearLayout>
