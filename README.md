@@ -7,3 +7,9 @@ This repository contains the project developed for SIMOV (Sistemas Móveis) curr
 - a [progress report](reports/SIMOV_Project_report_1131485_1160907.pdf) tracking the development of ipp-ementa, including its context, analysis, design, implementation and the requirements that are assumed as granted before using the application. (Graded 17.40/20)
 
 It is also present in the repository the [documentation](ADD/README.md) regarding the design process for ipp-ementa, in which **ADD (Architecture Driven Design)** methodology was used.
+
+## Team Members
+
+`Pedro Emanuel 1131485@isep.ipp.pt (@PedroEmanuelCoelho)`
+
+`João Freitas 1160907@isep.ipp.pt (@freitzzz)`
